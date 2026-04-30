@@ -1303,7 +1303,7 @@ function nieuweCamera() {
 }
 
 function maakFoto() {
-  if (!state.ronde) { toonNotif('Start eerst een ronde via Setup'); return; }
+  if (!state.ronde) { toonNotif('Start eerst een ronde op via Start'); return; }
   var video = document.getElementById('videoFeed');
   var canvas = document.getElementById('fotoCanvas');
   canvas.width = video.videoWidth || 640;
@@ -1919,5 +1919,4 @@ function toonNotif(tekst) {
 }
 </script>
 </body>
-</html>
-
+  </html>
