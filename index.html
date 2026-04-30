@@ -1303,7 +1303,7 @@ function nieuweCamera() {
 }
 
 function maakFoto() {
-  if (!state.ronde) { toonNotif('Start eerst een ronde op via Start'); return; }
+  if (!state.ronde) { toonNotif('Start eerst een ronde via Setup'); return; }
   var video = document.getElementById('videoFeed');
   var canvas = document.getElementById('fotoCanvas');
   canvas.width = video.videoWidth || 640;
@@ -1383,14 +1383,15 @@ function analyseerCloseup(fotoData, soortNaam, origineleVraag) {
     '  "vervolgvraag": "Nog een vraag als nog steeds onzeker, anders null"\n' +
     '}\n\nAlleen JSON, geen uitleg of markdown.';
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + state.apiKey, {
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + state.apiKey, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       contents: [{ parts: [
         { text: prompt },
         { inline_data: { mime_type: 'image/jpeg', data: base64 } }
-      ]}]
+      ]}],
+      generationConfig: { temperature: 0.1 }
     })
   }).then(function(r) { return r.json(); }).then(function(data) {
     document.getElementById('spinner').style.display = 'none';
@@ -1398,7 +1399,8 @@ function analyseerCloseup(fotoData, soortNaam, origineleVraag) {
     if (data.candidates && data.candidates[0] && data.candidates[0].content) {
       tekst = data.candidates[0].content.parts[0].text || '';
     }
-    tekst = tekst.replace(/```json/g,'').replace(/```/g,'').trim();
+    var match = tekst.match(/\{[\s\S]*\}/);
+    if (match) tekst = match[0];
     try {
       var r = JSON.parse(tekst);
       toonCloseupResultaat(r, soortNaam);
@@ -1503,27 +1505,30 @@ function analyseerFoto(fotoData) {
     '}\n\n' +
     'Wees eerlijk over onzekerheid. Vraag om een close-up of stel een determinatievraag bij twijfel.';
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + state.apiKey, {
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + state.apiKey, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       contents: [{ parts: [
         { text: prompt },
         { inline_data: { mime_type: 'image/jpeg', data: base64 } }
-      ]}]
+      ]}],
+      generationConfig: { temperature: 0.1 }
     })
   }).then(function(r) { return r.json(); }).then(function(data) {
     var tekst = '';
     if (data.candidates && data.candidates[0] && data.candidates[0].content) {
       tekst = data.candidates[0].content.parts[0].text || '';
     }
-    tekst = tekst.replace(/```json/g,'').replace(/```/g,'').trim();
+    // Robuust: zoek het JSON object binnen de tekst
+    var match = tekst.match(/\{[\s\S]*\}/);
+    if (match) tekst = match[0];
     try {
       var resultaat = JSON.parse(tekst);
       huidigAnalyseResultaat = resultaat;
       toonAnalyse(resultaat);
     } catch(e) {
-      toonAIFout('Kon AI-antwoord niet verwerken. Probeer opnieuw.');
+      toonAIFout('Kon AI-antwoord niet verwerken. Probeer opnieuw. (' + e.message + ')');
     }
   }).catch(function(err) {
     toonAIFout('Verbindingsfout: ' + err.message);
@@ -1919,4 +1924,5 @@ function toonNotif(tekst) {
 }
 </script>
 </body>
-  </html>
+</html>
+
