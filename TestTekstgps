@@ -1,1 +1,1208 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BermApp — Vegetatie Inventarisatie</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
 
+  :root {
+    --groen: #2d5a27;
+    --lichtgroen: #4a7c42;
+    --zand: #e8dfc8;
+    --aarde: #8b6f47;
+    --wit: #f5f2eb;
+    --donker: #1a2e17;
+    --waarschuwing: #c17f24;
+    --onzeker: #e8a020;
+    --zeker: #3a7d34;
+    --onbekend: #8b4444;
+    --lijn: rgba(45,90,39,0.2);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--donker);
+    color: var(--wit);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--groen);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--lichtgroen);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .header-title span {
+    font-style: italic;
+    font-weight: 300;
+    color: #a8d4a0;
+  }
+
+  .ronde-badge {
+    font-size: 0.65rem;
+    background: var(--donker);
+    color: #a8d4a0;
+    padding: 4px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    background: #0f1f0d;
+    border-bottom: 1px solid var(--lijn);
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px 4px;
+    text-align: center;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6a9465;
+    cursor: pointer;
+    border: none;
+    background: none;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    color: var(--wit);
+    background: var(--groen);
+    border-bottom: 2px solid #a8d4a0;
+  }
+
+  /* SCREENS */
+  .screen { display: none; padding: 16px; }
+  .screen.active { display: block; }
+
+  /* LOCATIE SETUP */
+  .setup-card {
+    background: #1e3a1a;
+    border: 1px solid var(--lijn);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .setup-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a8d4a0;
+    margin-bottom: 6px;
+  }
+
+  .setup-input {
+    width: 100%;
+    background: #0f1f0d;
+    border: 1px solid var(--lijn);
+    color: var(--wit);
+    padding: 10px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+
+  .setup-input:focus {
+    outline: none;
+    border-color: var(--lichtgroen);
+  }
+
+  .gps-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .gps-display {
+    flex: 1;
+    background: #0f1f0d;
+    border: 1px solid var(--lijn);
+    padding: 8px 12px;
+    font-size: 0.7rem;
+    color: #6a9465;
+    border-radius: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .btn-primair {
+    background: var(--groen);
+    color: var(--wit);
+    width: 100%;
+    padding: 14px;
+    font-size: 0.8rem;
+  }
+
+  .btn-primair:active { background: var(--lichtgroen); transform: scale(0.98); }
+
+  .btn-camera {
+    background: var(--groen);
+    color: var(--wit);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px #1e3a1a, 0 0 0 6px var(--groen);
+  }
+
+  .btn-camera:active { transform: scale(0.93); }
+
+  .btn-klein {
+    background: #1e3a1a;
+    color: #a8d4a0;
+    border: 1px solid var(--lijn);
+    font-size: 0.65rem;
+    padding: 7px 12px;
+  }
+
+  .btn-gps {
+    background: var(--aarde);
+    color: var(--wit);
+    font-size: 0.65rem;
+    padding: 8px 12px;
+    flex-shrink: 0;
+  }
+
+  .btn-gevaar {
+    background: #4a1a1a;
+    color: #e87070;
+    border: 1px solid #6a2a2a;
+  }
+
+  /* CAMERA SCHERM */
+  .camera-container {
+    position: relative;
+    background: #000;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    aspect-ratio: 4/3;
+  }
+
+  #videoFeed {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #fotoPreview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+  }
+
+  .kader-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .kader-vierkant {
+    width: 75%;
+    aspect-ratio: 1;
+    border: 2px dashed rgba(168, 212, 160, 0.8);
+    position: relative;
+    box-shadow: 0 0 0 2000px rgba(0,0,0,0.35);
+  }
+
+  .kader-vierkant::before {
+    content: '1 m²';
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: #a8d4a0;
+    background: rgba(0,0,0,0.6);
+    padding: 2px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+  }
+
+  /* hoekmarkeringen */
+  .kader-vierkant .hoek {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-color: #a8d4a0;
+    border-style: solid;
+  }
+  .hoek-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+  .hoek-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; }
+  .hoek-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; }
+  .hoek-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+
+  .plot-teller {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.7);
+    color: #a8d4a0;
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+  }
+
+  .camera-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+  }
+
+  /* ANALYSE */
+  .analyse-container {
+    background: #1e3a1a;
+    border: 1px solid var(--lijn);
+    border-radius: 4px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .analyse-header {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a8d4a0;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid #2d5a27;
+    border-top-color: #a8d4a0;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SOORT KAARTJE */
+  .soort-kaart {
+    background: #0f1f0d;
+    border-left: 3px solid var(--zeker);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-radius: 0 2px 2px 0;
+    position: relative;
+  }
+
+  .soort-kaart.onzeker { border-left-color: var(--onzeker); }
+  .soort-kaart.onbekend { border-left-color: var(--onbekend); }
+
+  .soort-naam {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1rem;
+    font-weight: 300;
+    margin-bottom: 2px;
+  }
+
+  .soort-nl {
+    font-size: 0.7rem;
+    color: #a8d4a0;
+    margin-bottom: 6px;
+  }
+
+  .soort-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .badge {
+    font-size: 0.55rem;
+    padding: 3px 7px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .badge-zeker { background: #1a4a16; color: #7dcf75; }
+  .badge-onzeker { background: #4a3000; color: #e8a020; }
+  .badge-onbekend { background: #4a1a1a; color: #e87070; }
+
+  .abundantie {
+    font-size: 0.65rem;
+    color: #6a9465;
+  }
+
+  .ai-vraag {
+    background: #2a1f00;
+    border: 1px solid #5a3f00;
+    border-radius: 3px;
+    padding: 8px 10px;
+    margin-top: 8px;
+    font-size: 0.72rem;
+    color: #e8c070;
+    line-height: 1.5;
+  }
+
+  .ai-vraag::before { content: '🔍 '; }
+
+  .foto-btn-rij {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  /* TOTAAL BAR */
+  .totaal-bar {
+    background: #0f1f0d;
+    border: 1px solid var(--lijn);
+    border-radius: 4px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 0.7rem;
+    color: #6a9465;
+  }
+
+  .totaal-getal {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--wit);
+    line-height: 1;
+  }
+
+  /* PLOTS LIJST */
+  .plot-item {
+    background: #1e3a1a;
+    border: 1px solid var(--lijn);
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .plot-thumb {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 2px;
+    flex-shrink: 0;
+    border: 1px solid var(--lijn);
+  }
+
+  .plot-thumb-placeholder {
+    width: 56px;
+    height: 56px;
+    background: #0f1f0d;
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: #2d5a27;
+  }
+
+  .plot-info { flex: 1; min-width: 0; }
+
+  .plot-nr {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #a8d4a0;
+    margin-bottom: 3px;
+  }
+
+  .plot-soorten {
+    font-size: 0.72rem;
+    color: var(--wit);
+    line-height: 1.4;
+  }
+
+  .plot-badges {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  /* KAART */
+  .kaart-placeholder {
+    background: #1a2e17;
+    border: 1px solid var(--lijn);
+    border-radius: 4px;
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #6a9465;
+    font-size: 0.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Simpele SVG kaart simulatie */
+  .kaart-achtergrond {
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+    background-image:
+      linear-gradient(rgba(168,212,160,0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(168,212,160,0.3) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  .kaart-pin {
+    width: 14px;
+    height: 14px;
+    background: var(--onzeker);
+    border-radius: 50%;
+    border: 2px solid var(--wit);
+    box-shadow: 0 0 6px rgba(232,160,32,0.6);
+    position: absolute;
+    cursor: pointer;
+  }
+
+  .kaart-label {
+    font-size: 0.55rem;
+    background: rgba(0,0,0,0.7);
+    padding: 2px 5px;
+    border-radius: 2px;
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    color: var(--wit);
+  }
+
+  /* EXPORT */
+  .export-card {
+    background: #1e3a1a;
+    border: 1px solid var(--lijn);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .export-icon { font-size: 2rem; margin-bottom: 8px; }
+
+  .export-desc {
+    font-size: 0.7rem;
+    color: #6a9465;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  /* NOTIFICATIE */
+  .notif {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--groen);
+    color: var(--wit);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .notif.zichtbaar { opacity: 1; }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--lijn);
+    margin: 14px 0;
+  }
+
+  .sectie-titel {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6a9465;
+    margin-bottom: 10px;
+  }
+
+  canvas { display: none; }
+
+  /* API KEY */
+  .api-banner {
+    background: #4a2000;
+    border: 1px solid #8b4400;
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    font-size: 0.72rem;
+    color: #e8c070;
+    line-height: 1.5;
+  }
+
+  .api-rij {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .api-input {
+    flex: 1;
+    background: #0f1f0d;
+    border: 1px solid #8b4400;
+    color: var(--wit);
+    padding: 8px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">Berm<span>App</span></div>
+  <div class="ronde-badge" id="rondeLabel">Geen ronde</div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="toonScherm('setup')">⚙ Setup</button>
+  <button class="tab" onclick="toonScherm('camera')">📷 Plot</button>
+  <button class="tab" onclick="toonScherm('overzicht')">📋 Ronde</button>
+  <button class="tab" onclick="toonScherm('export')">↗ Export</button>
+</div>
+
+<!-- SETUP SCHERM -->
+<div id="scherm-setup" class="screen active">
+
+  <div id="apiBanner" class="api-banner">
+    ⚠ Gemini API-sleutel vereist voor AI-analyse.<br>
+    <div class="api-rij">
+      <input type="password" class="api-input" id="apiKeyInput" placeholder="Plak hier je Gemini API-sleutel...">
+      <button class="btn btn-gps" onclick="slaApiKeyOp()">OK</button>
+    </div>
+  </div>
+
+  <div class="setup-card">
+    <div class="setup-label">Locatie / Traject</div>
+    <input type="text" class="setup-input" id="locatieNaam" placeholder="bijv. N244 km 12.4 – Texelpad">
+    <div class="setup-label">Datum ronde</div>
+    <input type="date" class="setup-input" id="datumInput">
+    <div class="setup-label">GPS-coördinaten</div>
+    <div class="gps-row">
+      <div class="gps-display" id="gpsDisplay">Nog niet bepaald</div>
+      <button class="btn btn-gps" onclick="bepaalGPS()">📍 GPS</button>
+    </div>
+  </div>
+
+  <div class="setup-card">
+    <div class="setup-label">Plotgrootte</div>
+    <input type="text" class="setup-input" id="plotGrootte" value="1 m²" readonly>
+    <div class="setup-label">Aantal plots (streefwaarde)</div>
+    <input type="number" class="setup-input" id="aantalPlots" value="10" min="1" max="50">
+  </div>
+
+  <button class="btn btn-primair" onclick="startRonde()">▶ Start nieuwe ronde</button>
+</div>
+
+<!-- CAMERA SCHERM -->
+<div id="scherm-camera" class="screen">
+
+  <div class="camera-container">
+    <video id="videoFeed" autoplay playsinline muted></video>
+    <img id="fotoPreview" alt="Foto plot">
+    <div class="kader-overlay">
+      <div class="kader-vierkant">
+        <div class="hoek hoek-tl"></div>
+        <div class="hoek hoek-tr"></div>
+        <div class="hoek hoek-bl"></div>
+        <div class="hoek hoek-br"></div>
+      </div>
+    </div>
+    <div class="plot-teller" id="plotTeller">Plot 1 / 10</div>
+  </div>
+
+  <div class="camera-controls">
+    <button class="btn btn-klein" onclick="nieuweCamera()">↩ Opnieuw</button>
+    <button class="btn btn-camera" id="cameraBtn" onclick="maakFoto()">📷</button>
+    <button class="btn btn-klein" onclick="slaPlotOp()" id="slaOpBtn" style="display:none">✓ Opslaan</button>
+  </div>
+
+  <canvas id="fotoCanvas"></canvas>
+
+  <!-- ANALYSE RESULTAAT -->
+  <div class="analyse-container" id="analyseContainer" style="display:none">
+    <div class="analyse-header">
+      AI-analyse
+      <div class="spinner" id="spinner"></div>
+    </div>
+    <div id="soortLijst"></div>
+    <div id="aiDialoog"></div>
+  </div>
+
+</div>
+
+<!-- OVERZICHT SCHERM -->
+<div id="scherm-overzicht" class="screen">
+
+  <div class="totaal-bar">
+    <div>
+      <div class="totaal-getal" id="totaalSoorten">0</div>
+      <div style="font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:#6a9465">soorten</div>
+    </div>
+    <div style="text-align:center">
+      <div class="totaal-getal" id="totaalPlots">0</div>
+      <div style="font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:#6a9465">plots</div>
+    </div>
+    <div style="text-align:right">
+      <div class="totaal-getal" id="totaalOnzeker">0</div>
+      <div style="font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:#6a9465">te controleren</div>
+    </div>
+  </div>
+
+  <!-- KAARTJE -->
+  <div class="sectie-titel">Locaties in ronde</div>
+  <div class="kaart-placeholder" id="kaartContainer">
+    <div class="kaart-achtergrond"></div>
+    <div style="position:relative;z-index:1;text-align:center">
+      <div style="font-size:1.5rem;margin-bottom:4px">🗺</div>
+      <div>Start een ronde om plots te zien</div>
+    </div>
+  </div>
+
+  <div class="sectie-titel">Gemaakte plots</div>
+  <div id="plotsLijst">
+    <div style="font-size:0.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots gemaakt</div>
+  </div>
+
+</div>
+
+<!-- EXPORT SCHERM -->
+<div id="scherm-export" class="screen">
+
+  <div class="export-card">
+    <div class="export-icon">📄</div>
+    <div class="sectie-titel">CSV Export</div>
+    <div class="export-desc">
+      Alle plots, soorten, abundantie en betrouwbaarheidsstatus<br>
+      klaar voor de bioloog. Datum en GPS inbegrepen.
+    </div>
+    <button class="btn btn-primair" onclick="exporteerCSV()">↓ Download CSV</button>
+  </div>
+
+  <div class="export-card">
+    <div class="export-icon">📋</div>
+    <div class="sectie-titel">Twijfellijst</div>
+    <div class="export-desc">
+      Alleen de onzekere en onbekende soorten,<br>
+      met de AI-vragen die gesteld zijn.
+    </div>
+    <button class="btn btn-primair" onclick="exporteerTwijfel()">↓ Download twijfellijst</button>
+  </div>
+
+  <hr class="divider">
+
+  <div class="setup-card">
+    <div class="setup-label">Opgeslagen rondes</div>
+    <div id="rondesArchief" style="font-size:0.72rem;color:#6a9465">Laden...</div>
+  </div>
+
+  <button class="btn btn-klein btn-gevaar" onclick="verwijderRonde()" style="width:100%;margin-top:8px">
+    ✕ Huidige ronde wissen
+  </button>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ======= STATE =======
+var state = {
+  apiKey: sessionStorage.getItem('bermapp_apikey') || '',
+  ronde: null,
+  plots: [],
+  stream: null,
+  huidigeFotoData: null,
+  analyseerModus: false // wordt true na foto
+};
+
+// ======= INIT =======
+window.addEventListener('load', function() {
+  var vandaag = new Date().toISOString().split('T')[0];
+  document.getElementById('datumInput').value = vandaag;
+  updateApiBanner();
+  laadOpgeslagenData();
+  updateOverzicht();
+});
+
+function updateApiBanner() {
+  document.getElementById('apiBanner').style.display = state.apiKey ? 'none' : 'block';
+}
+
+function slaApiKeyOp() {
+  var key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) return;
+  state.apiKey = key;
+  sessionStorage.setItem('bermapp_apikey', key);
+  updateApiBanner();
+  toonNotif('API-sleutel opgeslagen ✓');
+}
+
+// ======= TABS =======
+function toonScherm(naam) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('scherm-' + naam).classList.add('active');
+  var tabs = document.querySelectorAll('.tab');
+  var namen = ['setup','camera','overzicht','export'];
+  tabs[namen.indexOf(naam)].classList.add('active');
+
+  if (naam === 'camera') startCamera();
+  else stopCamera();
+  if (naam === 'overzicht') updateOverzicht();
+  if (naam === 'export') updateExportScherm();
+}
+
+// ======= RONDE =======
+function startRonde() {
+  var loc = document.getElementById('locatieNaam').value.trim();
+  var datum = document.getElementById('datumInput').value;
+  if (!loc) { toonNotif('Vul een locatienaam in'); return; }
+
+  state.ronde = {
+    id: Date.now(),
+    locatie: loc,
+    datum: datum,
+    gps: document.getElementById('gpsDisplay').textContent,
+    aantalPlots: parseInt(document.getElementById('aantalPlots').value) || 10
+  };
+  state.plots = [];
+
+  document.getElementById('rondeLabel').textContent = loc.substring(0, 20) + (loc.length > 20 ? '…' : '');
+  updatePlotTeller();
+  toonScherm('camera');
+  toonNotif('Ronde gestart ✓');
+}
+
+// ======= GPS =======
+function bepaalGPS() {
+  if (!navigator.geolocation) { toonNotif('GPS niet beschikbaar'); return; }
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    var lat = pos.coords.latitude.toFixed(5);
+    var lon = pos.coords.longitude.toFixed(5);
+    document.getElementById('gpsDisplay').textContent = lat + ', ' + lon;
+    if (state.ronde) state.ronde.gps = lat + ', ' + lon;
+    toonNotif('GPS bepaald ✓');
+  }, function() {
+    toonNotif('GPS mislukt – check permissies');
+  });
+}
+
+// ======= CAMERA =======
+function startCamera() {
+  if (state.stream) return;
+  var constraints = { video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } } };
+  navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+    state.stream = stream;
+    var video = document.getElementById('videoFeed');
+    video.srcObject = stream;
+    video.style.display = 'block';
+    document.getElementById('fotoPreview').style.display = 'none';
+    document.getElementById('analyseContainer').style.display = 'none';
+    document.getElementById('slaOpBtn').style.display = 'none';
+    document.getElementById('cameraBtn').textContent = '📷';
+    state.huidigeFotoData = null;
+  }).catch(function(err) {
+    toonNotif('Camera niet beschikbaar: ' + err.message);
+  });
+}
+
+function stopCamera() {
+  if (state.stream) {
+    state.stream.getTracks().forEach(function(t) { t.stop(); });
+    state.stream = null;
+  }
+}
+
+function nieuweCamera() {
+  stopCamera();
+  state.huidigeFotoData = null;
+  document.getElementById('analyseContainer').style.display = 'none';
+  document.getElementById('slaOpBtn').style.display = 'none';
+  document.getElementById('fotoPreview').style.display = 'none';
+  document.getElementById('videoFeed').style.display = 'block';
+  startCamera();
+}
+
+function maakFoto() {
+  if (!state.ronde) { toonNotif('Start eerst een ronde via Setup'); return; }
+  var video = document.getElementById('videoFeed');
+  var canvas = document.getElementById('fotoCanvas');
+  canvas.width = video.videoWidth || 640;
+  canvas.height = video.videoHeight || 480;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  state.huidigeFotoData = canvas.toDataURL('image/jpeg', 0.85);
+
+  document.getElementById('fotoPreview').src = state.huidigeFotoData;
+  document.getElementById('fotoPreview').style.display = 'block';
+  document.getElementById('videoFeed').style.display = 'none';
+  document.getElementById('analyseContainer').style.display = 'block';
+  document.getElementById('slaOpBtn').style.display = 'inline-flex';
+
+  analyseerFoto(state.huidigeFotoData);
+}
+
+function updatePlotTeller() {
+  var streef = state.ronde ? state.ronde.aantalPlots : 10;
+  document.getElementById('plotTeller').textContent = 'Plot ' + (state.plots.length + 1) + ' / ' + streef;
+}
+
+// ======= AI ANALYSE =======
+var huidigAnalyseResultaat = null;
+
+function analyseerFoto(fotoData) {
+  document.getElementById('soortLijst').innerHTML = '';
+  document.getElementById('aiDialoog').innerHTML = '';
+  document.getElementById('spinner').style.display = 'inline-block';
+
+  if (!state.apiKey) {
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag" style="background:#1a1a2e;border-color:#334">Geen API-sleutel ingesteld. Ga naar Setup.</div>';
+    return;
+  }
+
+  var base64 = fotoData.split(',')[1];
+  var prompt = 'Je bent een botanisch veldassistent. Analyseer deze foto van een berm-vegetatieplot van 1 m².\n\nGeef ALLEEN een JSON-object terug, geen uitleg, geen markdown:\n{\n  "soorten": [\n    {\n      "wetenschappelijk": "Naam of null",\n      "nl": "Nederlandse naam of onbekend",\n      "abundantie": "zeldzaam|schaars|frequent|abundant|dominant",\n      "betrouwbaarheid": "zeker|onzeker|onbekend",\n      "vraag": "Stel een gerichte vraag als onzeker/onbekend, anders null"\n    }\n  ],\n  "opmerkingen": "Korte algemene opmerking over het plot"\n}\n\nWees eerlijk: markeer als onzeker als je niet zeker bent. Vraag dan om een close-up of stel een determinatievraag.';
+
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + state.apiKey, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{
+        parts: [
+          { text: prompt },
+          { inline_data: { mime_type: 'image/jpeg', data: base64 } }
+        ]
+      }]
+    })
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    document.getElementById('spinner').style.display = 'none';
+    var tekst = '';
+    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
+      tekst = data.candidates[0].content.parts[0].text || '';
+    }
+    // Strip markdown
+    tekst = tekst.replace(/```json/g,'').replace(/```/g,'').trim();
+    try {
+      var resultaat = JSON.parse(tekst);
+      huidigAnalyseResultaat = resultaat;
+      toonAnalyse(resultaat);
+    } catch(e) {
+      document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag">Kon AI-antwoord niet verwerken. Probeer opnieuw.</div>';
+    }
+  }).catch(function(err) {
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag">Verbindingsfout: ' + err.message + '</div>';
+  });
+}
+
+function toonAnalyse(resultaat) {
+  var html = '';
+  resultaat.soorten.forEach(function(s, i) {
+    var klasse = s.betrouwbaarheid === 'zeker' ? '' : (s.betrouwbaarheid === 'onzeker' ? ' onzeker' : ' onbekend');
+    var badge = s.betrouwbaarheid === 'zeker' ? 'badge-zeker' : (s.betrouwbaarheid === 'onzeker' ? 'badge-onzeker' : 'badge-onbekend');
+    var badgeTekst = s.betrouwbaarheid === 'zeker' ? '✓ zeker' : (s.betrouwbaarheid === 'onzeker' ? '⚠ onzeker' : '? onbekend');
+
+    html += '<div class="soort-kaart' + klasse + '">';
+    html += '<div class="soort-naam">' + (s.wetenschappelijk || '—') + '</div>';
+    html += '<div class="soort-nl">' + s.nl + '</div>';
+    html += '<div class="soort-meta">';
+    html += '<span class="badge ' + badge + '">' + badgeTekst + '</span>';
+    html += '<span class="abundantie">' + s.abundantie + '</span>';
+    html += '</div>';
+    if (s.vraag) {
+      html += '<div class="ai-vraag">' + s.vraag + '</div>';
+      html += '<div class="foto-btn-rij">';
+      html += '<button class="btn btn-klein" onclick="vraagCloseFoto(' + i + ')">📷 Close-up maken</button>';
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+
+  document.getElementById('soortLijst').innerHTML = html;
+
+  if (resultaat.opmerkingen) {
+    document.getElementById('aiDialoog').innerHTML =
+      '<div style="font-size:0.68rem;color:#6a9465;margin-top:8px;font-style:italic;padding:8px 0;border-top:1px solid rgba(45,90,39,0.2)">💬 ' + resultaat.opmerkingen + '</div>';
+  }
+}
+
+function vraagCloseFoto(soortIndex) {
+  toonNotif('Maak een close-up van deze plant ↑');
+  // Zet tijdelijk in "close-up modus" – volgende foto wordt gekoppeld
+  nieuweCamera();
+}
+
+// ======= PLOT OPSLAAN =======
+function slaPlotOp() {
+  if (!state.huidigeFotoData) { toonNotif('Maak eerst een foto'); return; }
+
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    _slaOpMetGPS(pos.coords.latitude.toFixed(5) + ',' + pos.coords.longitude.toFixed(5));
+  }, function() {
+    _slaOpMetGPS(state.ronde ? state.ronde.gps : '');
+  }, { timeout: 3000 });
+}
+
+function _slaOpMetGPS(gps) {
+  var plot = {
+    nr: state.plots.length + 1,
+    timestamp: new Date().toISOString(),
+    gps: gps,
+    foto: state.huidigeFotoData,
+    analyse: huidigAnalyseResultaat
+  };
+  state.plots.push(plot);
+  slaDataOp();
+
+  huidigAnalyseResultaat = null;
+  nieuweCamera();
+  updatePlotTeller();
+  toonNotif('Plot ' + plot.nr + ' opgeslagen ✓');
+}
+
+// ======= OVERZICHT =======
+function updateOverzicht() {
+  var plots = state.plots;
+  var alleSoorten = {};
+  var onzeker = 0;
+
+  plots.forEach(function(p) {
+    if (!p.analyse) return;
+    p.analyse.soorten.forEach(function(s) {
+      var key = s.wetenschappelijk || s.nl;
+      alleSoorten[key] = true;
+      if (s.betrouwbaarheid !== 'zeker') onzeker++;
+    });
+  });
+
+  document.getElementById('totaalSoorten').textContent = Object.keys(alleSoorten).length;
+  document.getElementById('totaalPlots').textContent = plots.length;
+  document.getElementById('totaalOnzeker').textContent = onzeker;
+
+  // Kaart
+  var kaart = document.getElementById('kaartContainer');
+  if (plots.length > 0) {
+    var pinsHtml = '<div class="kaart-achtergrond"></div>';
+    plots.forEach(function(p, i) {
+      var x = 15 + (i % 5) * 18;
+      var y = 20 + Math.floor(i / 5) * 35;
+      pinsHtml += '<div class="kaart-pin" style="left:' + x + '%;top:' + y + '%">';
+      pinsHtml += '<div class="kaart-label">P' + p.nr + '</div></div>';
+    });
+    pinsHtml += '<div style="position:absolute;bottom:8px;right:10px;font-size:0.55rem;color:#6a9465;letter-spacing:0.06em">GPS-kaart (vereist internet)</div>';
+    kaart.innerHTML = pinsHtml;
+  }
+
+  // Plots lijst
+  var lijstHtml = '';
+  plots.forEach(function(p) {
+    var soortTekst = p.analyse ? p.analyse.soorten.slice(0,3).map(function(s){return s.nl;}).join(', ') : '—';
+    var onzekerP = p.analyse ? p.analyse.soorten.filter(function(s){return s.betrouwbaarheid!=='zeker';}).length : 0;
+
+    lijstHtml += '<div class="plot-item">';
+    if (p.foto) {
+      lijstHtml += '<img class="plot-thumb" src="' + p.foto + '" alt="Plot ' + p.nr + '">';
+    } else {
+      lijstHtml += '<div class="plot-thumb-placeholder">🌿</div>';
+    }
+    lijstHtml += '<div class="plot-info">';
+    lijstHtml += '<div class="plot-nr">Plot ' + p.nr + ' — ' + (p.timestamp ? p.timestamp.substring(11,16) : '') + '</div>';
+    lijstHtml += '<div class="plot-soorten">' + soortTekst + (p.analyse && p.analyse.soorten.length > 3 ? ' +' + (p.analyse.soorten.length-3) + ' meer' : '') + '</div>';
+    lijstHtml += '<div class="plot-badges">';
+    if (onzekerP > 0) lijstHtml += '<span class="badge badge-onzeker">⚠ ' + onzekerP + ' te controleren</span>';
+    if (p.gps) lijstHtml += '<span class="badge" style="background:#0f1f0d;color:#6a9465">📍 GPS</span>';
+    lijstHtml += '</div></div></div>';
+  });
+
+  document.getElementById('plotsLijst').innerHTML = lijstHtml || '<div style="font-size:0.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
+}
+
+// ======= EXPORT =======
+function exporteerCSV() {
+  if (!state.plots.length) { toonNotif('Geen data om te exporteren'); return; }
+  var rijen = [['Plot','Datum','Tijd','GPS','Wetenschappelijk','Nederlands','Abundantie','Betrouwbaarheid','Vraag AI']];
+
+  state.plots.forEach(function(p) {
+    var dt = p.timestamp ? p.timestamp.split('T') : ['',''];
+    if (p.analyse) {
+      p.analyse.soorten.forEach(function(s) {
+        rijen.push([
+          p.nr, dt[0], dt[1].substring(0,5), p.gps,
+          s.wetenschappelijk || '', s.nl, s.abundantie,
+          s.betrouwbaarheid, s.vraag || ''
+        ]);
+      });
+    } else {
+      rijen.push([p.nr, dt[0], dt[1].substring(0,5), p.gps, '','','','','']);
+    }
+  });
+
+  var csv = rijen.map(function(r){ return r.map(function(c){ return '"'+(c+'').replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+  var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'bermapp_' + (state.ronde ? state.ronde.datum : 'export') + '.csv';
+  a.click();
+  toonNotif('CSV gedownload ✓');
+}
+
+function exporteerTwijfel() {
+  if (!state.plots.length) { toonNotif('Geen data'); return; }
+  var regels = ['TWIJFELLIJST — BermApp\n'];
+  if (state.ronde) regels.push('Locatie: ' + state.ronde.locatie + '\nDatum: ' + state.ronde.datum + '\n\n');
+
+  state.plots.forEach(function(p) {
+    if (!p.analyse) return;
+    var tw = p.analyse.soorten.filter(function(s){ return s.betrouwbaarheid !== 'zeker'; });
+    if (!tw.length) return;
+    regels.push('PLOT ' + p.nr + ' — GPS: ' + p.gps);
+    tw.forEach(function(s) {
+      regels.push('  • ' + s.nl + ' (' + s.wetenschappelijk + ') [' + s.betrouwbaarheid + ']');
+      if (s.vraag) regels.push('    Vraag: ' + s.vraag);
+    });
+    regels.push('');
+  });
+
+  var blob = new Blob([regels.join('\n')], {type:'text/plain;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'twijfellijst_' + (state.ronde ? state.ronde.datum : 'export') + '.txt';
+  a.click();
+  toonNotif('Twijfellijst gedownload ✓');
+}
+
+// ======= OPSLAG =======
+function slaDataOp() {
+  try {
+    localStorage.setItem('bermapp_ronde', JSON.stringify(state.ronde));
+    // Foto's apart opslaan (groot)
+    var plotsZonderFoto = state.plots.map(function(p) {
+      return Object.assign({}, p, {foto: p.foto ? 'aanwezig' : null});
+    });
+    localStorage.setItem('bermapp_plots_meta', JSON.stringify(plotsZonderFoto));
+    state.plots.forEach(function(p, i) {
+      if (p.foto) localStorage.setItem('bermapp_foto_' + i, p.foto);
+    });
+  } catch(e) { /* localStorage vol — foto's te groot */ }
+}
+
+function laadOpgeslagenData() {
+  try {
+    var r = localStorage.getItem('bermapp_ronde');
+    var pm = localStorage.getItem('bermapp_plots_meta');
+    if (r) state.ronde = JSON.parse(r);
+    if (pm) {
+      state.plots = JSON.parse(pm).map(function(p, i) {
+        if (p.foto === 'aanwezig') p.foto = localStorage.getItem('bermapp_foto_' + i);
+        return p;
+      });
+      if (state.ronde) document.getElementById('rondeLabel').textContent = state.ronde.locatie.substring(0,20);
+    }
+  } catch(e) {}
+}
+
+function updateExportScherm() {
+  var arch = document.getElementById('rondesArchief');
+  if (state.ronde) {
+    arch.innerHTML = '<div style="color:var(--wit)">' + state.ronde.locatie + '</div>' +
+      '<div>' + state.ronde.datum + ' — ' + state.plots.length + ' plots</div>';
+  } else {
+    arch.textContent = 'Geen ronde actief';
+  }
+}
+
+function verwijderRonde() {
+  if (!confirm('Huidige ronde wissen? (Export eerst!)')) return;
+  state.ronde = null;
+  state.plots = [];
+  localStorage.removeItem('bermapp_ronde');
+  localStorage.removeItem('bermapp_plots_meta');
+  document.getElementById('rondeLabel').textContent = 'Geen ronde';
+  updateOverzicht();
+  toonNotif('Ronde gewist');
+}
+
+// ======= NOTIF =======
+function toonNotif(tekst) {
+  var n = document.getElementById('notif');
+  n.textContent = tekst;
+  n.classList.add('zichtbaar');
+  setTimeout(function(){ n.classList.remove('zichtbaar'); }, 2200);
+}
+</script>
+</body>
+</html>
