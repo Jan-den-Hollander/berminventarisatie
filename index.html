@@ -1371,17 +1371,7 @@ function analyseerCloseup(fotoData, soortNaam, origineleVraag) {
   }
 
   var base64 = fotoData.split(',')[1];
-  var prompt = 'Je bent een botanisch expert. Een veldwerker twijfelde over de determinatie van: "' + soortNaam + '".\n' +
-    'De eerder gestelde vraag was: "' + origineleVraag + '"\n\n' +
-    'Bekijk deze close-up foto zorgvuldig en geef een JSON-antwoord:\n' +
-    '{\n' +
-    '  "determinatie": "Wetenschappelijke naam of null als nog steeds onzeker",\n' +
-    '  "nl": "Nederlandse naam",\n' +
-    '  "betrouwbaarheid": "zeker|onzeker|onbekend",\n' +
-    '  "redenering": "Korte uitleg van je determinatie op basis van wat je ziet",\n' +
-    '  "kenmerken": ["Kenmerk 1 dat je ziet", "Kenmerk 2"],\n' +
-    '  "vervolgvraag": "Nog een vraag als nog steeds onzeker, anders null"\n' +
-    '}\n\nAlleen JSON, geen uitleg of markdown.';
+  var prompt = 'Botanische close-up analyse. Twijfelsoort: "' + soortNaam + '". Vraag was: "' + origineleVraag + '".\nGeef ALLEEN geldig JSON:\n{"determinatie":"naam of null","nl":"naam","betrouwbaarheid":"zeker|onzeker|onbekend","redenering":"kort","kenmerken":["kenmerk1"],"vervolgvraag":"vraag of null"}';
 
   fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + state.apiKey, {
     method: 'POST',
@@ -1391,10 +1381,7 @@ function analyseerCloseup(fotoData, soortNaam, origineleVraag) {
         { text: prompt },
         { inline_data: { mime_type: 'image/jpeg', data: base64 } }
       ]}],
-      generationConfig: { temperature: 0.1 }
-    })
-  }).then(function(r) { return r.json(); }).then(function(data) {
-    document.getElementById('spinner').style.display = 'none';
+      generationConfig: { temperature: 0.1, maxOutputTokens: 800 }
     var tekst = '';
     if (data.candidates && data.candidates[0] && data.candidates[0].content) {
       tekst = data.candidates[0].content.parts[0].text || '';
@@ -1488,22 +1475,7 @@ function analyseerFoto(fotoData) {
   }
 
   var base64 = fotoData.split(',')[1];
-  var prompt = 'Je bent een botanisch veldassistent. Analyseer deze foto van een berm-vegetatieplot van 1 m².\n\n' +
-    'Geef ALLEEN een JSON-object terug, geen uitleg, geen markdown:\n' +
-    '{\n' +
-    '  "soorten": [\n' +
-    '    {\n' +
-    '      "wetenschappelijk": "Naam of null",\n' +
-    '      "nl": "Nederlandse naam of onbekend",\n' +
-    '      "abundantie": "zeldzaam|schaars|frequent|abundant|dominant",\n' +
-    '      "betrouwbaarheid": "zeker|onzeker|onbekend",\n' +
-    '      "vraag": "Gerichte determinatievraag als onzeker/onbekend, anders null"\n' +
-    '    }\n' +
-    '  ],\n' +
-    '  "vegetatiebedekking": "percentage als getal 0-100",\n' +
-    '  "opmerkingen": "Korte opmerking over het plot"\n' +
-    '}\n\n' +
-    'Wees eerlijk over onzekerheid. Vraag om een close-up of stel een determinatievraag bij twijfel.';
+  var prompt = 'Analyseer deze berm-vegetatiefoto (1 m² plot). Geef ALLEEN geldig JSON terug:\n{"soorten":[{"wetenschappelijk":"naam of null","nl":"naam","abundantie":"zeldzaam|schaars|frequent|abundant|dominant","betrouwbaarheid":"zeker|onzeker|onbekend","vraag":"vraag bij twijfel of null"}],"vegetatiebedekking":80,"opmerkingen":"kort"}\nMaximaal 8 soorten. Alleen JSON, geen tekst eromheen.';
 
   fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + state.apiKey, {
     method: 'POST',
@@ -1513,15 +1485,7 @@ function analyseerFoto(fotoData) {
         { text: prompt },
         { inline_data: { mime_type: 'image/jpeg', data: base64 } }
       ]}],
-      generationConfig: { temperature: 0.1 }
-    })
-  }).then(function(r) { return r.json(); }).then(function(data) {
-    var tekst = '';
-    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-      tekst = data.candidates[0].content.parts[0].text || '';
-    }
-    // Robuust: zoek het JSON object binnen de tekst
-    var match = tekst.match(/\{[\s\S]*\}/);
+      generationConfig: { temperature: 0.1, maxOutputTokens: 1500 }
     if (match) tekst = match[0];
     try {
       var resultaat = JSON.parse(tekst);
