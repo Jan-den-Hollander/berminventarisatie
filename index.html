@@ -499,7 +499,6 @@
     overflow: hidden;
   }
 
-  /* Simpele SVG kaart simulatie */
   .kaart-achtergrond {
     position: absolute;
     inset: 0;
@@ -602,6 +601,16 @@
     line-height: 1.5;
   }
 
+  .api-link {
+    display: inline-block;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    color: #ffd080;
+    font-size: 0.68rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
   .api-rij {
     display: flex;
     gap: 8px;
@@ -617,6 +626,32 @@
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.7rem;
     border-radius: 2px;
+  }
+
+  /* API key opgeslagen banner (groen) */
+  .api-banner-ok {
+    background: #1a3a16;
+    border: 1px solid #3a6a34;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 0.68rem;
+    color: #a8d4a0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .api-wis-btn {
+    background: none;
+    border: 1px solid #3a6a34;
+    color: #6a9465;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    padding: 4px 8px;
+    border-radius: 2px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
   }
 </style>
 </head>
@@ -637,13 +672,8 @@
 <!-- SETUP SCHERM -->
 <div id="scherm-setup" class="screen active">
 
-  <div id="apiBanner" class="api-banner">
-    ⚠ Gemini API-sleutel vereist voor AI-analyse.<br>
-    <div class="api-rij">
-      <input type="password" class="api-input" id="apiKeyInput" placeholder="Plak hier je Gemini API-sleutel...">
-      <button class="btn btn-gps" onclick="slaApiKeyOp()">OK</button>
-    </div>
-  </div>
+  <!-- API banner: wordt gevuld door updateApiBanner() -->
+  <div id="apiBanner"></div>
 
   <div class="setup-card">
     <div class="setup-label">Locatie / Traject</div>
@@ -722,7 +752,6 @@
     </div>
   </div>
 
-  <!-- KAARTJE -->
   <div class="sectie-titel">Locaties in ronde</div>
   <div class="kaart-placeholder" id="kaartContainer">
     <div class="kaart-achtergrond"></div>
@@ -779,12 +808,11 @@
 <script>
 // ======= STATE =======
 var state = {
-  apiKey: sessionStorage.getItem('bermapp_apikey') || '',
+  apiKey: localStorage.getItem('bermapp_apikey') || '',  // FIX: localStorage ipv sessionStorage
   ronde: null,
   plots: [],
   stream: null,
-  huidigeFotoData: null,
-  analyseerModus: false // wordt true na foto
+  huidigeFotoData: null
 };
 
 // ======= INIT =======
@@ -796,17 +824,44 @@ window.addEventListener('load', function() {
   updateOverzicht();
 });
 
+// FIX: API banner toont link + invoerveld als geen key, anders groene bevestiging
 function updateApiBanner() {
-  document.getElementById('apiBanner').style.display = state.apiKey ? 'none' : 'block';
+  var banner = document.getElementById('apiBanner');
+  if (state.apiKey) {
+    banner.innerHTML =
+      '<div class="api-banner-ok">' +
+      '<span>✓ API-sleutel actief</span>' +
+      '<button class="api-wis-btn" onclick="wisApiKey()">Wijzigen</button>' +
+      '</div>';
+  } else {
+    banner.innerHTML =
+      '<div class="api-banner">' +
+      '⚠ Gemini API-sleutel vereist voor AI-analyse.<br>' +
+      '<a class="api-link" href="https://aistudio.google.com/app/apikey" target="_blank">' +
+      '→ Maak hier gratis een API-sleutel aan (Google AI Studio)' +
+      '</a>' +
+      '<div class="api-rij">' +
+      '<input type="password" class="api-input" id="apiKeyInput" placeholder="Plak hier je Gemini API-sleutel...">' +
+      '<button class="btn btn-gps" onclick="slaApiKeyOp()">OK</button>' +
+      '</div></div>';
+  }
 }
 
 function slaApiKeyOp() {
-  var key = document.getElementById('apiKeyInput').value.trim();
+  var input = document.getElementById('apiKeyInput');
+  if (!input) return;
+  var key = input.value.trim();
   if (!key) return;
   state.apiKey = key;
-  sessionStorage.setItem('bermapp_apikey', key);
+  localStorage.setItem('bermapp_apikey', key);  // FIX: localStorage
   updateApiBanner();
   toonNotif('API-sleutel opgeslagen ✓');
+}
+
+function wisApiKey() {
+  state.apiKey = '';
+  localStorage.removeItem('bermapp_apikey');
+  updateApiBanner();
 }
 
 // ======= TABS =======
@@ -928,12 +983,23 @@ function analyseerFoto(fotoData) {
 
   if (!state.apiKey) {
     document.getElementById('spinner').style.display = 'none';
-    document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag" style="background:#1a1a2e;border-color:#334">Geen API-sleutel ingesteld. Ga naar Setup.</div>';
+    document.getElementById('soortLijst').innerHTML =
+      '<div class="ai-vraag" style="background:#1a1a2e;border-color:#334">' +
+      'Geen API-sleutel ingesteld. Ga naar Setup.</div>';
     return;
   }
 
   var base64 = fotoData.split(',')[1];
-  var prompt = 'Je bent een botanisch veldassistent. Analyseer deze foto van een berm-vegetatieplot van 1 m².\n\nGeef ALLEEN een JSON-object terug, geen uitleg, geen markdown:\n{\n  "soorten": [\n    {\n      "wetenschappelijk": "Naam of null",\n      "nl": "Nederlandse naam of onbekend",\n      "abundantie": "zeldzaam|schaars|frequent|abundant|dominant",\n      "betrouwbaarheid": "zeker|onzeker|onbekend",\n      "vraag": "Stel een gerichte vraag als onzeker/onbekend, anders null"\n    }\n  ],\n  "opmerkingen": "Korte algemene opmerking over het plot"\n}\n\nWees eerlijk: markeer als onzeker als je niet zeker bent. Vraag dan om een close-up of stel een determinatievraag.';
+  var prompt = 'Je bent een botanisch veldassistent. Analyseer deze foto van een berm-vegetatieplot van 1 m².\n\n' +
+    'Geef ALLEEN een JSON-object terug, geen uitleg, geen markdown:\n' +
+    '{\n  "soorten": [\n    {\n      "wetenschappelijk": "Naam of null",\n' +
+    '      "nl": "Nederlandse naam of onbekend",\n' +
+    '      "abundantie": "zeldzaam|schaars|frequent|abundant|dominant",\n' +
+    '      "betrouwbaarheid": "zeker|onzeker|onbekend",\n' +
+    '      "vraag": "Stel een gerichte vraag als onzeker/onbekend, anders null"\n' +
+    '    }\n  ],\n' +
+    '  "opmerkingen": "Korte algemene opmerking over het plot"\n}\n\n' +
+    'Wees eerlijk: markeer als onzeker als je niet zeker bent. Vraag dan om een close-up of stel een determinatievraag.';
 
   fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + state.apiKey, {
     method: 'POST',
@@ -946,61 +1012,89 @@ function analyseerFoto(fotoData) {
         ]
       }]
     })
-  }).then(function(r) { return r.json(); }).then(function(data) {
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
     document.getElementById('spinner').style.display = 'none';
+
+    // FIX: robuuste response-extractie
     var tekst = '';
-    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
+    try {
       tekst = data.candidates[0].content.parts[0].text || '';
+    } catch(e) {
+      // Mogelijk een API-fout — toon details als beschikbaar
+      var foutMsg = (data.error && data.error.message) ? data.error.message : 'Geen antwoord van Gemini.';
+      document.getElementById('soortLijst').innerHTML =
+        '<div class="ai-vraag">⚠ ' + foutMsg + '<br>Controleer je API-sleutel in Setup.</div>';
+      return;
     }
-    // Strip markdown
-    tekst = tekst.replace(/```json/g,'').replace(/```/g,'').trim();
+
+    // FIX: pak JSON tussen eerste { en laatste } — werkt ook als Gemini tekst toevoegt
+    var start = tekst.indexOf('{');
+    var eind = tekst.lastIndexOf('}');
+    if (start === -1 || eind === -1 || eind <= start) {
+      document.getElementById('soortLijst').innerHTML =
+        '<div class="ai-vraag">Gemini gaf geen JSON terug. Probeer opnieuw.<br>' +
+        '<small style="opacity:0.6;font-size:0.65rem">' + tekst.substring(0, 120) + '</small></div>';
+      return;
+    }
+    tekst = tekst.substring(start, eind + 1);
+
     try {
       var resultaat = JSON.parse(tekst);
       huidigAnalyseResultaat = resultaat;
       toonAnalyse(resultaat);
     } catch(e) {
-      document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag">Kon AI-antwoord niet verwerken. Probeer opnieuw.</div>';
+      document.getElementById('soortLijst').innerHTML =
+        '<div class="ai-vraag">JSON-fout: ' + e.message + '<br>' +
+        '<small style="opacity:0.6;font-size:0.65rem">' + tekst.substring(0, 120) + '…</small></div>';
     }
-  }).catch(function(err) {
+  })
+  .catch(function(err) {
     document.getElementById('spinner').style.display = 'none';
-    document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag">Verbindingsfout: ' + err.message + '</div>';
+    document.getElementById('soortLijst').innerHTML =
+      '<div class="ai-vraag">Verbindingsfout: ' + err.message + '</div>';
   });
 }
 
 function toonAnalyse(resultaat) {
   var html = '';
-  resultaat.soorten.forEach(function(s, i) {
-    var klasse = s.betrouwbaarheid === 'zeker' ? '' : (s.betrouwbaarheid === 'onzeker' ? ' onzeker' : ' onbekend');
-    var badge = s.betrouwbaarheid === 'zeker' ? 'badge-zeker' : (s.betrouwbaarheid === 'onzeker' ? 'badge-onzeker' : 'badge-onbekend');
-    var badgeTekst = s.betrouwbaarheid === 'zeker' ? '✓ zeker' : (s.betrouwbaarheid === 'onzeker' ? '⚠ onzeker' : '? onbekend');
+  if (!resultaat.soorten || !resultaat.soorten.length) {
+    html = '<div class="ai-vraag">Geen soorten herkend in dit plot.</div>';
+  } else {
+    resultaat.soorten.forEach(function(s, i) {
+      var klasse = s.betrouwbaarheid === 'zeker' ? '' : (s.betrouwbaarheid === 'onzeker' ? ' onzeker' : ' onbekend');
+      var badge = s.betrouwbaarheid === 'zeker' ? 'badge-zeker' : (s.betrouwbaarheid === 'onzeker' ? 'badge-onzeker' : 'badge-onbekend');
+      var badgeTekst = s.betrouwbaarheid === 'zeker' ? '✓ zeker' : (s.betrouwbaarheid === 'onzeker' ? '⚠ onzeker' : '? onbekend');
 
-    html += '<div class="soort-kaart' + klasse + '">';
-    html += '<div class="soort-naam">' + (s.wetenschappelijk || '—') + '</div>';
-    html += '<div class="soort-nl">' + s.nl + '</div>';
-    html += '<div class="soort-meta">';
-    html += '<span class="badge ' + badge + '">' + badgeTekst + '</span>';
-    html += '<span class="abundantie">' + s.abundantie + '</span>';
-    html += '</div>';
-    if (s.vraag) {
-      html += '<div class="ai-vraag">' + s.vraag + '</div>';
-      html += '<div class="foto-btn-rij">';
-      html += '<button class="btn btn-klein" onclick="vraagCloseFoto(' + i + ')">📷 Close-up maken</button>';
+      html += '<div class="soort-kaart' + klasse + '">';
+      html += '<div class="soort-naam">' + (s.wetenschappelijk || '—') + '</div>';
+      html += '<div class="soort-nl">' + (s.nl || '') + '</div>';
+      html += '<div class="soort-meta">';
+      html += '<span class="badge ' + badge + '">' + badgeTekst + '</span>';
+      html += '<span class="abundantie">' + (s.abundantie || '') + '</span>';
       html += '</div>';
-    }
-    html += '</div>';
-  });
+      if (s.vraag) {
+        html += '<div class="ai-vraag">' + s.vraag + '</div>';
+        html += '<div class="foto-btn-rij">';
+        html += '<button class="btn btn-klein" onclick="vraagCloseFoto(' + i + ')">📷 Close-up maken</button>';
+        html += '</div>';
+      }
+      html += '</div>';
+    });
+  }
 
   document.getElementById('soortLijst').innerHTML = html;
 
   if (resultaat.opmerkingen) {
     document.getElementById('aiDialoog').innerHTML =
-      '<div style="font-size:0.68rem;color:#6a9465;margin-top:8px;font-style:italic;padding:8px 0;border-top:1px solid rgba(45,90,39,0.2)">💬 ' + resultaat.opmerkingen + '</div>';
+      '<div style="font-size:0.68rem;color:#6a9465;margin-top:8px;font-style:italic;' +
+      'padding:8px 0;border-top:1px solid rgba(45,90,39,0.2)">💬 ' + resultaat.opmerkingen + '</div>';
   }
 }
 
 function vraagCloseFoto(soortIndex) {
   toonNotif('Maak een close-up van deze plant ↑');
-  // Zet tijdelijk in "close-up modus" – volgende foto wordt gekoppeld
   nieuweCamera();
 }
 
@@ -1051,7 +1145,6 @@ function updateOverzicht() {
   document.getElementById('totaalPlots').textContent = plots.length;
   document.getElementById('totaalOnzeker').textContent = onzeker;
 
-  // Kaart
   var kaart = document.getElementById('kaartContainer');
   if (plots.length > 0) {
     var pinsHtml = '<div class="kaart-achtergrond"></div>';
@@ -1065,7 +1158,6 @@ function updateOverzicht() {
     kaart.innerHTML = pinsHtml;
   }
 
-  // Plots lijst
   var lijstHtml = '';
   plots.forEach(function(p) {
     var soortTekst = p.analyse ? p.analyse.soorten.slice(0,3).map(function(s){return s.nl;}).join(', ') : '—';
@@ -1086,7 +1178,8 @@ function updateOverzicht() {
     lijstHtml += '</div></div></div>';
   });
 
-  document.getElementById('plotsLijst').innerHTML = lijstHtml || '<div style="font-size:0.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
+  document.getElementById('plotsLijst').innerHTML = lijstHtml ||
+    '<div style="font-size:0.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
 }
 
 // ======= EXPORT =======
@@ -1109,7 +1202,9 @@ function exporteerCSV() {
     }
   });
 
-  var csv = rijen.map(function(r){ return r.map(function(c){ return '"'+(c+'').replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+  var csv = rijen.map(function(r){
+    return r.map(function(c){ return '"'+(c+'').replace(/"/g,'""')+'"'; }).join(',');
+  }).join('\n');
   var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
@@ -1149,7 +1244,6 @@ function exporteerTwijfel() {
 function slaDataOp() {
   try {
     localStorage.setItem('bermapp_ronde', JSON.stringify(state.ronde));
-    // Foto's apart opslaan (groot)
     var plotsZonderFoto = state.plots.map(function(p) {
       return Object.assign({}, p, {foto: p.foto ? 'aanwezig' : null});
     });
@@ -1205,4 +1299,4 @@ function toonNotif(tekst) {
 }
 </script>
 </body>
-      </html>
+</html>
