@@ -863,7 +863,7 @@
     <div class="setup-label">GPS-coördinaten</div>
     <div class="gps-row">
       <div class="gps-display" id="gpsDisplay">Nog niet bepaald</div>
-      <button class="btn btn-gps" onclick="bepaalGPS()">📍 GPS</button>
+      <button class="btn btn-gps" onclick="bepaalGPS()" id="gpsKnop">📍 GPS</button>
     </div>
   </div>
 
@@ -1239,16 +1239,52 @@ function startRonde() {
 
 // ======= GPS =======
 function bepaalGPS() {
-  if (!navigator.geolocation) { toonNotif('GPS niet beschikbaar'); return; }
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    var lat = pos.coords.latitude.toFixed(5);
-    var lon = pos.coords.longitude.toFixed(5);
-    document.getElementById('gpsDisplay').textContent = lat + ', ' + lon;
-    if (state.ronde) state.ronde.gps = lat + ', ' + lon;
-    toonNotif('GPS bepaald ✓');
-  }, function() {
-    toonNotif('GPS mislukt – check permissies');
-  });
+  var display = document.getElementById('gpsDisplay');
+  var knop = document.getElementById('gpsKnop');
+  display.textContent = 'Zoeken...';
+  display.style.color = '#e8a020';
+  if (knop) { knop.textContent = '⏳'; knop.disabled = true; }
+
+  if (!navigator.geolocation) {
+    display.textContent = 'GPS niet beschikbaar in deze browser';
+    if (knop) { knop.textContent = '📍 GPS'; knop.disabled = false; }
+    toonNotif('GPS niet beschikbaar');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      var lat = pos.coords.latitude.toFixed(5);
+      var lon = pos.coords.longitude.toFixed(5);
+      var tekst = lat + ', ' + lon;
+      display.textContent = tekst;
+      display.style.color = '#7dcf75';
+      if (knop) { knop.textContent = '✓'; knop.disabled = false; }
+      if (state.ronde) state.ronde.gps = tekst;
+      toonNotif('GPS bepaald ✓');
+    },
+    function(err) {
+      display.style.color = '#e87070';
+      if (knop) { knop.textContent = '📍 GPS'; knop.disabled = false; }
+      if (err.code === 1) {
+        display.textContent = 'Toestemming geweigerd';
+        toonNotif('Sta locatietoegang toe in browserinstellingen');
+      } else if (err.code === 2) {
+        display.textContent = 'Locatie niet beschikbaar';
+        toonNotif('GPS signaal niet gevonden');
+      } else if (err.code === 3) {
+        display.textContent = 'Time-out — probeer opnieuw';
+        toonNotif('GPS time-out, probeer opnieuw');
+      } else {
+        display.textContent = 'GPS fout: ' + err.message;
+      }
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  );
 }
 
 // ======= VOORTGANG =======
@@ -1889,3 +1925,4 @@ function toonNotif(tekst) {
 </script>
 </body>
 </html>
+
