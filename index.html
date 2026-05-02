@@ -4,10 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BermApp — Vegetatie Inventarisatie</title>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
-  @import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
 
   :root {
     --groen: #2d5a27;
@@ -483,134 +481,7 @@
     margin-top: 4px;
   }
 
-  /* VOORTGANGSBALK */
-  .voortgang-balk {
-    background: #0f1f0d;
-    border: 1px solid var(--lijn);
-    border-radius: 4px;
-    padding: 10px 14px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .voortgang-track {
-    flex: 1;
-    height: 6px;
-    background: #1e3a1a;
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .voortgang-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--groen), #a8d4a0);
-    border-radius: 3px;
-    transition: width 0.4s ease;
-  }
-
-  .voortgang-tekst {
-    font-size: 0.65rem;
-    color: #a8d4a0;
-    white-space: nowrap;
-    letter-spacing: 0.06em;
-  }
-
-  /* ECHTE KAART */
-  #leafletKaart {
-    height: 240px;
-    border-radius: 4px;
-    border: 1px solid var(--lijn);
-    margin-bottom: 12px;
-    z-index: 1;
-  }
-
-  /* CORRECTIE INVOER */
-  .correctie-rij {
-    display: flex;
-    gap: 6px;
-    margin-top: 8px;
-    align-items: center;
-  }
-
-  .correctie-input {
-    flex: 1;
-    background: #0a150a;
-    border: 1px solid var(--lijn);
-    color: var(--wit);
-    padding: 6px 10px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    border-radius: 2px;
-    font-style: italic;
-  }
-
-  .correctie-input:focus { outline: none; border-color: var(--lichtgroen); }
-
-  /* CLOSE-UP MODUS BANNER */
-  .closeup-banner {
-    background: #2a1f00;
-    border: 1px solid #8b6000;
-    border-radius: 4px;
-    padding: 10px 14px;
-    margin-bottom: 10px;
-    font-size: 0.72rem;
-    color: #f0c060;
-    display: none;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .closeup-banner.actief { display: flex; }
-
-  /* NOTITIE */
-  .notitie-veld {
-    width: 100%;
-    background: #0f1f0d;
-    border: 1px solid var(--lijn);
-    color: var(--wit);
-    padding: 8px 10px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    border-radius: 2px;
-    resize: none;
-    min-height: 52px;
-    margin-top: 8px;
-  }
-
-  .notitie-veld:focus { outline: none; border-color: var(--lichtgroen); }
-
-  /* PLOT DETAIL POPUP */
-  .plot-detail-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 200;
-    overflow-y: auto;
-    padding: 16px;
-  }
-
-  .plot-detail-overlay.actief { display: block; }
-
-  .plot-detail-kaart {
-    background: #1e3a1a;
-    border: 1px solid var(--lijn);
-    border-radius: 6px;
-    padding: 16px;
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
-  .plot-detail-foto {
-    width: 100%;
-    border-radius: 3px;
-    margin-bottom: 12px;
-    border: 1px solid var(--lijn);
-  }
-
-  /* KAART PLACEHOLDER (fallback) */
+  /* KAART */
   .kaart-placeholder {
     background: #1a2e17;
     border: 1px solid var(--lijn);
@@ -628,6 +499,7 @@
     overflow: hidden;
   }
 
+  /* Simpele SVG kaart simulatie */
   .kaart-achtergrond {
     position: absolute;
     inset: 0;
@@ -718,78 +590,6 @@
 
   canvas { display: none; }
 
-  /* HANDLEIDING */
-  .handleiding-stap {
-    background: #1e3a1a;
-    border: 1px solid var(--lijn);
-    border-radius: 4px;
-    padding: 14px;
-    margin-bottom: 10px;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-
-  .stap-nr {
-    font-family: 'Fraunces', serif;
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: #2d5a27;
-    line-height: 1;
-    flex-shrink: 0;
-    width: 28px;
-    text-align: center;
-  }
-
-  .stap-inhoud { flex: 1; }
-
-  .stap-titel {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--wit);
-    margin-bottom: 4px;
-    letter-spacing: 0.02em;
-  }
-
-  .stap-tekst {
-    font-size: 0.68rem;
-    color: #a8d4a0;
-    line-height: 1.6;
-  }
-
-  .stap-tekst b { color: var(--wit); }
-
-  .tip-kaart {
-    background: #0f1f0d;
-    border-left: 3px solid var(--aarde);
-    padding: 10px 12px;
-    margin-bottom: 10px;
-    border-radius: 0 3px 3px 0;
-    font-size: 0.68rem;
-    color: #c8a870;
-    line-height: 1.6;
-  }
-
-  .tip-kaart b { color: #e8c890; }
-
-  .api-link-kaart {
-    background: #0d2a0d;
-    border: 1px solid #2d5a27;
-    border-radius: 4px;
-    padding: 14px;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-
-  .api-link-kaart a {
-    color: #a8d4a0;
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    border-bottom: 1px solid #2d5a27;
-    padding-bottom: 1px;
-  }
-
   /* API KEY */
   .api-banner {
     background: #4a2000;
@@ -828,31 +628,21 @@
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="toonScherm('setup')">▶ Start</button>
+  <button class="tab active" onclick="toonScherm('setup')">⚙ Setup</button>
   <button class="tab" onclick="toonScherm('camera')">📷 Plot</button>
   <button class="tab" onclick="toonScherm('overzicht')">📋 Ronde</button>
   <button class="tab" onclick="toonScherm('export')">↗ Export</button>
-  <button class="tab" onclick="toonScherm('handleiding')">? Help</button>
 </div>
 
-<!-- START & SETUP SCHERM -->
+<!-- SETUP SCHERM -->
 <div id="scherm-setup" class="screen active">
 
-  <!-- API sleutel kaart — altijd zichtbaar -->
-  <div class="setup-card" style="border-color:#2d5a27">
-    <div class="setup-label">Gemini API-sleutel</div>
-    <div style="font-size:0.65rem;color:#6a9465;margin-bottom:8px;line-height:1.6">
-      Vereist voor AI-analyse. Gratis aan te maken via:<br>
-      <a href="https://aistudio.google.com/app/apikey"
-         style="color:#a8d4a0;text-decoration:none;border-bottom:1px solid #2d5a27">
-        🔗 aistudio.google.com/app/apikey
-      </a>
-    </div>
+  <div id="apiBanner" class="api-banner">
+    ⚠ Gemini API-sleutel vereist voor AI-analyse.<br>
     <div class="api-rij">
       <input type="password" class="api-input" id="apiKeyInput" placeholder="Plak hier je Gemini API-sleutel...">
       <button class="btn btn-gps" onclick="slaApiKeyOp()">OK</button>
     </div>
-    <div id="apiStatus" style="font-size:0.6rem;margin-top:6px;color:#6a9465"></div>
   </div>
 
   <div class="setup-card">
@@ -863,7 +653,7 @@
     <div class="setup-label">GPS-coördinaten</div>
     <div class="gps-row">
       <div class="gps-display" id="gpsDisplay">Nog niet bepaald</div>
-      <button class="btn btn-gps" onclick="bepaalGPS()" id="gpsKnop">📍 GPS</button>
+      <button class="btn btn-gps" onclick="bepaalGPS()">📍 GPS</button>
     </div>
   </div>
 
@@ -880,24 +670,10 @@
 <!-- CAMERA SCHERM -->
 <div id="scherm-camera" class="screen">
 
-  <!-- Voortgangsbalk -->
-  <div class="voortgang-balk">
-    <div class="voortgang-track">
-      <div class="voortgang-fill" id="voortgangFill" style="width:0%"></div>
-    </div>
-    <div class="voortgang-tekst" id="voortgangTekst">0 / 10 plots</div>
-  </div>
-
-  <!-- Close-up modus banner -->
-  <div class="closeup-banner" id="closeupBanner">
-    🔍 <span id="closeupTekst">Close-up modus — fotografeer de twijfelplant</span>
-    <button class="btn btn-klein" style="margin-left:auto;padding:4px 8px" onclick="annuleerCloseup()">✕</button>
-  </div>
-
   <div class="camera-container">
     <video id="videoFeed" autoplay playsinline muted></video>
     <img id="fotoPreview" alt="Foto plot">
-    <div class="kader-overlay" id="kaderOverlay">
+    <div class="kader-overlay">
       <div class="kader-vierkant">
         <div class="hoek hoek-tl"></div>
         <div class="hoek hoek-tr"></div>
@@ -915,12 +691,6 @@
   </div>
 
   <canvas id="fotoCanvas"></canvas>
-
-  <!-- Notitie -->
-  <div id="notitieContainer" style="display:none;margin-bottom:12px">
-    <div class="setup-label">Opmerking veldwerker</div>
-    <textarea class="notitie-veld" id="notitieVeld" placeholder="Bijv: veel beschaduwing, recente maaiing zichtbaar..."></textarea>
-  </div>
 
   <!-- ANALYSE RESULTAAT -->
   <div class="analyse-container" id="analyseContainer" style="display:none">
@@ -954,8 +724,7 @@
 
   <!-- KAARTJE -->
   <div class="sectie-titel">Locaties in ronde</div>
-  <div id="leafletKaart"></div>
-  <div id="kaartPlaceholder" class="kaart-placeholder">
+  <div class="kaart-placeholder" id="kaartContainer">
     <div class="kaart-achtergrond"></div>
     <div style="position:relative;z-index:1;text-align:center">
       <div style="font-size:1.5rem;margin-bottom:4px">🗺</div>
@@ -1005,152 +774,6 @@
   </button>
 </div>
 
-<!-- HANDLEIDING SCHERM -->
-<div id="scherm-handleiding" class="screen">
-
-  <div style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:300;font-style:italic;color:#a8d4a0;margin-bottom:4px">
-    Handleiding
-  </div>
-  <div style="font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:#6a9465;margin-bottom:16px">
-    BermApp — Vegetatie Inventarisatie
-  </div>
-
-  <!-- API SLEUTEL -->
-  <div class="sectie-titel">Stap 0 — API-sleutel</div>
-  <div class="api-link-kaart">
-    <div style="font-size:0.68rem;color:#a8d4a0;margin-bottom:8px;line-height:1.6">
-      De app gebruikt Google Gemini voor soortherkenning.<br>
-      Een gratis sleutel is aan te maken op:
-    </div>
-    <a href="https://aistudio.google.com/app/apikey">
-      aistudio.google.com/app/apikey
-    </a>
-    <div style="font-size:0.6rem;color:#6a9465;margin-top:8px">
-      Log in met een Google-account → klik "Create API key" → kopieer de sleutel → plak in Setup.
-    </div>
-  </div>
-
-  <hr class="divider">
-  <div class="sectie-titel">Een ronde uitvoeren</div>
-
-  <div class="handleiding-stap">
-    <div class="stap-nr">1</div>
-    <div class="stap-inhoud">
-      <div class="stap-titel">Setup invullen</div>
-      <div class="stap-tekst">
-        Ga naar het tabblad <b>⚙ Setup</b>. Vul de <b>locatienaam</b> in (bijv. "N244 km 12.4"), controleer de datum en tik op <b>📍 GPS</b> om je startpositie vast te leggen. Stel het gewenste <b>aantal plots</b> in (standaard 10 = 10 m²). Tik dan op <b>▶ Start nieuwe ronde</b>.
-      </div>
-    </div>
-  </div>
-
-  <div class="handleiding-stap">
-    <div class="stap-nr">2</div>
-    <div class="stap-inhoud">
-      <div class="stap-titel">Plot fotograferen</div>
-      <div class="stap-tekst">
-        De app gaat automatisch naar <b>📷 Plot</b>. Houd je telefoon recht boven de vegetatie. Zorg dat de berm binnen het <b>groene kader</b> (= 1 m²) valt. Tik op de grote <b>📷 knop</b> om de foto te maken.
-      </div>
-    </div>
-  </div>
-
-  <div class="handleiding-stap">
-    <div class="stap-nr">3</div>
-    <div class="stap-inhoud">
-      <div class="stap-titel">AI-analyse bekijken</div>
-      <div class="stap-tekst">
-        De AI analyseert de foto en toont de herkende soorten met:<br>
-        <b style="color:#7dcf75">✓ zeker</b> — betrouwbare determinatie<br>
-        <b style="color:#e8a020">⚠ onzeker</b> — twijfel, controleer zelf<br>
-        <b style="color:#e87070">? onbekend</b> — niet te herkennen van foto<br><br>
-        Bij twijfel stelt de AI een gerichte vraag of vraagt om een close-up.
-      </div>
-    </div>
-  </div>
-
-  <div class="handleiding-stap">
-    <div class="stap-nr">4</div>
-    <div class="stap-inhoud">
-      <div class="stap-titel">Close-up bij twijfel</div>
-      <div class="stap-tekst">
-        Tik op <b>📷 Close-up</b> bij een twijfelsoort. De app gaat in close-up modus — het kader verdwijnt zodat je vrij kunt kaderen. Fotografeer de plant van dichtbij. De AI analyseert opnieuw en legt uit wat hij ziet. Bij zekerheid tik je <b>✓ Overnemen</b> om het resultaat bij te werken.
-      </div>
-    </div>
-  </div>
-
-  <div class="handleiding-stap">
-    <div class="stap-nr">5</div>
-    <div class="stap-inhoud">
-      <div class="stap-titel">Handmatig corrigeren</div>
-      <div class="stap-tekst">
-        Ken je de soort zelf? Typ de naam in het <b>correctieveld</b> onder de soortkaart en tik <b>✓</b>. De soort wordt gemarkeerd als "handmatig gecorrigeerd" in de export — zichtbaar voor de bioloog.
-      </div>
-    </div>
-  </div>
-
-  <div class="handleiding-stap">
-    <div class="stap-nr">6</div>
-    <div class="stap-inhoud">
-      <div class="stap-titel">Notitie toevoegen &amp; opslaan</div>
-      <div class="stap-tekst">
-        Voeg eventueel een <b>opmerking</b> toe in het notitieveld (bijv. "recent gemaaid", "droog talud"). Tik daarna op <b>✓ Opslaan</b>. De app registreert automatisch je GPS-positie op dat moment. Herhaal voor het volgende plot.
-      </div>
-    </div>
-  </div>
-
-  <div class="handleiding-stap">
-    <div class="stap-nr">7</div>
-    <div class="stap-inhoud">
-      <div class="stap-titel">Ronde afsluiten &amp; exporteren</div>
-      <div class="stap-tekst">
-        Ga naar <b>📋 Ronde</b> voor een kaartoverzicht en samenvatting. Tik op een plot voor details. Ga naar <b>↗ Export</b> om te downloaden:<br><br>
-        <b>CSV</b> — alle data voor de bioloog (Excel-compatibel)<br>
-        <b>Twijfellijst</b> — alleen de onzekere soorten met AI-vragen
-      </div>
-    </div>
-  </div>
-
-  <hr class="divider">
-  <div class="sectie-titel">Tips voor goede foto's</div>
-
-  <div class="tip-kaart">
-    🌤 <b>Licht:</b> Fotografeer bij bewolkt weer of in de schaduw — direct zonlicht geeft te veel contrast en weerkaatsing.
-  </div>
-  <div class="tip-kaart">
-    📐 <b>Hoek:</b> Houd de telefoon zo recht mogelijk boven het plot. Schuin fotograferen vervormt de verhouding.
-  </div>
-  <div class="tip-kaart">
-    🌿 <b>Scherpte:</b> Wacht even na het inkaderen zodat de camera scherp stelt. Beweeg niet tijdens het tikken.
-  </div>
-  <div class="tip-kaart">
-    🔍 <b>Close-ups:</b> Bij een twijfelplant: fotografeer het blad, de stengeldoorsnede of de bloem apart. Hoe meer kenmerken zichtbaar, hoe beter de AI kan determineren.
-  </div>
-  <div class="tip-kaart">
-    📅 <b>Seizoen:</b> Vegetatie varieert sterk per seizoen. Noteer altijd de datum. Bij hermonitoring: gebruik dezelfde locatienaam en plotnummering voor vergelijkbaarheid.
-  </div>
-
-  <hr class="divider">
-  <div style="font-size:0.6rem;color:#3a5a36;text-align:center;line-height:1.8;padding-bottom:20px">
-    BermApp is een veldwerkgereedschap voor botanische monitoring.<br>
-    AI-determinaties zijn indicatief — eindoordeel ligt bij de bioloog.<br>
-    Data blijft lokaal op het apparaat opgeslagen.
-  </div>
-
-</div>
-
-<!-- PLOT DETAIL OVERLAY -->
-<div class="plot-detail-overlay" id="plotDetailOverlay">
-  <div class="plot-detail-kaart">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <div class="sectie-titel" style="margin:0" id="detailTitel">Plot details</div>
-      <button class="btn btn-klein" onclick="sluitDetail()">✕ Sluiten</button>
-    </div>
-    <img class="plot-detail-foto" id="detailFoto" src="" alt="Plot foto">
-    <div id="detailSoorten"></div>
-    <div id="detailNotitie" style="margin-top:10px;font-size:0.7rem;color:#6a9465;font-style:italic"></div>
-    <div id="detailGPS" style="margin-top:6px;font-size:0.65rem;color:#3a5a36"></div>
-  </div>
-</div>
-
 <div class="notif" id="notif"></div>
 
 <script>
@@ -1161,12 +784,7 @@ var state = {
   plots: [],
   stream: null,
   huidigeFotoData: null,
-  closeupModus: false,     // true als we een close-up maken voor een twijfelsoort
-  closeupSoortNaam: '',    // naam van de twijfelsoort
-  closeupSoortVraag: '',   // de AI-vraag die gesteld werd
-  closeupParentPlot: null, // index van het plot waar de twijfel vandaan komt
-  leafletKaart: null,
-  leafletMarkers: []
+  analyseerModus: false // wordt true na foto
 };
 
 // ======= INIT =======
@@ -1179,15 +797,7 @@ window.addEventListener('load', function() {
 });
 
 function updateApiBanner() {
-  var status = document.getElementById('apiStatus');
-  if (!status) return;
-  if (state.apiKey) {
-    status.textContent = '✓ Sleutel opgeslagen voor deze sessie';
-    status.style.color = '#7dcf75';
-  } else {
-    status.textContent = 'Nog geen sleutel ingevoerd';
-    status.style.color = '#e8a020';
-  }
+  document.getElementById('apiBanner').style.display = state.apiKey ? 'none' : 'block';
 }
 
 function slaApiKeyOp() {
@@ -1204,15 +814,14 @@ function toonScherm(naam) {
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
   document.getElementById('scherm-' + naam).classList.add('active');
+  var tabs = document.querySelectorAll('.tab');
+  var namen = ['setup','camera','overzicht','export'];
+  tabs[namen.indexOf(naam)].classList.add('active');
 
   if (naam === 'camera') startCamera();
   else stopCamera();
-  if (naam === 'overzicht') { updateOverzicht(); setTimeout(initLeaflet, 100); }
+  if (naam === 'overzicht') updateOverzicht();
   if (naam === 'export') updateExportScherm();
-
-  var namen = ['setup','camera','overzicht','export','handleiding'];
-  var tabs = document.querySelectorAll('.tab');
-  tabs[namen.indexOf(naam)].classList.add('active');
 }
 
 // ======= RONDE =======
@@ -1232,69 +841,22 @@ function startRonde() {
 
   document.getElementById('rondeLabel').textContent = loc.substring(0, 20) + (loc.length > 20 ? '…' : '');
   updatePlotTeller();
-  updateVoortgang();
   toonScherm('camera');
   toonNotif('Ronde gestart ✓');
 }
 
 // ======= GPS =======
 function bepaalGPS() {
-  var display = document.getElementById('gpsDisplay');
-  var knop = document.getElementById('gpsKnop');
-  display.textContent = 'Zoeken...';
-  display.style.color = '#e8a020';
-  if (knop) { knop.textContent = '⏳'; knop.disabled = true; }
-
-  if (!navigator.geolocation) {
-    display.textContent = 'GPS niet beschikbaar in deze browser';
-    if (knop) { knop.textContent = '📍 GPS'; knop.disabled = false; }
-    toonNotif('GPS niet beschikbaar');
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    function(pos) {
-      var lat = pos.coords.latitude.toFixed(5);
-      var lon = pos.coords.longitude.toFixed(5);
-      var tekst = lat + ', ' + lon;
-      display.textContent = tekst;
-      display.style.color = '#7dcf75';
-      if (knop) { knop.textContent = '✓'; knop.disabled = false; }
-      if (state.ronde) state.ronde.gps = tekst;
-      toonNotif('GPS bepaald ✓');
-    },
-    function(err) {
-      display.style.color = '#e87070';
-      if (knop) { knop.textContent = '📍 GPS'; knop.disabled = false; }
-      if (err.code === 1) {
-        display.textContent = 'Toestemming geweigerd';
-        toonNotif('Sta locatietoegang toe in browserinstellingen');
-      } else if (err.code === 2) {
-        display.textContent = 'Locatie niet beschikbaar';
-        toonNotif('GPS signaal niet gevonden');
-      } else if (err.code === 3) {
-        display.textContent = 'Time-out — probeer opnieuw';
-        toonNotif('GPS time-out, probeer opnieuw');
-      } else {
-        display.textContent = 'GPS fout: ' + err.message;
-      }
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
-    }
-  );
-}
-
-// ======= VOORTGANG =======
-function updateVoortgang() {
-  if (!state.ronde) return;
-  var streef = state.ronde.aantalPlots;
-  var gedaan = state.plots.length;
-  var pct = Math.min(100, Math.round((gedaan / streef) * 100));
-  document.getElementById('voortgangFill').style.width = pct + '%';
-  document.getElementById('voortgangTekst').textContent = gedaan + ' / ' + streef + ' plots';
+  if (!navigator.geolocation) { toonNotif('GPS niet beschikbaar'); return; }
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    var lat = pos.coords.latitude.toFixed(5);
+    var lon = pos.coords.longitude.toFixed(5);
+    document.getElementById('gpsDisplay').textContent = lat + ', ' + lon;
+    if (state.ronde) state.ronde.gps = lat + ', ' + lon;
+    toonNotif('GPS bepaald ✓');
+  }, function() {
+    toonNotif('GPS mislukt – check permissies');
+  });
 }
 
 // ======= CAMERA =======
@@ -1308,8 +870,8 @@ function startCamera() {
     video.style.display = 'block';
     document.getElementById('fotoPreview').style.display = 'none';
     document.getElementById('analyseContainer').style.display = 'none';
-    document.getElementById('notitieContainer').style.display = 'none';
     document.getElementById('slaOpBtn').style.display = 'none';
+    document.getElementById('cameraBtn').textContent = '📷';
     state.huidigeFotoData = null;
   }).catch(function(err) {
     toonNotif('Camera niet beschikbaar: ' + err.message);
@@ -1327,14 +889,9 @@ function nieuweCamera() {
   stopCamera();
   state.huidigeFotoData = null;
   document.getElementById('analyseContainer').style.display = 'none';
-  document.getElementById('notitieContainer').style.display = 'none';
   document.getElementById('slaOpBtn').style.display = 'none';
   document.getElementById('fotoPreview').style.display = 'none';
   document.getElementById('videoFeed').style.display = 'block';
-  // Kader terug zichtbaar voor normale modus
-  if (!state.closeupModus) {
-    document.getElementById('kaderOverlay').style.display = 'flex';
-  }
   startCamera();
 }
 
@@ -1345,20 +902,15 @@ function maakFoto() {
   canvas.width = video.videoWidth || 640;
   canvas.height = video.videoHeight || 480;
   canvas.getContext('2d').drawImage(video, 0, 0);
-  state.huidigeFotoData = canvas.toDataURL('image/jpeg', 0.82);
+  state.huidigeFotoData = canvas.toDataURL('image/jpeg', 0.85);
 
   document.getElementById('fotoPreview').src = state.huidigeFotoData;
   document.getElementById('fotoPreview').style.display = 'block';
   document.getElementById('videoFeed').style.display = 'none';
   document.getElementById('analyseContainer').style.display = 'block';
-  document.getElementById('notitieContainer').style.display = state.closeupModus ? 'none' : 'block';
-  document.getElementById('slaOpBtn').style.display = state.closeupModus ? 'none' : 'inline-flex';
+  document.getElementById('slaOpBtn').style.display = 'inline-flex';
 
-  if (state.closeupModus) {
-    analyseerCloseup(state.huidigeFotoData, state.closeupSoortNaam, state.closeupSoortVraag);
-  } else {
-    analyseerFoto(state.huidigeFotoData);
-  }
+  analyseerFoto(state.huidigeFotoData);
 }
 
 function updatePlotTeller() {
@@ -1366,217 +918,73 @@ function updatePlotTeller() {
   document.getElementById('plotTeller').textContent = 'Plot ' + (state.plots.length + 1) + ' / ' + streef;
 }
 
-// ======= CLOSE-UP DIALOOG =======
-function vraagCloseFoto(soortIndex, naam, vraag, parentPlotIndex) {
-  state.closeupModus = true;
-  state.closeupSoortNaam = naam;
-  state.closeupSoortVraag = vraag;
-  state.closeupParentPlot = parentPlotIndex !== undefined ? parentPlotIndex : null;
-
-  var banner = document.getElementById('closeupBanner');
-  document.getElementById('closeupTekst').textContent = 'Close-up modus: ' + naam;
-  banner.classList.add('actief');
-
-  // Verberg het raster-kader, close-up is vrij kaderen
-  document.getElementById('kaderOverlay').style.display = 'none';
-
-  nieuweCamera();
-  toonNotif('Maak nu een close-up van: ' + naam);
-}
-
-function annuleerCloseup() {
-  state.closeupModus = false;
-  state.closeupSoortNaam = '';
-  state.closeupSoortVraag = '';
-  document.getElementById('closeupBanner').classList.remove('actief');
-  document.getElementById('kaderOverlay').style.display = 'flex';
-  nieuweCamera();
-}
-
-function analyseerCloseup(fotoData, soortNaam, origineleVraag) {
-  document.getElementById('soortLijst').innerHTML = '';
-  document.getElementById('aiDialoog').innerHTML = '';
-  document.getElementById('spinner').style.display = 'inline-block';
-  document.getElementById('analyseContainer').querySelector('.analyse-header').innerHTML =
-    '🔍 Close-up analyse: <em>' + soortNaam + '</em> <div class="spinner" id="spinner" style="display:inline-block"></div>';
-
-  if (!state.apiKey) {
-    document.getElementById('spinner').style.display = 'none';
-    toonAIFout('Geen API-sleutel ingesteld.');
-    return;
-  }
-
-  var base64 = fotoData.split(',')[1];
-  var prompt = 'Botanische close-up analyse. Twijfelsoort: "' + soortNaam + '". Vraag was: "' + origineleVraag + '".\nGeef ALLEEN geldig JSON:\n{"determinatie":"naam of null","nl":"naam","betrouwbaarheid":"zeker|onzeker|onbekend","redenering":"kort","kenmerken":["kenmerk1"],"vervolgvraag":"vraag of null"}';
-
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + state.apiKey, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [
-        { text: prompt },
-        { inline_data: { mime_type: 'image/jpeg', data: base64 } }
-      ]}],
-      generationConfig: { temperature: 0.1, maxOutputTokens: 800 }
-    var tekst = '';
-    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-      tekst = data.candidates[0].content.parts[0].text || '';
-    }
-    var match = tekst.match(/\{[\s\S]*\}/);
-    if (match) tekst = match[0];
-    try {
-      var r = JSON.parse(tekst);
-      toonCloseupResultaat(r, soortNaam);
-    } catch(e) {
-      toonAIFout('Kon close-up resultaat niet verwerken.');
-    }
-  }).catch(function(err) {
-    document.getElementById('spinner').style.display = 'none';
-    toonAIFout('Verbindingsfout: ' + err.message);
-  });
-}
-
-function toonCloseupResultaat(r, soortNaam) {
-  var badge = r.betrouwbaarheid === 'zeker' ? 'badge-zeker' : (r.betrouwbaarheid === 'onzeker' ? 'badge-onzeker' : 'badge-onbekend');
-  var badgeTekst = r.betrouwbaarheid === 'zeker' ? '✓ zeker' : (r.betrouwbaarheid === 'onzeker' ? '⚠ onzeker' : '? onbekend');
-  var klasse = r.betrouwbaarheid === 'zeker' ? '' : (r.betrouwbaarheid === 'onzeker' ? ' onzeker' : ' onbekend');
-
-  var html = '<div class="soort-kaart' + klasse + '">';
-  html += '<div style="font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:#a8d4a0;margin-bottom:4px">Close-up resultaat voor: ' + soortNaam + '</div>';
-  html += '<div class="soort-naam">' + (r.determinatie || '—') + '</div>';
-  html += '<div class="soort-nl">' + r.nl + '</div>';
-  html += '<div class="soort-meta"><span class="badge ' + badge + '">' + badgeTekst + '</span></div>';
-  html += '<div style="font-size:0.7rem;color:#a8d4a0;margin-top:8px;line-height:1.5">' + r.redenering + '</div>';
-  if (r.kenmerken && r.kenmerken.length) {
-    html += '<div style="font-size:0.65rem;color:#6a9465;margin-top:6px">';
-    r.kenmerken.forEach(function(k) { html += '• ' + k + '<br>'; });
-    html += '</div>';
-  }
-  if (r.vervolgvraag) {
-    html += '<div class="ai-vraag">' + r.vervolgvraag + '</div>';
-  }
-  html += '</div>';
-
-  // Knoppen: correctie overnemen of toch handmatig invoeren
-  html += '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">';
-  if (r.determinatie && r.betrouwbaarheid === 'zeker') {
-    html += '<button class="btn btn-klein" style="background:#1a4a16;color:#7dcf75" onclick="neemCloseupOver(\'' +
-      (r.determinatie||'').replace(/'/g,"\\'") + '\',\'' + (r.nl||'').replace(/'/g,"\\'") + '\')">✓ Overnemen in plot</button>';
-  }
-  html += '<button class="btn btn-klein" onclick="annuleerCloseup()">↩ Terug naar ronde</button>';
-  html += '</div>';
-
-  document.getElementById('soortLijst').innerHTML = html;
-  document.getElementById('aiDialoog').innerHTML = '';
-}
-
-function neemCloseupOver(wetenschappelijk, nl) {
-  // Update de twijfelsoort in het parent plot als die bestaat
-  if (state.closeupParentPlot !== null && state.plots[state.closeupParentPlot]) {
-    var plot = state.plots[state.closeupParentPlot];
-    if (plot.analyse) {
-      plot.analyse.soorten.forEach(function(s) {
-        if ((s.wetenschappelijk || s.nl) === state.closeupSoortNaam ||
-            s.nl === state.closeupSoortNaam || s.wetenschappelijk === state.closeupSoortNaam) {
-          s.wetenschappelijk = wetenschappelijk;
-          s.nl = nl;
-          s.betrouwbaarheid = 'zeker';
-          s.vraag = null;
-          s.gecorrigeerd = true;
-        }
-      });
-      slaDataOp();
-    }
-  }
-  toonNotif('Determinatie bijgewerkt: ' + nl + ' ✓');
-  annuleerCloseup();
-}
-
-function toonAIFout(bericht) {
-  document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag">' + bericht + '</div>';
-}
-
-// ======= AI ANALYSE (plot) =======
+// ======= AI ANALYSE =======
 var huidigAnalyseResultaat = null;
 
 function analyseerFoto(fotoData) {
   document.getElementById('soortLijst').innerHTML = '';
   document.getElementById('aiDialoog').innerHTML = '';
-  document.getElementById('analyseContainer').querySelector('.analyse-header').innerHTML =
-    'AI-analyse <div class="spinner" id="spinner" style="display:inline-block"></div>';
+  document.getElementById('spinner').style.display = 'inline-block';
 
   if (!state.apiKey) {
-    document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag">Geen API-sleutel ingesteld. Ga naar Setup.</div>';
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag" style="background:#1a1a2e;border-color:#334">Geen API-sleutel ingesteld. Ga naar Setup.</div>';
     return;
   }
 
   var base64 = fotoData.split(',')[1];
-  var prompt = 'Analyseer deze berm-vegetatiefoto (1 m² plot). Geef ALLEEN geldig JSON terug:\n{"soorten":[{"wetenschappelijk":"naam of null","nl":"naam","abundantie":"zeldzaam|schaars|frequent|abundant|dominant","betrouwbaarheid":"zeker|onzeker|onbekend","vraag":"vraag bij twijfel of null"}],"vegetatiebedekking":80,"opmerkingen":"kort"}\nMaximaal 8 soorten. Alleen JSON, geen tekst eromheen.';
+  var prompt = 'Je bent een botanisch veldassistent. Analyseer deze foto van een berm-vegetatieplot van 1 m².\n\nGeef ALLEEN een JSON-object terug, geen uitleg, geen markdown:\n{\n  "soorten": [\n    {\n      "wetenschappelijk": "Naam of null",\n      "nl": "Nederlandse naam of onbekend",\n      "abundantie": "zeldzaam|schaars|frequent|abundant|dominant",\n      "betrouwbaarheid": "zeker|onzeker|onbekend",\n      "vraag": "Stel een gerichte vraag als onzeker/onbekend, anders null"\n    }\n  ],\n  "opmerkingen": "Korte algemene opmerking over het plot"\n}\n\nWees eerlijk: markeer als onzeker als je niet zeker bent. Vraag dan om een close-up of stel een determinatievraag.';
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + state.apiKey, {
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + state.apiKey, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      contents: [{ parts: [
-        { text: prompt },
-        { inline_data: { mime_type: 'image/jpeg', data: base64 } }
-      ]}],
-      generationConfig: { temperature: 0.1, maxOutputTokens: 1500 }
-    if (match) tekst = match[0];
+      contents: [{
+        parts: [
+          { text: prompt },
+          { inline_data: { mime_type: 'image/jpeg', data: base64 } }
+        ]
+      }]
+    })
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    document.getElementById('spinner').style.display = 'none';
+    var tekst = '';
+    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
+      tekst = data.candidates[0].content.parts[0].text || '';
+    }
+    // Strip markdown
+    tekst = tekst.replace(/```json/g,'').replace(/```/g,'').trim();
     try {
       var resultaat = JSON.parse(tekst);
       huidigAnalyseResultaat = resultaat;
       toonAnalyse(resultaat);
     } catch(e) {
-      toonAIFout('Kon AI-antwoord niet verwerken. Probeer opnieuw. (' + e.message + ')');
+      document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag">Kon AI-antwoord niet verwerken. Probeer opnieuw.</div>';
     }
   }).catch(function(err) {
-    toonAIFout('Verbindingsfout: ' + err.message);
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('soortLijst').innerHTML = '<div class="ai-vraag">Verbindingsfout: ' + err.message + '</div>';
   });
 }
 
 function toonAnalyse(resultaat) {
   var html = '';
-
-  // Vegetatiebedekking
-  if (resultaat.vegetatiebedekking !== undefined) {
-    var pct = parseInt(resultaat.vegetatiebedekking) || 0;
-    html += '<div style="margin-bottom:10px;padding:8px 10px;background:#0a150a;border-radius:2px">';
-    html += '<div style="font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:#6a9465;margin-bottom:4px">Vegetatiebedekking</div>';
-    html += '<div style="display:flex;align-items:center;gap:8px">';
-    html += '<div style="flex:1;height:5px;background:#1e3a1a;border-radius:2px"><div style="height:100%;width:' + pct + '%;background:linear-gradient(90deg,var(--groen),#a8d4a0);border-radius:2px"></div></div>';
-    html += '<div style="font-size:0.8rem;color:var(--wit);font-weight:600">' + pct + '%</div>';
-    html += '</div></div>';
-  }
-
-  var parentPlotIdx = state.plots.length; // index die dit plot zal krijgen bij opslaan
-
   resultaat.soorten.forEach(function(s, i) {
     var klasse = s.betrouwbaarheid === 'zeker' ? '' : (s.betrouwbaarheid === 'onzeker' ? ' onzeker' : ' onbekend');
     var badge = s.betrouwbaarheid === 'zeker' ? 'badge-zeker' : (s.betrouwbaarheid === 'onzeker' ? 'badge-onzeker' : 'badge-onbekend');
     var badgeTekst = s.betrouwbaarheid === 'zeker' ? '✓ zeker' : (s.betrouwbaarheid === 'onzeker' ? '⚠ onzeker' : '? onbekend');
-    var soortId = 'soort_' + i;
 
-    html += '<div class="soort-kaart' + klasse + '" id="' + soortId + '">';
-    html += '<div class="soort-naam" id="naam_' + i + '">' + (s.wetenschappelijk || '—') + '</div>';
-    html += '<div class="soort-nl" id="nl_' + i + '">' + s.nl + '</div>';
+    html += '<div class="soort-kaart' + klasse + '">';
+    html += '<div class="soort-naam">' + (s.wetenschappelijk || '—') + '</div>';
+    html += '<div class="soort-nl">' + s.nl + '</div>';
     html += '<div class="soort-meta">';
-    html += '<span class="badge ' + badge + '" id="badge_' + i + '">' + badgeTekst + '</span>';
+    html += '<span class="badge ' + badge + '">' + badgeTekst + '</span>';
     html += '<span class="abundantie">' + s.abundantie + '</span>';
     html += '</div>';
-
-    // Correctie veld
-    html += '<div class="correctie-rij">';
-    html += '<input class="correctie-input" id="correctie_' + i + '" placeholder="Naam corrigeren..." value="">';
-    html += '<button class="btn btn-klein" style="font-size:0.55rem;padding:5px 8px" onclick="pasNaamAan(' + i + ')">✓</button>';
-    html += '</div>';
-
     if (s.vraag) {
-      var soortNaamVoorClose = (s.wetenschappelijk || s.nl || 'onbekende plant').replace(/'/g,"\\'");
-      var vraagVoorClose = (s.vraag || '').replace(/'/g,"\\'");
       html += '<div class="ai-vraag">' + s.vraag + '</div>';
       html += '<div class="foto-btn-rij">';
-      html += '<button class="btn btn-klein" onclick="vraagCloseFoto(' + i + ',\'' + soortNaamVoorClose + '\',\'' + vraagVoorClose + '\',' + parentPlotIdx + ')">📷 Close-up</button>';
+      html += '<button class="btn btn-klein" onclick="vraagCloseFoto(' + i + ')">📷 Close-up maken</button>';
       html += '</div>';
     }
     html += '</div>';
@@ -1590,153 +998,38 @@ function toonAnalyse(resultaat) {
   }
 }
 
-function pasNaamAan(i) {
-  var correctie = document.getElementById('correctie_' + i).value.trim();
-  if (!correctie) return;
-  // Update in het huidige analyseresultaat
-  if (huidigAnalyseResultaat && huidigAnalyseResultaat.soorten[i]) {
-    huidigAnalyseResultaat.soorten[i].wetenschappelijk = correctie;
-    huidigAnalyseResultaat.soorten[i].betrouwbaarheid = 'zeker';
-    huidigAnalyseResultaat.soorten[i].gecorrigeerd = true;
-    document.getElementById('naam_' + i).textContent = correctie;
-    document.getElementById('badge_' + i).className = 'badge badge-zeker';
-    document.getElementById('badge_' + i).textContent = '✓ handmatig';
-    document.getElementById('correctie_' + i).value = '';
-    toonNotif('Naam bijgewerkt ✓');
-  }
+function vraagCloseFoto(soortIndex) {
+  toonNotif('Maak een close-up van deze plant ↑');
+  // Zet tijdelijk in "close-up modus" – volgende foto wordt gekoppeld
+  nieuweCamera();
 }
 
 // ======= PLOT OPSLAAN =======
 function slaPlotOp() {
   if (!state.huidigeFotoData) { toonNotif('Maak eerst een foto'); return; }
-  if (!state.ronde) { toonNotif('Geen actieve ronde'); return; }
 
   navigator.geolocation.getCurrentPosition(function(pos) {
     _slaOpMetGPS(pos.coords.latitude.toFixed(5) + ',' + pos.coords.longitude.toFixed(5));
   }, function() {
-    _slaOpMetGPS(state.ronde.gps || '');
+    _slaOpMetGPS(state.ronde ? state.ronde.gps : '');
   }, { timeout: 3000 });
 }
 
 function _slaOpMetGPS(gps) {
-  var notitie = document.getElementById('notitieVeld') ? document.getElementById('notitieVeld').value.trim() : '';
   var plot = {
     nr: state.plots.length + 1,
     timestamp: new Date().toISOString(),
     gps: gps,
     foto: state.huidigeFotoData,
-    analyse: huidigAnalyseResultaat,
-    notitie: notitie
+    analyse: huidigAnalyseResultaat
   };
   state.plots.push(plot);
   slaDataOp();
 
   huidigAnalyseResultaat = null;
-  document.getElementById('notitieVeld').value = '';
   nieuweCamera();
   updatePlotTeller();
-  updateVoortgang();
   toonNotif('Plot ' + plot.nr + ' opgeslagen ✓');
-}
-
-// ======= LEAFLET KAART =======
-function initLeaflet() {
-  var plots = state.plots.filter(function(p) {
-    return p.gps && p.gps.indexOf(',') > -1 && p.gps !== 'Nog niet bepaald';
-  });
-
-  var kaartDiv = document.getElementById('leafletKaart');
-  var placeholder = document.getElementById('kaartPlaceholder');
-
-  if (!plots.length) {
-    kaartDiv.style.display = 'none';
-    placeholder.style.display = 'flex';
-    return;
-  }
-
-  kaartDiv.style.display = 'block';
-  placeholder.style.display = 'none';
-
-  // Initialiseer kaart of hergebruik
-  if (!state.leafletKaart) {
-    state.leafletKaart = L.map('leafletKaart', { zoomControl: true });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-      maxZoom: 19
-    }).addTo(state.leafletKaart);
-  } else {
-    // Verwijder oude markers
-    state.leafletMarkers.forEach(function(m) { m.remove(); });
-    state.leafletMarkers = [];
-  }
-
-  var coords = [];
-
-  plots.forEach(function(p, i) {
-    var parts = p.gps.split(',');
-    var lat = parseFloat(parts[0]);
-    var lon = parseFloat(parts[1]);
-    if (isNaN(lat) || isNaN(lon)) return;
-    coords.push([lat, lon]);
-
-    var onzekerCount = p.analyse ? p.analyse.soorten.filter(function(s){ return s.betrouwbaarheid !== 'zeker'; }).length : 0;
-    var kleur = onzekerCount > 0 ? '#e8a020' : '#3a7d34';
-
-    var icon = L.divIcon({
-      className: '',
-      html: '<div style="background:' + kleur + ';color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4);font-family:monospace">' + p.nr + '</div>',
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
-    });
-
-    var marker = L.marker([lat, lon], { icon: icon }).addTo(state.leafletKaart);
-    var soortTekst = p.analyse ? p.analyse.soorten.slice(0,3).map(function(s){return s.nl;}).join(', ') : '—';
-    marker.bindPopup('<strong>Plot ' + p.nr + '</strong><br>' + soortTekst + (onzekerCount ? '<br>⚠ ' + onzekerCount + ' te controleren' : ''));
-    marker.on('click', function() { toonPlotDetail(i); });
-    state.leafletMarkers.push(marker);
-  });
-
-  if (coords.length === 1) {
-    state.leafletKaart.setView(coords[0], 16);
-  } else if (coords.length > 1) {
-    state.leafletKaart.fitBounds(coords, { padding: [20, 20] });
-  }
-}
-
-// ======= PLOT DETAIL =======
-function toonPlotDetail(plotIndex) {
-  var p = state.plots[plotIndex];
-  if (!p) return;
-
-  document.getElementById('detailTitel').textContent = 'Plot ' + p.nr + ' — ' + (p.timestamp ? p.timestamp.substring(0,10) : '');
-  var fotoEl = document.getElementById('detailFoto');
-  if (p.foto) { fotoEl.src = p.foto; fotoEl.style.display = 'block'; }
-  else { fotoEl.style.display = 'none'; }
-
-  var html = '';
-  if (p.analyse) {
-    p.analyse.soorten.forEach(function(s) {
-      var kleur = s.betrouwbaarheid === 'zeker' ? '#1a4a16' : (s.betrouwbaarheid === 'onzeker' ? '#4a3000' : '#4a1a1a');
-      var tekstKleur = s.betrouwbaarheid === 'zeker' ? '#7dcf75' : (s.betrouwbaarheid === 'onzeker' ? '#e8a020' : '#e87070');
-      html += '<div style="padding:6px 0;border-bottom:1px solid rgba(45,90,39,0.15)">';
-      html += '<span style="font-style:italic;font-family:Fraunces,serif">' + (s.wetenschappelijk || '—') + '</span> ';
-      html += '<span style="font-size:0.7rem;color:#a8d4a0">(' + s.nl + ')</span> ';
-      html += '<span style="font-size:0.6rem;background:' + kleur + ';color:' + tekstKleur + ';padding:2px 6px;border-radius:2px">' + s.abundantie + '</span>';
-      if (s.gecorrigeerd) html += ' <span style="font-size:0.55rem;color:#7dcf75">✏ handmatig</span>';
-      html += '</div>';
-    });
-  } else {
-    html = '<div style="color:#6a9465;font-size:0.75rem">Geen AI-analyse beschikbaar</div>';
-  }
-  document.getElementById('detailSoorten').innerHTML = html;
-  document.getElementById('detailNotitie').textContent = p.notitie ? '📝 ' + p.notitie : '';
-  document.getElementById('detailGPS').textContent = p.gps ? '📍 ' + p.gps : '';
-
-  document.getElementById('plotDetailOverlay').classList.add('actief');
-}
-
-function sluitDetail() {
-  document.getElementById('plotDetailOverlay').classList.remove('actief');
 }
 
 // ======= OVERZICHT =======
@@ -1758,14 +1051,27 @@ function updateOverzicht() {
   document.getElementById('totaalPlots').textContent = plots.length;
   document.getElementById('totaalOnzeker').textContent = onzeker;
 
+  // Kaart
+  var kaart = document.getElementById('kaartContainer');
+  if (plots.length > 0) {
+    var pinsHtml = '<div class="kaart-achtergrond"></div>';
+    plots.forEach(function(p, i) {
+      var x = 15 + (i % 5) * 18;
+      var y = 20 + Math.floor(i / 5) * 35;
+      pinsHtml += '<div class="kaart-pin" style="left:' + x + '%;top:' + y + '%">';
+      pinsHtml += '<div class="kaart-label">P' + p.nr + '</div></div>';
+    });
+    pinsHtml += '<div style="position:absolute;bottom:8px;right:10px;font-size:0.55rem;color:#6a9465;letter-spacing:0.06em">GPS-kaart (vereist internet)</div>';
+    kaart.innerHTML = pinsHtml;
+  }
+
   // Plots lijst
   var lijstHtml = '';
-  plots.forEach(function(p, i) {
+  plots.forEach(function(p) {
     var soortTekst = p.analyse ? p.analyse.soorten.slice(0,3).map(function(s){return s.nl;}).join(', ') : '—';
     var onzekerP = p.analyse ? p.analyse.soorten.filter(function(s){return s.betrouwbaarheid!=='zeker';}).length : 0;
-    var aantalS = p.analyse ? p.analyse.soorten.length : 0;
 
-    lijstHtml += '<div class="plot-item" onclick="toonPlotDetail(' + i + ')" style="cursor:pointer">';
+    lijstHtml += '<div class="plot-item">';
     if (p.foto) {
       lijstHtml += '<img class="plot-thumb" src="' + p.foto + '" alt="Plot ' + p.nr + '">';
     } else {
@@ -1773,11 +1079,10 @@ function updateOverzicht() {
     }
     lijstHtml += '<div class="plot-info">';
     lijstHtml += '<div class="plot-nr">Plot ' + p.nr + ' — ' + (p.timestamp ? p.timestamp.substring(11,16) : '') + '</div>';
-    lijstHtml += '<div class="plot-soorten">' + soortTekst + (aantalS > 3 ? ' +' + (aantalS-3) + ' meer' : '') + '</div>';
+    lijstHtml += '<div class="plot-soorten">' + soortTekst + (p.analyse && p.analyse.soorten.length > 3 ? ' +' + (p.analyse.soorten.length-3) + ' meer' : '') + '</div>';
     lijstHtml += '<div class="plot-badges">';
     if (onzekerP > 0) lijstHtml += '<span class="badge badge-onzeker">⚠ ' + onzekerP + ' te controleren</span>';
-    if (p.gps && p.gps !== 'Nog niet bepaald') lijstHtml += '<span class="badge" style="background:#0f1f0d;color:#6a9465">📍</span>';
-    if (p.notitie) lijstHtml += '<span class="badge" style="background:#0f1f0d;color:#a8d4a0">📝</span>';
+    if (p.gps) lijstHtml += '<span class="badge" style="background:#0f1f0d;color:#6a9465">📍 GPS</span>';
     lijstHtml += '</div></div></div>';
   });
 
@@ -1787,23 +1092,20 @@ function updateOverzicht() {
 // ======= EXPORT =======
 function exporteerCSV() {
   if (!state.plots.length) { toonNotif('Geen data om te exporteren'); return; }
-  var rijen = [['Locatie','Plot','Datum','Tijd','GPS','Wetenschappelijk','Nederlands','Abundantie','Betrouwbaarheid','Gecorrigeerd','Vegetatiebedekking%','Vraag_AI','Notitie_veldwerker']];
+  var rijen = [['Plot','Datum','Tijd','GPS','Wetenschappelijk','Nederlands','Abundantie','Betrouwbaarheid','Vraag AI']];
 
   state.plots.forEach(function(p) {
     var dt = p.timestamp ? p.timestamp.split('T') : ['',''];
-    var locatie = state.ronde ? state.ronde.locatie : '';
-    var bedekking = p.analyse && p.analyse.vegetatiebedekking ? p.analyse.vegetatiebedekking : '';
-    if (p.analyse && p.analyse.soorten.length) {
+    if (p.analyse) {
       p.analyse.soorten.forEach(function(s) {
         rijen.push([
-          locatie, p.nr, dt[0], dt[1].substring(0,5), p.gps,
+          p.nr, dt[0], dt[1].substring(0,5), p.gps,
           s.wetenschappelijk || '', s.nl, s.abundantie,
-          s.betrouwbaarheid, s.gecorrigeerd ? 'ja' : 'nee',
-          bedekking, s.vraag || '', p.notitie || ''
+          s.betrouwbaarheid, s.vraag || ''
         ]);
       });
     } else {
-      rijen.push([locatie, p.nr, dt[0], dt[1].substring(0,5), p.gps, '','','','','nee',bedekking,'',p.notitie||'']);
+      rijen.push([p.nr, dt[0], dt[1].substring(0,5), p.gps, '','','','','']);
     }
   });
 
@@ -1812,7 +1114,7 @@ function exporteerCSV() {
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
   a.href = url;
-  a.download = 'bermapp_' + (state.ronde ? state.ronde.datum + '_' + state.ronde.locatie.substring(0,20).replace(/\s/g,'_') : 'export') + '.csv';
+  a.download = 'bermapp_' + (state.ronde ? state.ronde.datum : 'export') + '.csv';
   a.click();
   toonNotif('CSV gedownload ✓');
 }
@@ -1822,22 +1124,17 @@ function exporteerTwijfel() {
   var regels = ['TWIJFELLIJST — BermApp\n'];
   if (state.ronde) regels.push('Locatie: ' + state.ronde.locatie + '\nDatum: ' + state.ronde.datum + '\n\n');
 
-  var heeftTwijfel = false;
   state.plots.forEach(function(p) {
     if (!p.analyse) return;
     var tw = p.analyse.soorten.filter(function(s){ return s.betrouwbaarheid !== 'zeker'; });
     if (!tw.length) return;
-    heeftTwijfel = true;
-    regels.push('PLOT ' + p.nr + ' — GPS: ' + p.gps + ' — Tijd: ' + (p.timestamp ? p.timestamp.substring(11,16) : ''));
+    regels.push('PLOT ' + p.nr + ' — GPS: ' + p.gps);
     tw.forEach(function(s) {
-      regels.push('  • ' + s.nl + (s.wetenschappelijk ? ' (' + s.wetenschappelijk + ')' : '') + ' [' + s.betrouwbaarheid + ']');
-      if (s.vraag) regels.push('    AI-vraag: ' + s.vraag);
+      regels.push('  • ' + s.nl + ' (' + s.wetenschappelijk + ') [' + s.betrouwbaarheid + ']');
+      if (s.vraag) regels.push('    Vraag: ' + s.vraag);
     });
-    if (p.notitie) regels.push('  Notitie: ' + p.notitie);
     regels.push('');
   });
-
-  if (!heeftTwijfel) { toonNotif('Geen twijfelgevallen gevonden ✓'); return; }
 
   var blob = new Blob([regels.join('\n')], {type:'text/plain;charset=utf-8'});
   var url = URL.createObjectURL(blob);
@@ -1852,51 +1149,37 @@ function exporteerTwijfel() {
 function slaDataOp() {
   try {
     localStorage.setItem('bermapp_ronde', JSON.stringify(state.ronde));
+    // Foto's apart opslaan (groot)
     var plotsZonderFoto = state.plots.map(function(p) {
       return Object.assign({}, p, {foto: p.foto ? 'aanwezig' : null});
     });
     localStorage.setItem('bermapp_plots_meta', JSON.stringify(plotsZonderFoto));
     state.plots.forEach(function(p, i) {
-      if (p.foto) {
-        try { localStorage.setItem('bermapp_foto_' + i, p.foto); } catch(e) {}
-      }
+      if (p.foto) localStorage.setItem('bermapp_foto_' + i, p.foto);
     });
-  } catch(e) { console.warn('Opslag fout:', e); }
+  } catch(e) { /* localStorage vol — foto's te groot */ }
 }
 
 function laadOpgeslagenData() {
   try {
     var r = localStorage.getItem('bermapp_ronde');
     var pm = localStorage.getItem('bermapp_plots_meta');
-    if (r) {
-      state.ronde = JSON.parse(r);
-      document.getElementById('locatieNaam').value = state.ronde.locatie || '';
-      document.getElementById('datumInput').value = state.ronde.datum || '';
-      document.getElementById('aantalPlots').value = state.ronde.aantalPlots || 10;
-      document.getElementById('gpsDisplay').textContent = state.ronde.gps || 'Nog niet bepaald';
-      document.getElementById('rondeLabel').textContent = state.ronde.locatie.substring(0,20);
-    }
+    if (r) state.ronde = JSON.parse(r);
     if (pm) {
       state.plots = JSON.parse(pm).map(function(p, i) {
         if (p.foto === 'aanwezig') p.foto = localStorage.getItem('bermapp_foto_' + i);
         return p;
       });
+      if (state.ronde) document.getElementById('rondeLabel').textContent = state.ronde.locatie.substring(0,20);
     }
-    updateVoortgang();
-    updatePlotTeller();
   } catch(e) {}
 }
 
 function updateExportScherm() {
   var arch = document.getElementById('rondesArchief');
   if (state.ronde) {
-    var onzekerTotaal = 0;
-    state.plots.forEach(function(p) {
-      if (p.analyse) p.analyse.soorten.forEach(function(s){ if(s.betrouwbaarheid!=='zeker') onzekerTotaal++; });
-    });
-    arch.innerHTML =
-      '<div style="color:var(--wit);margin-bottom:4px">' + state.ronde.locatie + '</div>' +
-      '<div>' + state.ronde.datum + ' — ' + state.plots.length + ' plots — ' + onzekerTotaal + ' twijfelgevallen</div>';
+    arch.innerHTML = '<div style="color:var(--wit)">' + state.ronde.locatie + '</div>' +
+      '<div>' + state.ronde.datum + ' — ' + state.plots.length + ' plots</div>';
   } else {
     arch.textContent = 'Geen ronde actief';
   }
@@ -1906,12 +1189,10 @@ function verwijderRonde() {
   if (!confirm('Huidige ronde wissen? (Export eerst!)')) return;
   state.ronde = null;
   state.plots = [];
-  if (state.leafletKaart) { state.leafletKaart.remove(); state.leafletKaart = null; state.leafletMarkers = []; }
   localStorage.removeItem('bermapp_ronde');
   localStorage.removeItem('bermapp_plots_meta');
   document.getElementById('rondeLabel').textContent = 'Geen ronde';
   updateOverzicht();
-  updateVoortgang();
   toonNotif('Ronde gewist');
 }
 
@@ -1920,9 +1201,8 @@ function toonNotif(tekst) {
   var n = document.getElementById('notif');
   n.textContent = tekst;
   n.classList.add('zichtbaar');
-  setTimeout(function(){ n.classList.remove('zichtbaar'); }, 2400);
+  setTimeout(function(){ n.classList.remove('zichtbaar'); }, 2200);
 }
 </script>
 </body>
 </html>
-
