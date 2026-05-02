@@ -1001,7 +1001,7 @@ function analyseerFoto(fotoData) {
     '  "opmerkingen": "Korte algemene opmerking over het plot"\n}\n\n' +
     'Wees eerlijk: markeer als onzeker als je niet zeker bent. Vraag dan om een close-up of stel een determinatievraag.';
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + state.apiKey, {
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + state.apiKey, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
