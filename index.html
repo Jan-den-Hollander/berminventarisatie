@@ -17,7 +17,7 @@
   .header{background:var(--groen);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--lichtgroen);position:sticky;top:0;z-index:100;}
   .header-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;}
   .header-title span{font-style:italic;font-weight:300;color:#a8d4a0;}
-  .ronde-badge{font-size:0.6rem;background:var(--donker);color:#a8d4a0;padding:4px 8px;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .ronde-badge{font-size:.6rem;background:var(--donker);color:#a8d4a0;padding:4px 8px;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .tabs{display:flex;background:#0f1f0d;border-bottom:1px solid var(--lijn);}
   .tab{flex:1;padding:10px 2px;text-align:center;font-size:.53rem;letter-spacing:.05em;text-transform:uppercase;color:#6a9465;cursor:pointer;border:none;background:none;transition:all .2s;}
   .tab.active{color:var(--wit);background:var(--groen);border-bottom:2px solid #a8d4a0;}
@@ -37,13 +37,10 @@
   .btn-klein{background:#1e3a1a;color:#a8d4a0;border:1px solid var(--lijn);font-size:.65rem;padding:7px 14px;}
   .btn-gps{background:var(--aarde);color:var(--wit);font-size:.65rem;padding:8px 12px;flex-shrink:0;}
   .btn-gevaar{background:#4a1a1a;color:#e87070;border:1px solid #6a2a2a;}
-  /* Per-plot analyse knop */
-  .btn-plot-analyse{background:#1a3a50;color:#70c8e8;border:1px solid #2a5a70;font-size:.65rem;padding:5px 10px;border-radius:2px;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.05em;}
-  .btn-plot-analyse:disabled{opacity:.4;cursor:not-allowed;}
-  .btn-plot-opnieuw{background:#1e3a1a;color:#a8d4a0;border:1px solid var(--lijn);font-size:.6rem;padding:4px 8px;border-radius:2px;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;}
-  /* Batch knop */
-  .btn-batch{background:#1a3a50;color:#70c8e8;border:1px solid #2a5a70;width:100%;padding:12px;font-size:.75rem;margin-bottom:8px;border-radius:2px;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;}
-  .btn-batch:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-deel{background:#1a3a50;color:#70c8e8;border:1px solid #2a5a70;font-size:.7rem;padding:9px 14px;flex:1;}
+  .btn-prompt{background:#2a1f00;color:#e8c070;border:1px solid #5a3f00;font-size:.7rem;padding:9px 14px;flex:1;}
+  .btn-opslaan-analyse{background:var(--groen);color:var(--wit);font-size:.7rem;padding:9px 14px;width:100%;margin-top:6px;}
+  .btn-reset-analyse{background:#1e3a1a;color:#a8d4a0;border:1px solid var(--lijn);font-size:.6rem;padding:5px 10px;}
   .camera-container{position:relative;background:#000;border-radius:4px;overflow:hidden;margin-bottom:12px;aspect-ratio:4/3;}
   #videoFeed{width:100%;height:100%;object-fit:cover;}
   #fotoPreview{width:100%;height:100%;object-fit:cover;display:none;}
@@ -93,22 +90,24 @@
   .divider{border:none;border-top:1px solid var(--lijn);margin:14px 0;}
   .sectie-titel{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#6a9465;margin-bottom:10px;}
   canvas{display:none;}
-  .api-banner{background:#4a2000;border:1px solid #8b4400;border-radius:4px;padding:12px 14px;margin-bottom:12px;font-size:.72rem;color:#e8c070;line-height:1.5;}
-  .api-link{display:inline-block;margin-top:6px;margin-bottom:2px;color:#ffd080;font-size:.68rem;text-decoration:underline;text-underline-offset:3px;}
-  .api-rij{display:flex;gap:8px;margin-top:8px;}
-  .api-input{flex:1;background:#0f1f0d;border:1px solid #8b4400;color:var(--wit);padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:.7rem;border-radius:2px;}
-  .api-banner-ok{background:#1a3a16;border:1px solid #3a6a34;border-radius:4px;padding:10px 14px;margin-bottom:12px;font-size:.68rem;color:#a8d4a0;display:flex;justify-content:space-between;align-items:center;}
-  .api-wis-btn{background:none;border:1px solid #3a6a34;color:#6a9465;font-family:'IBM Plex Mono',monospace;font-size:.6rem;padding:4px 8px;border-radius:2px;cursor:pointer;}
   .veld-hint{background:#1a3a16;border:1px solid #3a6a34;border-radius:4px;padding:10px 14px;margin-bottom:12px;font-size:.7rem;color:#a8d4a0;line-height:1.6;}
-  /* Plot analyse kaart */
-  .analyse-kaart{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:12px;margin-bottom:10px;}
-  .analyse-kaart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-  .plot-log{font-size:.65rem;padding:6px 8px;background:#0f1f0d;border-radius:3px;margin-top:6px;display:none;}
-  .log-ok{color:#7dcf75;}
-  .log-fout{color:#e87070;}
-  .log-bezig{color:#70c8e8;}
-  /* Batch log */
-  .batch-log{background:#0f1f0d;border:1px solid var(--lijn);border-radius:4px;padding:10px;margin-bottom:10px;font-size:.65rem;color:#6a9465;line-height:1.8;max-height:120px;overflow-y:auto;display:none;}
+
+  /* Analyse kaart per plot */
+  .analyse-kaart{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:14px;margin-bottom:12px;}
+  .analyse-kaart-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+  .analyse-foto{width:100%;border-radius:3px;margin-bottom:10px;max-height:160px;object-fit:cover;}
+
+  /* Workflow stappen */
+  .stap-rij{display:flex;gap:8px;margin-bottom:8px;}
+  .stap-hint{font-size:.65rem;color:#6a9465;line-height:1.5;margin-bottom:8px;padding:6px 8px;background:#0f1f0d;border-radius:3px;}
+
+  /* Tekstvak voor geplakt resultaat */
+  .resultaat-input{width:100%;background:#0f1f0d;border:1px solid #3a6a34;color:var(--wit);padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;border-radius:2px;min-height:80px;resize:vertical;line-height:1.5;}
+  .resultaat-input:focus{outline:none;border-color:#a8d4a0;}
+  .resultaat-input::placeholder{color:#3a6a34;}
+
+  /* Resultaat weergave */
+  .analyse-resultaat{margin-top:8px;}
 </style>
 </head>
 <body>
@@ -128,7 +127,6 @@
 
 <!-- SETUP -->
 <div id="scherm-setup" class="screen active">
-  <div id="apiBanner"></div>
   <div class="card">
     <div class="label">Locatie / Traject</div>
     <input type="text" class="inp" id="locatieNaam" placeholder="bijv. Pastoriepad Hapert km 0-0.5">
@@ -152,8 +150,8 @@
 <!-- VELD -->
 <div id="scherm-camera" class="screen">
   <div class="veld-hint">
-    &#128247; Maak foto en sla direct op. Geen wachttijd.<br>
-    AI-analyse doe je thuis via het Analyse-tabblad.
+    &#128247; Maak foto en sla direct op.<br>
+    Analyse doe je via het Analyse-tabblad.
   </div>
   <div class="camera-container">
     <video id="videoFeed" autoplay playsinline muted></video>
@@ -178,22 +176,15 @@
 
 <!-- ANALYSE -->
 <div id="scherm-analyse" class="screen">
-  <div id="apiBannerAnalyse"></div>
 
-  <div class="card">
-    <div class="label">AI-analyse</div>
-    <div style="font-size:.7rem;color:#6a9465;line-height:1.7;margin-bottom:10px">
-      Analyseer plots <strong style="color:#a8d4a0">een voor een</strong> via de knop per plot,
-      of gebruik de batch-knop voor alle wachtende plots tegelijk.<br>
-      <span style="color:#e8c070">Bij quota-fout: wacht ~3 min en probeer opnieuw.</span><br>
-      Model: <span style="color:#a8d4a0">gemini-1.5-flash-8b</span>
-    </div>
-    <button class="btn-batch" id="btnBatch" onclick="startBatchAnalyse()">
-      &#9654; Analyseer alle wachtende plots
-    </button>
+  <div class="veld-hint" style="border-color:#5a3f00;background:#2a1f00;color:#e8c070">
+    <strong>Werkwijze:</strong><br>
+    1. Druk <strong>Deel foto</strong> → kies Gemini in het deelmenu<br>
+    2. Druk <strong>Kopieer prompt</strong> → plak in Gemini<br>
+    3. Kopieer het Gemini-antwoord<br>
+    4. Plak het in het tekstvak en druk <strong>Opslaan</strong>
   </div>
 
-  <div class="batch-log" id="batchLog"></div>
   <div id="analysePlotLijst"></div>
 </div>
 
@@ -238,7 +229,7 @@
   <div class="export-card">
     <div class="export-icon">&#128203;</div>
     <div class="sectie-titel">Twijfellijst</div>
-    <div class="export-desc">Alleen onzekere en onbekende soorten met AI-vragen.</div>
+    <div class="export-desc">Alleen onzekere en onbekende soorten met vragen.</div>
     <button class="btn btn-primair" onclick="exporteerTwijfel()">&#8595; Download twijfellijst</button>
   </div>
   <hr class="divider">
@@ -255,56 +246,31 @@
 
 <script>
 var state = {
-  apiKey: localStorage.getItem('bermapp_apikey') || '',
   ronde: null,
   plots: [],
   stream: null,
-  huidigeFotoData: null,
-  analyseBezig: false
+  huidigeFotoData: null
 };
+
+// Vaste analyse-prompt die naar Gemini gaat
+var ANALYSE_PROMPT =
+  'Je bent een botanisch veldassistent. Analyseer deze foto van een berm-vegetatieplot van 1 m2.\n\n' +
+  'Geef je antwoord als een nette lijst per soort met:\n' +
+  '- Wetenschappelijke naam\n' +
+  '- Nederlandse naam\n' +
+  '- Abundantie (zeldzaam / schaars / frequent / abundant / dominant)\n' +
+  '- Zekerheid (zeker / onzeker / onbekend)\n' +
+  '- Eventuele determinatievraag voor de bioloog\n\n' +
+  'Sluit af met een korte algemene opmerking over het plot.\n' +
+  'Wees eerlijk: markeer als onzeker als je twijfelt.';
 
 window.addEventListener('load', function() {
   document.getElementById('datumInput').value = new Date().toISOString().split('T')[0];
   laadOpgeslagenData();
-  updateApiBanner();
   updateOverzicht();
   updateVeldLijst();
   bouwAnalyseLijst();
 });
-
-// ── API KEY ──────────────────────────────────────────────
-function updateApiBanner() {
-  ['apiBanner','apiBannerAnalyse'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    if (state.apiKey) {
-      el.innerHTML = '<div class="api-banner-ok"><span>&#10003; API-sleutel actief</span><button class="api-wis-btn" onclick="wisApiKey()">Wijzigen</button></div>';
-    } else {
-      el.innerHTML =
-        '<div class="api-banner">&#9888; Gemini API-sleutel vereist.<br>' +
-        '<a class="api-link" href="https://aistudio.google.com/app/apikey" target="_blank">&#8594; Maak gratis sleutel aan (Google AI Studio)</a>' +
-        '<div class="api-rij"><input type="password" class="api-input" id="apiIn_' + id + '" placeholder="Plak sleutel...">' +
-        '<button class="btn btn-gps" onclick="slaApiKeyOp(\'' + id + '\')">OK</button></div></div>';
-    }
-  });
-}
-
-function slaApiKeyOp(id) {
-  var el = document.getElementById('apiIn_' + id);
-  if (!el) return;
-  var key = el.value.trim();
-  if (!key) return;
-  state.apiKey = key;
-  localStorage.setItem('bermapp_apikey', key);
-  updateApiBanner();
-  toonNotif('API-sleutel opgeslagen');
-}
-
-function wisApiKey() {
-  state.apiKey = '';
-  localStorage.removeItem('bermapp_apikey');
-  updateApiBanner();
-}
 
 // ── TABS ─────────────────────────────────────────────────
 function toonScherm(naam) {
@@ -312,393 +278,434 @@ function toonScherm(naam) {
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
   document.getElementById('scherm-'+naam).classList.add('active');
   var tabs = document.querySelectorAll('.tab');
-  var namen = ['setup','camera','analyse','overzicht','export'];
-  var i = namen.indexOf(naam);
-  if (i >= 0) tabs[i].classList.add('active');
-  if (naam === 'camera') { startCamera(); updateVeldLijst(); }
+  ['setup','camera','analyse','overzicht','export'].forEach(function(n,i){
+    if (n===naam) tabs[i].classList.add('active');
+  });
+  if (naam==='camera'){startCamera();updateVeldLijst();}
   else stopCamera();
-  if (naam === 'overzicht') updateOverzicht();
-  if (naam === 'export') updateExportScherm();
-  if (naam === 'analyse') { updateApiBanner(); bouwAnalyseLijst(); }
+  if (naam==='overzicht') updateOverzicht();
+  if (naam==='export') updateExportScherm();
+  if (naam==='analyse') bouwAnalyseLijst();
 }
 
-// ── RONDE ────────────────────────────────────────────────
+// ── RONDE ─────────────────────────────────────────────────
 function startRonde() {
   var loc = document.getElementById('locatieNaam').value.trim();
-  if (!loc) { toonNotif('Vul een locatienaam in'); return; }
+  if (!loc){toonNotif('Vul een locatienaam in');return;}
   if (!confirm('Nieuwe ronde starten?')) return;
   state.ronde = {
     id: Date.now(),
     locatie: loc,
     datum: document.getElementById('datumInput').value,
     gps: document.getElementById('gpsDisplay').textContent,
-    aantalPlots: parseInt(document.getElementById('aantalPlots').value) || 10
+    aantalPlots: parseInt(document.getElementById('aantalPlots').value)||10
   };
   state.plots = [];
   slaDataOp();
-  document.getElementById('rondeLabel').textContent = loc.substring(0,22) + (loc.length > 22 ? '...' : '');
+  document.getElementById('rondeLabel').textContent = loc.substring(0,22)+(loc.length>22?'...':'');
   updatePlotTeller();
   toonScherm('camera');
   toonNotif('Ronde gestart');
 }
 
-// ── GPS ──────────────────────────────────────────────────
+// ── GPS ───────────────────────────────────────────────────
 function bepaalGPS() {
-  if (!navigator.geolocation) { toonNotif('GPS niet beschikbaar'); return; }
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    var coords = pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5);
-    document.getElementById('gpsDisplay').textContent = coords;
-    if (state.ronde) { state.ronde.gps = coords; slaDataOp(); }
+  if (!navigator.geolocation){toonNotif('GPS niet beschikbaar');return;}
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var c = pos.coords.latitude.toFixed(5)+', '+pos.coords.longitude.toFixed(5);
+    document.getElementById('gpsDisplay').textContent = c;
+    if (state.ronde){state.ronde.gps=c;slaDataOp();}
     toonNotif('GPS bepaald');
-  }, function() { toonNotif('GPS mislukt'); });
+  },function(){toonNotif('GPS mislukt');});
 }
 
-// ── CAMERA ───────────────────────────────────────────────
+// ── CAMERA ────────────────────────────────────────────────
 function startCamera() {
   if (state.stream) return;
   navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:960}}})
-  .then(function(stream) {
-    state.stream = stream;
-    var v = document.getElementById('videoFeed');
-    v.srcObject = stream; v.style.display = 'block';
-    document.getElementById('fotoPreview').style.display = 'none';
-    document.getElementById('slaOpBtn').style.display = 'none';
-    state.huidigeFotoData = null;
-  }).catch(function(e) { toonNotif('Camera: ' + e.message); });
+  .then(function(stream){
+    state.stream=stream;
+    var v=document.getElementById('videoFeed');
+    v.srcObject=stream;v.style.display='block';
+    document.getElementById('fotoPreview').style.display='none';
+    document.getElementById('slaOpBtn').style.display='none';
+    state.huidigeFotoData=null;
+  }).catch(function(e){toonNotif('Camera: '+e.message);});
 }
 
 function stopCamera() {
-  if (state.stream) { state.stream.getTracks().forEach(function(t){t.stop();}); state.stream = null; }
+  if (state.stream){state.stream.getTracks().forEach(function(t){t.stop();});state.stream=null;}
 }
 
 function nieuweCamera() {
-  stopCamera(); state.huidigeFotoData = null;
-  document.getElementById('fotoPreview').style.display = 'none';
-  document.getElementById('videoFeed').style.display = 'block';
-  document.getElementById('slaOpBtn').style.display = 'none';
+  stopCamera();state.huidigeFotoData=null;
+  document.getElementById('fotoPreview').style.display='none';
+  document.getElementById('videoFeed').style.display='block';
+  document.getElementById('slaOpBtn').style.display='none';
   startCamera();
 }
 
 function maakFoto() {
-  if (!state.ronde) { toonNotif('Start eerst een ronde'); return; }
-  var v = document.getElementById('videoFeed');
-  var c = document.getElementById('fotoCanvas');
-  c.width = v.videoWidth || 640; c.height = v.videoHeight || 480;
-  c.getContext('2d').drawImage(v, 0, 0);
-  state.huidigeFotoData = c.toDataURL('image/jpeg', 0.82);
-  document.getElementById('fotoPreview').src = state.huidigeFotoData;
-  document.getElementById('fotoPreview').style.display = 'block';
-  document.getElementById('videoFeed').style.display = 'none';
-  document.getElementById('slaOpBtn').style.display = 'inline-flex';
+  if (!state.ronde){toonNotif('Start eerst een ronde');return;}
+  var v=document.getElementById('videoFeed');
+  var c=document.getElementById('fotoCanvas');
+  c.width=v.videoWidth||640;c.height=v.videoHeight||480;
+  c.getContext('2d').drawImage(v,0,0);
+  state.huidigeFotoData=c.toDataURL('image/jpeg',0.82);
+  document.getElementById('fotoPreview').src=state.huidigeFotoData;
+  document.getElementById('fotoPreview').style.display='block';
+  document.getElementById('videoFeed').style.display='none';
+  document.getElementById('slaOpBtn').style.display='inline-flex';
 }
 
 function updatePlotTeller() {
-  document.getElementById('plotTeller').textContent =
-    'Plot ' + (state.plots.length + 1) + ' / ' + (state.ronde ? state.ronde.aantalPlots : 10);
+  document.getElementById('plotTeller').textContent=
+    'Plot '+(state.plots.length+1)+' / '+(state.ronde?state.ronde.aantalPlots:10);
 }
 
-// ── PLOT OPSLAAN ─────────────────────────────────────────
+// ── PLOT OPSLAAN ──────────────────────────────────────────
 function slaPlotOp() {
-  if (!state.huidigeFotoData) { toonNotif('Maak eerst een foto'); return; }
+  if (!state.huidigeFotoData){toonNotif('Maak eerst een foto');return;}
   navigator.geolocation.getCurrentPosition(
-    function(pos) { _opslaan(pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5)); },
-    function() { _opslaan(state.ronde ? state.ronde.gps : ''); },
-    { timeout: 3000 }
+    function(pos){_opslaan(pos.coords.latitude.toFixed(5)+', '+pos.coords.longitude.toFixed(5));},
+    function(){_opslaan(state.ronde?state.ronde.gps:'');},
+    {timeout:3000}
   );
 }
 
 function _opslaan(gps) {
-  var plot = { nr: state.plots.length + 1, timestamp: new Date().toISOString(), gps: gps, foto: state.huidigeFotoData, analyse: null };
+  var plot={nr:state.plots.length+1,timestamp:new Date().toISOString(),gps:gps,foto:state.huidigeFotoData,analyse:null,analyseRauw:''};
   state.plots.push(plot);
-  slaDataOp(); nieuweCamera(); updatePlotTeller(); updateVeldLijst();
-  toonNotif('Plot ' + plot.nr + ' opgeslagen');
+  slaDataOp();nieuweCamera();updatePlotTeller();updateVeldLijst();
+  toonNotif('Plot '+plot.nr+' opgeslagen');
 }
 
 function updateVeldLijst() {
-  var el = document.getElementById('veldPlotLijst');
-  if (!state.plots.length) { el.innerHTML = '<div style="color:#6a9465;padding:4px 0">Nog geen plots</div>'; return; }
-  var html = '';
-  state.plots.forEach(function(p) {
-    html += '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--lijn)">';
-    html += '<span style="font-size:.65rem;color:#a8d4a0;min-width:50px">Plot ' + p.nr + '</span>';
-    html += p.analyse ? '<span class="badge badge-zeker">AI gereed</span>' : '<span class="badge badge-wacht">wacht op AI</span>';
-    if (p.gps && p.gps !== 'Nog niet bepaald') html += '<span class="badge badge-gps">GPS</span>';
-    html += '<span style="font-size:.6rem;color:#6a9465">' + (p.timestamp ? p.timestamp.substring(11,16) : '') + '</span>';
-    html += '</div>';
+  var el=document.getElementById('veldPlotLijst');
+  if (!state.plots.length){el.innerHTML='<div style="color:#6a9465;padding:4px 0">Nog geen plots</div>';return;}
+  var html='';
+  state.plots.forEach(function(p){
+    html+='<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--lijn)">';
+    html+='<span style="font-size:.65rem;color:#a8d4a0;min-width:50px">Plot '+p.nr+'</span>';
+    html+=p.analyse?'<span class="badge badge-zeker">gereed</span>':'<span class="badge badge-wacht">wacht</span>';
+    if (p.gps&&p.gps!=='Nog niet bepaald') html+='<span class="badge badge-gps">GPS</span>';
+    html+='<span style="font-size:.6rem;color:#6a9465">'+(p.timestamp?p.timestamp.substring(11,16):'')+'</span>';
+    html+='</div>';
   });
-  el.innerHTML = html;
+  el.innerHTML=html;
 }
 
-// ── ANALYSE PER PLOT ─────────────────────────────────────
-// Bouwt de lijst opnieuw op — elk plot krijgt eigen knop en resultaat
+// ── ANALYSE LIJST ─────────────────────────────────────────
 function bouwAnalyseLijst() {
-  var container = document.getElementById('analysePlotLijst');
+  var container=document.getElementById('analysePlotLijst');
   if (!container) return;
-  if (!state.plots.length) {
-    container.innerHTML = '<div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Geen plots in deze ronde</div>';
+  if (!state.plots.length){
+    container.innerHTML='<div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Geen plots in deze ronde</div>';
     return;
   }
+  var html='';
+  state.plots.forEach(function(p){
+    html+='<div class="analyse-kaart" id="ak_'+p.nr+'">';
 
-  var html = '';
-  state.plots.forEach(function(p) {
-    html += '<div class="analyse-kaart" id="akaart_' + p.nr + '">';
-    html += '<div class="analyse-kaart-header">';
-    html += '<div>';
-    html += '<div class="label" style="margin:0">Plot ' + p.nr + '</div>';
-    html += '<div style="font-size:.6rem;color:#6a9465">' + (p.timestamp ? p.timestamp.substring(0,10) + ' ' + p.timestamp.substring(11,16) : '') + ' &nbsp;';
-    if (p.gps && p.gps !== 'Nog niet bepaald') html += '&#128205; ' + p.gps;
-    html += '</div>';
-    html += '</div>';
-    // Knop rechts
-    if (p.analyse) {
-      html += '<button class="btn-plot-opnieuw" id="btn_' + p.nr + '" onclick="heranalyseerEen(' + p.nr + ')">&#8635; Opnieuw</button>';
-    } else {
-      html += '<button class="btn-plot-analyse" id="btn_' + p.nr + '" onclick="analyseerEen(' + p.nr + ')">Analyseer</button>';
+    // Header
+    html+='<div class="analyse-kaart-header">';
+    html+='<div><div class="label" style="margin:0">Plot '+p.nr+'</div>';
+    html+='<div style="font-size:.6rem;color:#6a9465">'+(p.timestamp?p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16):'');
+    if (p.gps&&p.gps!=='Nog niet bepaald') html+=' &#128205; '+p.gps;
+    html+='</div></div>';
+    if (p.analyse){
+      html+='<button class="btn-reset-analyse" onclick="resetAnalyse('+p.nr+')">&#8635; Opnieuw</button>';
     }
-    html += '</div>'; // header
+    html+='</div>';
 
-    // Foto thumbnail
-    if (p.foto) html += '<img src="' + p.foto + '" style="width:100%;border-radius:3px;margin:8px 0;max-height:120px;object-fit:cover">';
+    // Foto
+    if (p.foto) html+='<img src="'+p.foto+'" class="analyse-foto">';
 
-    // Resultaat of wachtstatus
-    html += '<div id="res_' + p.nr + '">';
-    if (p.analyse) {
-      html += bouwSoortenHtml(p.analyse);
-    } else {
-      html += '<div style="font-size:.7rem;color:#6a9465;font-style:italic">Nog niet geanalyseerd</div>';
-    }
-    html += '</div>';
+    // Als nog niet geanalyseerd: werkflow knoppen
+    html+='<div id="workflow_'+p.nr+'" style="'+(p.analyse?'display:none':'')+'">';
+    html+='<div class="stap-hint">Stap 1 &amp; 2: Deel de foto met Gemini en plak de analyse-prompt</div>';
+    html+='<div class="stap-rij">';
+    html+='<button class="btn btn-deel" onclick="deelFoto('+p.nr+')">&#8679; Deel foto</button>';
+    html+='<button class="btn btn-prompt" onclick="kopieerPrompt('+p.nr+')">&#128203; Kopieer prompt</button>';
+    html+='</div>';
+    html+='<div class="stap-hint" style="margin-top:8px">Stap 3: Plak het Gemini-antwoord hieronder</div>';
+    html+='<textarea class="resultaat-input" id="ta_'+p.nr+'" placeholder="Plak hier het antwoord van Gemini..."></textarea>';
+    html+='<button class="btn btn-opslaan-analyse" onclick="slaAnalyseOp('+p.nr+')">&#10003; Opslaan analyse</button>';
+    html+='</div>';
 
-    // Per-plot log
-    html += '<div class="plot-log" id="log_' + p.nr + '"></div>';
-    html += '</div>'; // kaart
+    // Resultaat (als geanalyseerd)
+    html+='<div id="res_'+p.nr+'" class="analyse-resultaat">';
+    if (p.analyse) html+=bouwResultaatHtml(p);
+    html+='</div>';
+
+    html+='</div>'; // analyse-kaart
   });
-
-  container.innerHTML = html;
+  container.innerHTML=html;
 }
 
-function bouwSoortenHtml(analyse) {
-  var html = '';
-  if (!analyse.soorten || !analyse.soorten.length) return '<div style="font-size:.7rem;color:#6a9465">Geen soorten herkend</div>';
-  analyse.soorten.forEach(function(s) {
-    var kl = s.betrouwbaarheid === 'zeker' ? '' : (s.betrouwbaarheid === 'onzeker' ? ' onzeker' : ' onbekend');
-    var badge = s.betrouwbaarheid === 'zeker' ? 'badge-zeker' : (s.betrouwbaarheid === 'onzeker' ? 'badge-onzeker' : 'badge-onbekend');
-    html += '<div class="soort-kaart' + kl + '">';
-    html += '<div class="soort-naam">' + (s.wetenschappelijk || '&#8212;') + '</div>';
-    html += '<div class="soort-nl">' + (s.nl || '') + '</div>';
-    html += '<div class="soort-meta"><span class="badge ' + badge + '">' + s.betrouwbaarheid + '</span><span class="abundantie">' + (s.abundantie || '') + '</span></div>';
-    if (s.vraag) html += '<div class="ai-vraag">' + s.vraag + '</div>';
-    html += '</div>';
-  });
-  if (analyse.opmerkingen) html += '<div style="font-size:.68rem;color:#6a9465;font-style:italic;margin-top:4px">&#128172; ' + analyse.opmerkingen + '</div>';
+// Deel foto via Web Share API
+function deelFoto(nr) {
+  var plot=state.plots.find(function(p){return p.nr===nr;});
+  if (!plot||!plot.foto){toonNotif('Geen foto beschikbaar');return;}
+
+  // Converteer dataURL naar Blob
+  var arr=plot.foto.split(',');
+  var mime=arr[0].match(/:(.*?);/)[1];
+  var bstr=atob(arr[1]);
+  var n=bstr.length;
+  var u8arr=new Uint8Array(n);
+  while(n--){u8arr[n]=bstr.charCodeAt(n);}
+  var blob=new Blob([u8arr],{type:mime});
+  var file=new File([blob],'plot_'+nr+'.jpg',{type:'image/jpeg'});
+
+  if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+    navigator.share({
+      title: 'BermApp Plot '+nr,
+      text: ANALYSE_PROMPT,
+      files: [file]
+    }).then(function(){
+      toonNotif('Gedeeld ✓');
+    }).catch(function(e){
+      if (e.name!=='AbortError') toonNotif('Delen mislukt: '+e.message);
+    });
+  } else {
+    // Fallback: download de foto
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download='plot_'+nr+'.jpg';a.click();
+    toonNotif('Foto gedownload — open zelf in Gemini');
+  }
+}
+
+// Kopieer prompt naar klembord
+function kopieerPrompt(nr) {
+  var promptTekst = ANALYSE_PROMPT;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(promptTekst).then(function(){
+      toonNotif('Prompt gekopieerd ✓ — plak in Gemini');
+    }).catch(function(){
+      _kopieerFallback(promptTekst);
+    });
+  } else {
+    _kopieerFallback(promptTekst);
+  }
+}
+
+function _kopieerFallback(tekst) {
+  var ta=document.createElement('textarea');
+  ta.value=tekst;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');toonNotif('Prompt gekopieerd ✓');}
+  catch(e){toonNotif('Kopieer handmatig — zie tekstvak');}
+  document.body.removeChild(ta);
+}
+
+// Sla geplakt Gemini-antwoord op
+function slaAnalyseOp(nr) {
+  var plot=state.plots.find(function(p){return p.nr===nr;});
+  if (!plot) return;
+  var ta=document.getElementById('ta_'+nr);
+  if (!ta||!ta.value.trim()){toonNotif('Plak eerst het Gemini-antwoord');return;}
+
+  var tekst=ta.value.trim();
+  plot.analyseRauw=tekst;
+
+  // Probeer JSON te parsen (als Gemini toevallig JSON geeft)
+  var start=tekst.indexOf('{');
+  var eind=tekst.lastIndexOf('}');
+  if (start!==-1&&eind>start) {
+    try {
+      var res=JSON.parse(tekst.substring(start,eind+1));
+      plot.analyse=res;
+    } catch(e) {
+      // Geen JSON — sla als vrije tekst op in analyse-structuur
+      plot.analyse = parseVrijeTekst(tekst);
+    }
+  } else {
+    plot.analyse = parseVrijeTekst(tekst);
+  }
+
+  slaDataOp();
+
+  // Ververs dit plot in de UI
+  var workflow=document.getElementById('workflow_'+nr);
+  var res=document.getElementById('res_'+nr);
+  var header=document.getElementById('ak_'+nr).querySelector('.analyse-kaart-header');
+  if (workflow) workflow.style.display='none';
+  if (res) res.innerHTML=bouwResultaatHtml(plot);
+  // Voeg opnieuw-knop toe
+  var resetBtn=header.querySelector('.btn-reset-analyse');
+  if (!resetBtn) {
+    var btn=document.createElement('button');
+    btn.className='btn-reset-analyse';
+    btn.innerHTML='&#8635; Opnieuw';
+    btn.onclick=function(){resetAnalyse(nr);};
+    header.appendChild(btn);
+  }
+
+  updateVeldLijst(); updateOverzicht();
+  toonNotif('Plot '+nr+' analyse opgeslagen');
+}
+
+// Parseer vrije tekst van Gemini naar structuur
+function parseVrijeTekst(tekst) {
+  // Bewaar als vrije tekst — toon het netjes
+  return {
+    soorten: [],
+    opmerkingen: tekst,
+    vrijeTekst: true
+  };
+}
+
+function resetAnalyse(nr) {
+  var plot=state.plots.find(function(p){return p.nr===nr;});
+  if (!plot) return;
+  plot.analyse=null; plot.analyseRauw='';
+  slaDataOp();
+  bouwAnalyseLijst();
+  toonNotif('Analyse gewist — klaar voor nieuw antwoord');
+}
+
+function bouwResultaatHtml(p) {
+  if (!p.analyse) return '';
+  var html='';
+
+  if (p.analyse.vrijeTekst) {
+    // Vrije tekst weergave
+    html+='<div style="background:#0f1f0d;border-left:3px solid var(--lichtgroen);padding:12px;border-radius:0 3px 3px 0;margin-top:4px">';
+    html+='<div class="label" style="margin-bottom:6px">Gemini-analyse</div>';
+    html+='<div style="font-size:.72rem;line-height:1.8;white-space:pre-wrap;color:var(--wit)">'+escapeHtml(p.analyse.opmerkingen)+'</div>';
+    html+='</div>';
+  } else {
+    // JSON structuur
+    if (p.analyse.soorten && p.analyse.soorten.length) {
+      p.analyse.soorten.forEach(function(s){
+        var kl=s.betrouwbaarheid==='zeker'?'':(s.betrouwbaarheid==='onzeker'?' onzeker':' onbekend');
+        var badge=s.betrouwbaarheid==='zeker'?'badge-zeker':(s.betrouwbaarheid==='onzeker'?'badge-onzeker':'badge-onbekend');
+        html+='<div class="soort-kaart'+kl+'">';
+        html+='<div class="soort-naam">'+(s.wetenschappelijk||'&#8212;')+'</div>';
+        html+='<div class="soort-nl">'+(s.nl||'')+'</div>';
+        html+='<div class="soort-meta"><span class="badge '+badge+'">'+(s.betrouwbaarheid||'')+'</span>';
+        html+='<span class="abundantie">'+(s.abundantie||'')+'</span></div>';
+        if (s.vraag) html+='<div class="ai-vraag">'+s.vraag+'</div>';
+        html+='</div>';
+      });
+    }
+    if (p.analyse.opmerkingen) {
+      html+='<div style="font-size:.68rem;color:#6a9465;font-style:italic;margin-top:4px">&#128172; '+p.analyse.opmerkingen+'</div>';
+    }
+  }
   return html;
 }
 
-function analyseerEen(nr) {
-  var plot = state.plots.find(function(p){return p.nr===nr;});
-  if (!plot) return;
-  if (!state.apiKey) { toonNotif('Stel eerst een API-sleutel in'); return; }
-
-  var btn = document.getElementById('btn_' + nr);
-  var log = document.getElementById('log_' + nr);
-  if (btn) { btn.textContent = 'Bezig...'; btn.disabled = true; }
-  if (log) { log.style.display = 'block'; log.innerHTML = '<span class="log-bezig">Analyseren...</span>'; }
-
-  roepGeminiAan(plot, function(ok, msg) {
-    slaDataOp();
-    if (log) log.innerHTML = ok ? '<span class="log-ok">&#10003; ' + msg + '</span>' : '<span class="log-fout">&#10005; ' + msg + '</span>';
-    // Ververs alleen dit plot in de lijst
-    var res = document.getElementById('res_' + nr);
-    if (res && plot.analyse) res.innerHTML = bouwSoortenHtml(plot.analyse);
-    if (btn) {
-      if (ok) { btn.textContent = '&#8635; Opnieuw'; btn.className = 'btn-plot-opnieuw'; btn.disabled = false; btn.onclick = function(){heranalyseerEen(nr);}; }
-      else { btn.textContent = 'Analyseer'; btn.disabled = false; }
-    }
-    updateVeldLijst(); updateOverzicht();
-    toonNotif(ok ? 'Plot ' + nr + ' geanalyseerd' : 'Fout bij plot ' + nr);
-  });
+function escapeHtml(t) {
+  return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function heranalyseerEen(nr) {
-  var plot = state.plots.find(function(p){return p.nr===nr;});
-  if (!plot) return;
-  plot.analyse = null;
-  slaDataOp();
-  // Reset UI voor dit plot
-  var btn = document.getElementById('btn_' + nr);
-  if (btn) { btn.textContent = 'Analyseer'; btn.className = 'btn-plot-analyse'; btn.onclick = function(){analyseerEen(nr);}; btn.disabled = false; }
-  var res = document.getElementById('res_' + nr);
-  if (res) res.innerHTML = '<div style="font-size:.7rem;color:#6a9465;font-style:italic">Nog niet geanalyseerd</div>';
-  var log = document.getElementById('log_' + nr);
-  if (log) { log.style.display = 'none'; log.innerHTML = ''; }
-  setTimeout(function(){ analyseerEen(nr); }, 100);
-}
-
-// ── BATCH ANALYSE ────────────────────────────────────────
-function startBatchAnalyse() {
-  if (state.analyseBezig) return;
-  if (!state.apiKey) { toonNotif('Stel eerst een API-sleutel in'); return; }
-  var wacht = state.plots.filter(function(p){return !p.analyse;});
-  if (!wacht.length) { toonNotif('Alle plots zijn al geanalyseerd'); return; }
-
-  state.analyseBezig = true;
-  var batchBtn = document.getElementById('btnBatch');
-  if (batchBtn) batchBtn.disabled = true;
-
-  var log = document.getElementById('batchLog');
-  log.style.display = 'block'; log.innerHTML = '';
-
-  function volgende(i) {
-    if (i >= wacht.length) {
-      state.analyseBezig = false;
-      if (batchBtn) batchBtn.disabled = false;
-      slaDataOp(); bouwAnalyseLijst(); updateVeldLijst(); updateOverzicht();
-      toonNotif('Batch klaar');
-      return;
-    }
-    var plot = wacht[i];
-    log.innerHTML += '<div class="log-bezig">Plot ' + plot.nr + ' analyseren...</div>';
-    log.scrollTop = log.scrollHeight;
-
-    roepGeminiAan(plot, function(ok, msg) {
-      log.innerHTML += ok
-        ? '<div class="log-ok">&#10003; Plot ' + plot.nr + ': ' + msg + '</div>'
-        : '<div class="log-fout">&#10005; Plot ' + plot.nr + ': ' + msg + '</div>';
-      log.scrollTop = log.scrollHeight;
-      slaDataOp();
-      setTimeout(function(){ volgende(i+1); }, 1000);
-    });
-  }
-  volgende(0);
-}
-
-// ── GEMINI API AANROEP ───────────────────────────────────
-function roepGeminiAan(plot, callback) {
-  if (!plot.foto) { callback(false, 'geen foto'); return; }
-  var base64 = plot.foto.split(',')[1];
-  var prompt =
-    'Je bent een botanisch veldassistent. Analyseer deze foto van een berm-vegetatieplot van 1 m2.\n\n' +
-    'Geef ALLEEN een JSON-object terug, geen uitleg, geen markdown:\n' +
-    '{"soorten":[{"wetenschappelijk":"naam of null","nl":"Nederlandse naam","abundantie":"zeldzaam|schaars|frequent|abundant|dominant","betrouwbaarheid":"zeker|onzeker|onbekend","vraag":"vraag voor bioloog of null"}],"opmerkingen":"korte opmerking"}\n\n' +
-    'Wees botanisch nauwkeurig. Markeer onzeker als je twijfelt.';
-
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=' + state.apiKey, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({contents:[{parts:[{text:prompt},{inline_data:{mime_type:'image/jpeg',data:base64}}]}]})
-  })
-  .then(function(r){return r.json();})
-  .then(function(data) {
-    var tekst = '';
-    try { tekst = data.candidates[0].content.parts[0].text || ''; }
-    catch(e) {
-      var fout = (data.error && data.error.message) ? data.error.message : 'geen response';
-      callback(false, fout); return;
-    }
-    var s = tekst.indexOf('{'), e = tekst.lastIndexOf('}');
-    if (s === -1 || e <= s) { callback(false, 'geen JSON in antwoord'); return; }
-    try {
-      var res = JSON.parse(tekst.substring(s, e+1));
-      plot.analyse = res;
-      callback(true, (res.soorten ? res.soorten.length : 0) + ' soorten');
-    } catch(ex) { callback(false, 'JSON-fout: ' + ex.message); }
-  })
-  .catch(function(err){ callback(false, err.message); });
-}
-
-// ── OVERZICHT ────────────────────────────────────────────
+// ── OVERZICHT ─────────────────────────────────────────────
 function updateOverzicht() {
-  var soorten = {}, onzeker = 0;
-  state.plots.forEach(function(p) {
-    if (!p.analyse) return;
-    p.analyse.soorten.forEach(function(s) {
-      soorten[s.wetenschappelijk || s.nl] = true;
-      if (s.betrouwbaarheid !== 'zeker') onzeker++;
+  var soorten={},onzeker=0;
+  state.plots.forEach(function(p){
+    if (!p.analyse||p.analyse.vrijeTekst) return;
+    p.analyse.soorten.forEach(function(s){
+      soorten[s.wetenschappelijk||s.nl]=true;
+      if (s.betrouwbaarheid!=='zeker') onzeker++;
     });
   });
-  document.getElementById('totaalSoorten').textContent = Object.keys(soorten).length;
-  document.getElementById('totaalPlots').textContent = state.plots.length;
-  document.getElementById('totaalOnzeker').textContent = onzeker;
+  document.getElementById('totaalSoorten').textContent=Object.keys(soorten).length;
+  document.getElementById('totaalPlots').textContent=state.plots.length;
+  document.getElementById('totaalOnzeker').textContent=onzeker;
 
-  var kaart = document.getElementById('kaartContainer');
-  if (state.plots.length) {
-    var html = '<div class="kaart-achtergrond"></div>';
-    state.plots.forEach(function(p,i) {
-      var x = 10+(i%6)*15, y = 15+Math.floor(i/6)*35;
-      html += '<div class="kaart-pin' + (p.analyse?' geanalyseerd':'') + '" style="left:'+x+'%;top:'+y+'%"><div class="kaart-label">P'+p.nr+'</div></div>';
+  var kaart=document.getElementById('kaartContainer');
+  if (state.plots.length){
+    var html='<div class="kaart-achtergrond"></div>';
+    state.plots.forEach(function(p,i){
+      var x=10+(i%6)*15,y=15+Math.floor(i/6)*35;
+      html+='<div class="kaart-pin'+(p.analyse?' geanalyseerd':'')+'" style="left:'+x+'%;top:'+y+'%"><div class="kaart-label">P'+p.nr+'</div></div>';
     });
-    kaart.innerHTML = html;
+    kaart.innerHTML=html;
   }
 
-  var lijst = '';
-  state.plots.forEach(function(p) {
-    var st = p.analyse ? p.analyse.soorten.slice(0,3).map(function(s){return s.nl;}).join(', ') : 'Wacht op analyse';
-    var onz = p.analyse ? p.analyse.soorten.filter(function(s){return s.betrouwbaarheid!=='zeker';}).length : 0;
-    lijst += '<div class="plot-item">';
-    if (p.foto) lijst += '<img class="plot-thumb" src="'+p.foto+'" alt="P'+p.nr+'">';
-    else lijst += '<div class="plot-thumb-placeholder">&#127807;</div>';
-    lijst += '<div class="plot-info"><div class="plot-nr">Plot '+p.nr+' &mdash; '+(p.timestamp?p.timestamp.substring(11,16):'')+'</div>';
-    lijst += '<div class="plot-soorten">'+st+(p.analyse&&p.analyse.soorten.length>3?' +'+(p.analyse.soorten.length-3)+' meer':'')+'</div>';
-    lijst += '<div class="plot-badges">';
-    if (!p.analyse) lijst += '<span class="badge badge-wacht">wacht op AI</span>';
-    if (onz>0) lijst += '<span class="badge badge-onzeker">&#9888; '+onz+' controleren</span>';
-    if (p.gps && p.gps!=='Nog niet bepaald') lijst += '<span class="badge badge-gps">GPS</span>';
-    lijst += '</div></div></div>';
+  var lijst='';
+  state.plots.forEach(function(p){
+    var st='Wacht op analyse';
+    if (p.analyse) {
+      st=p.analyse.vrijeTekst?'Analyse aanwezig (vrije tekst)':p.analyse.soorten.slice(0,3).map(function(s){return s.nl;}).join(', ');
+    }
+    var onz=(!p.analyse||p.analyse.vrijeTekst)?0:p.analyse.soorten.filter(function(s){return s.betrouwbaarheid!=='zeker';}).length;
+    lijst+='<div class="plot-item">';
+    if (p.foto) lijst+='<img class="plot-thumb" src="'+p.foto+'" alt="P'+p.nr+'">';
+    else lijst+='<div class="plot-thumb-placeholder">&#127807;</div>';
+    lijst+='<div class="plot-info"><div class="plot-nr">Plot '+p.nr+' &mdash; '+(p.timestamp?p.timestamp.substring(11,16):'')+'</div>';
+    lijst+='<div class="plot-soorten">'+st+(p.analyse&&!p.analyse.vrijeTekst&&p.analyse.soorten.length>3?' +'+(p.analyse.soorten.length-3)+' meer':'')+'</div>';
+    lijst+='<div class="plot-badges">';
+    if (!p.analyse) lijst+='<span class="badge badge-wacht">wacht</span>';
+    if (onz>0) lijst+='<span class="badge badge-onzeker">&#9888; '+onz+' controleren</span>';
+    if (p.gps&&p.gps!=='Nog niet bepaald') lijst+='<span class="badge badge-gps">GPS</span>';
+    lijst+='</div></div></div>';
   });
-  document.getElementById('plotsLijst').innerHTML = lijst || '<div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
+  document.getElementById('plotsLijst').innerHTML=lijst||'<div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
 }
 
-// ── EXPORT ───────────────────────────────────────────────
+// ── EXPORT ────────────────────────────────────────────────
 function exporteerCSV() {
-  if (!state.plots.length) { toonNotif('Geen data'); return; }
-  var rijen = [['Plot','Datum','Tijd','GPS','Wetenschappelijk','Nederlands','Abundantie','Betrouwbaarheid','Vraag AI']];
-  state.plots.forEach(function(p) {
-    var dt = p.timestamp ? p.timestamp.split('T') : ['',''];
-    if (p.analyse && p.analyse.soorten.length) {
-      p.analyse.soorten.forEach(function(s) {
-        rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,s.wetenschappelijk||'',s.nl,s.abundantie,s.betrouwbaarheid,s.vraag||'']);
+  if (!state.plots.length){toonNotif('Geen data');return;}
+  var rijen=[['Plot','Datum','Tijd','GPS','Wetenschappelijk','Nederlands','Abundantie','Betrouwbaarheid','Vraag','Analyse (tekst)']];
+  state.plots.forEach(function(p){
+    var dt=p.timestamp?p.timestamp.split('T'):['',''];
+    if (p.analyse&&!p.analyse.vrijeTekst&&p.analyse.soorten.length){
+      p.analyse.soorten.forEach(function(s){
+        rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,s.wetenschappelijk||'',s.nl,s.abundantie,s.betrouwbaarheid,s.vraag||'','']);
       });
+    } else if (p.analyse&&p.analyse.vrijeTekst) {
+      rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,'','','','','',p.analyseRauw||'']);
     } else {
-      rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,'','','','nog niet geanalyseerd','']);
+      rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,'','','','nog niet geanalyseerd','','']);
     }
   });
-  var csv = rijen.map(function(r){return r.map(function(c){return '"'+(c+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
-  a.download = 'bermapp_'+(state.ronde?state.ronde.datum:'export')+'.csv';
-  a.click(); toonNotif('CSV gedownload');
+  var csv=rijen.map(function(r){return r.map(function(c){return '"'+(c+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download='bermapp_'+(state.ronde?state.ronde.datum:'export')+'.csv';
+  a.click();toonNotif('CSV gedownload');
 }
 
 function exporteerTwijfel() {
-  if (!state.plots.length) { toonNotif('Geen data'); return; }
-  var r = ['TWIJFELLIJST - BermApp\n'];
+  if (!state.plots.length){toonNotif('Geen data');return;}
+  var r=['TWIJFELLIJST - BermApp\n'];
   if (state.ronde) r.push('Locatie: '+state.ronde.locatie+'\nDatum: '+state.ronde.datum+'\n\n');
-  state.plots.forEach(function(p) {
+  state.plots.forEach(function(p){
     if (!p.analyse) return;
-    var tw = p.analyse.soorten.filter(function(s){return s.betrouwbaarheid!=='zeker';});
+    if (p.analyse.vrijeTekst){
+      r.push('PLOT '+p.nr+' - GPS: '+p.gps);
+      r.push('  (vrije tekst analyse - zie CSV voor volledig antwoord)');
+      r.push('');
+      return;
+    }
+    var tw=p.analyse.soorten.filter(function(s){return s.betrouwbaarheid!=='zeker';});
     if (!tw.length) return;
     r.push('PLOT '+p.nr+' - GPS: '+p.gps);
-    tw.forEach(function(s) {
+    tw.forEach(function(s){
       r.push('  * '+s.nl+' ('+(s.wetenschappelijk||'?')+') ['+s.betrouwbaarheid+']');
       if (s.vraag) r.push('    Vraag: '+s.vraag);
     });
     r.push('');
   });
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([r.join('\n')],{type:'text/plain;charset=utf-8'}));
-  a.download = 'twijfellijst_'+(state.ronde?state.ronde.datum:'export')+'.txt';
-  a.click(); toonNotif('Twijfellijst gedownload');
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([r.join('\n')],{type:'text/plain;charset=utf-8'}));
+  a.download='twijfellijst_'+(state.ronde?state.ronde.datum:'export')+'.txt';
+  a.click();toonNotif('Twijfellijst gedownload');
 }
 
-// ── OPSLAG ───────────────────────────────────────────────
+// ── OPSLAG ────────────────────────────────────────────────
 function slaDataOp() {
   try {
-    localStorage.setItem('bermapp_ronde', JSON.stringify(state.ronde));
-    var meta = state.plots.map(function(p) {
-      return {nr:p.nr,timestamp:p.timestamp,gps:p.gps,analyse:p.analyse,foto:p.foto?'aanwezig':null};
+    localStorage.setItem('bermapp_ronde',JSON.stringify(state.ronde));
+    var meta=state.plots.map(function(p){
+      return {nr:p.nr,timestamp:p.timestamp,gps:p.gps,analyse:p.analyse,analyseRauw:p.analyseRauw||'',foto:p.foto?'aanwezig':null};
     });
-    localStorage.setItem('bermapp_plots_meta', JSON.stringify(meta));
-    state.plots.forEach(function(p,i) {
+    localStorage.setItem('bermapp_plots_meta',JSON.stringify(meta));
+    state.plots.forEach(function(p,i){
       if (p.foto) try{localStorage.setItem('bermapp_foto_'+i,p.foto);}catch(e){}
     });
   } catch(e){}
@@ -706,21 +713,21 @@ function slaDataOp() {
 
 function laadOpgeslagenData() {
   try {
-    var r = localStorage.getItem('bermapp_ronde');
-    var pm = localStorage.getItem('bermapp_plots_meta');
-    if (r) {
-      state.ronde = JSON.parse(r);
-      if (state.ronde) {
-        document.getElementById('locatieNaam').value = state.ronde.locatie || '';
-        document.getElementById('datumInput').value = state.ronde.datum || '';
-        document.getElementById('gpsDisplay').textContent = state.ronde.gps || 'Nog niet bepaald';
-        document.getElementById('aantalPlots').value = state.ronde.aantalPlots || 10;
-        document.getElementById('rondeLabel').textContent = state.ronde.locatie.substring(0,22);
+    var r=localStorage.getItem('bermapp_ronde');
+    var pm=localStorage.getItem('bermapp_plots_meta');
+    if (r){
+      state.ronde=JSON.parse(r);
+      if (state.ronde){
+        document.getElementById('locatieNaam').value=state.ronde.locatie||'';
+        document.getElementById('datumInput').value=state.ronde.datum||'';
+        document.getElementById('gpsDisplay').textContent=state.ronde.gps||'Nog niet bepaald';
+        document.getElementById('aantalPlots').value=state.ronde.aantalPlots||10;
+        document.getElementById('rondeLabel').textContent=state.ronde.locatie.substring(0,22);
       }
     }
-    if (pm) {
-      state.plots = JSON.parse(pm).map(function(p,i) {
-        if (p.foto==='aanwezig') p.foto = localStorage.getItem('bermapp_foto_'+i) || null;
+    if (pm){
+      state.plots=JSON.parse(pm).map(function(p,i){
+        if (p.foto==='aanwezig') p.foto=localStorage.getItem('bermapp_foto_'+i)||null;
         return p;
       });
     }
@@ -729,25 +736,30 @@ function laadOpgeslagenData() {
 }
 
 function updateExportScherm() {
-  var el = document.getElementById('rondesArchief');
-  if (state.ronde) {
-    var g = state.plots.filter(function(p){return p.analyse;}).length;
-    el.innerHTML = '<div style="color:var(--wit);margin-bottom:4px">'+state.ronde.locatie+'</div><div>'+state.ronde.datum+' &mdash; '+state.plots.length+' plots, '+g+' geanalyseerd</div>';
-  } else { el.textContent = 'Geen ronde actief'; }
+  var el=document.getElementById('rondesArchief');
+  if (state.ronde){
+    var g=state.plots.filter(function(p){return p.analyse;}).length;
+    el.innerHTML='<div style="color:var(--wit);margin-bottom:4px">'+state.ronde.locatie+'</div><div>'+state.ronde.datum+' &mdash; '+state.plots.length+' plots, '+g+' geanalyseerd</div>';
+  } else {el.textContent='Geen ronde actief';}
+}
+
+function updatePlotTeller() {
+  document.getElementById('plotTeller').textContent=
+    'Plot '+(state.plots.length+1)+' / '+(state.ronde?state.ronde.aantalPlots:10);
 }
 
 function verwijderRonde() {
   if (!confirm('Huidige ronde wissen? Exporteer eerst!')) return;
-  state.ronde = null; state.plots = [];
-  localStorage.removeItem('bermapp_ronde'); localStorage.removeItem('bermapp_plots_meta');
-  document.getElementById('rondeLabel').textContent = 'Geen ronde';
-  updateOverzicht(); toonNotif('Ronde gewist');
+  state.ronde=null;state.plots=[];
+  localStorage.removeItem('bermapp_ronde');localStorage.removeItem('bermapp_plots_meta');
+  document.getElementById('rondeLabel').textContent='Geen ronde';
+  updateOverzicht();toonNotif('Ronde gewist');
 }
 
 function toonNotif(tekst) {
-  var n = document.getElementById('notif');
-  n.textContent = tekst; n.classList.add('zichtbaar');
-  setTimeout(function(){n.classList.remove('zichtbaar');}, 2400);
+  var n=document.getElementById('notif');
+  n.textContent=tekst;n.classList.add('zichtbaar');
+  setTimeout(function(){n.classList.remove('zichtbaar');},2400);
 }
 </script>
 </body>
