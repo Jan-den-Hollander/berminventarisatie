@@ -3,417 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BermApp — Vegetatie Inventarisatie</title>
+<title>BermApp</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
-
   :root {
-    --groen: #2d5a27;
-    --lichtgroen: #4a7c42;
-    --aarde: #8b6f47;
-    --wit: #f5f2eb;
-    --donker: #1a2e17;
-    --onzeker: #e8a020;
-    --zeker: #3a7d34;
-    --onbekend: #8b4444;
-    --lijn: rgba(45,90,39,0.2);
+    --groen:#2d5a27; --lichtgroen:#4a7c42; --aarde:#8b6f47;
+    --wit:#f5f2eb; --donker:#1a2e17;
+    --onzeker:#e8a020; --zeker:#3a7d34; --onbekend:#8b4444;
+    --lijn:rgba(45,90,39,0.2);
   }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'IBM Plex Mono', monospace;
-    background: var(--donker);
-    color: var(--wit);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  .header {
-    background: var(--groen);
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 2px solid var(--lichtgroen);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .header-title { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; }
-  .header-title span { font-style: italic; font-weight: 300; color: #a8d4a0; }
-
-  .ronde-badge {
-    font-size: 0.6rem;
-    background: var(--donker);
-    color: #a8d4a0;
-    padding: 4px 8px;
-    border-radius: 2px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    max-width: 160px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .tabs {
-    display: flex;
-    background: #0f1f0d;
-    border-bottom: 1px solid var(--lijn);
-  }
-
-  .tab {
-    flex: 1;
-    padding: 10px 2px;
-    text-align: center;
-    font-size: 0.53rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: #6a9465;
-    cursor: pointer;
-    border: none;
-    background: none;
-    transition: all 0.2s;
-  }
-
-  .tab.active {
-    color: var(--wit);
-    background: var(--groen);
-    border-bottom: 2px solid #a8d4a0;
-  }
-
-  .screen { display: none; padding: 16px; }
-  .screen.active { display: block; }
-
-  .card {
-    background: #1e3a1a;
-    border: 1px solid var(--lijn);
-    border-radius: 4px;
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-
-  .label {
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #a8d4a0;
-    margin-bottom: 6px;
-  }
-
-  .inp {
-    width: 100%;
-    background: #0f1f0d;
-    border: 1px solid var(--lijn);
-    color: var(--wit);
-    padding: 10px 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.85rem;
-    border-radius: 2px;
-    margin-bottom: 10px;
-  }
-  .inp:focus { outline: none; border-color: var(--lichtgroen); }
-
-  .gps-row { display: flex; gap: 8px; align-items: center; }
-
-  .gps-display {
-    flex: 1;
-    background: #0f1f0d;
-    border: 1px solid var(--lijn);
-    padding: 8px 12px;
-    font-size: 0.7rem;
-    color: #6a9465;
-    border-radius: 2px;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px 16px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-transform: uppercase;
-  }
-
-  .btn-primair { background: var(--groen); color: var(--wit); width: 100%; padding: 14px; font-size: 0.8rem; }
-  .btn-primair:active { background: var(--lichtgroen); transform: scale(0.98); }
-
-  .btn-camera {
-    background: var(--groen); color: var(--wit);
-    border-radius: 50%; width: 72px; height: 72px;
-    font-size: 1.8rem; flex-shrink: 0;
-    box-shadow: 0 0 0 4px #1e3a1a, 0 0 0 6px var(--groen);
-  }
-  .btn-camera:active { transform: scale(0.93); }
-
-  .btn-klein {
-    background: #1e3a1a; color: #a8d4a0;
-    border: 1px solid var(--lijn);
-    font-size: 0.65rem; padding: 7px 14px;
-  }
-
-  .btn-gps { background: var(--aarde); color: var(--wit); font-size: 0.65rem; padding: 8px 12px; flex-shrink: 0; }
-  .btn-gevaar { background: #4a1a1a; color: #e87070; border: 1px solid #6a2a2a; }
-
-  .btn-analyse {
-    background: #1a3a50; color: #70c8e8;
-    border: 1px solid #2a5a70;
-    width: 100%; padding: 14px; font-size: 0.8rem; margin-bottom: 8px;
-  }
-  .btn-analyse:active { background: #2a5a70; }
-  .btn-analyse:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-  .camera-container {
-    position: relative; background: #000;
-    border-radius: 4px; overflow: hidden;
-    margin-bottom: 12px; aspect-ratio: 4/3;
-  }
-
-  #videoFeed { width: 100%; height: 100%; object-fit: cover; }
-  #fotoPreview { width: 100%; height: 100%; object-fit: cover; display: none; }
-
-  .kader-overlay {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    pointer-events: none;
-  }
-
-  .kader-vierkant {
-    width: 75%; aspect-ratio: 1;
-    border: 2px dashed rgba(168,212,160,0.8);
-    position: relative;
-    box-shadow: 0 0 0 2000px rgba(0,0,0,0.35);
-  }
-
-  .kader-vierkant::before {
-    content: '1 m\00b2';
-    position: absolute; top: -22px; left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.65rem; color: #a8d4a0;
-    background: rgba(0,0,0,0.6);
-    padding: 2px 8px; border-radius: 2px; letter-spacing: 0.1em;
-  }
-
-  .hoek { position: absolute; width: 16px; height: 16px; border-color: #a8d4a0; border-style: solid; }
-  .hoek-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
-  .hoek-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; }
-  .hoek-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; }
-  .hoek-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
-
-  .plot-teller {
-    position: absolute; top: 10px; left: 10px;
-    background: rgba(0,0,0,0.7); color: #a8d4a0;
-    font-size: 0.65rem; padding: 4px 8px; border-radius: 2px; letter-spacing: 0.08em;
-  }
-
-  .camera-controls {
-    display: flex; align-items: center;
-    justify-content: space-between;
-    gap: 12px; padding: 8px 0;
-  }
-
-  .voortgang-balk-wrap {
-    background: #0f1f0d; border-radius: 2px;
-    height: 6px; margin: 10px 0; overflow: hidden;
-  }
-
-  .voortgang-balk {
-    height: 100%; background: #70c8e8;
-    border-radius: 2px; transition: width 0.4s ease; width: 0%;
-  }
-
-  .plot-item {
-    background: #1e3a1a; border: 1px solid var(--lijn);
-    border-radius: 4px; padding: 10px; margin-bottom: 8px;
-    display: flex; gap: 10px; align-items: flex-start;
-  }
-
-  .plot-thumb {
-    width: 56px; height: 56px; object-fit: cover;
-    border-radius: 2px; flex-shrink: 0; border: 1px solid var(--lijn);
-  }
-
-  .plot-thumb-placeholder {
-    width: 56px; height: 56px; background: #0f1f0d;
-    border-radius: 2px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem; color: #2d5a27;
-  }
-
-  .plot-info { flex: 1; min-width: 0; }
-  .plot-nr { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #a8d4a0; margin-bottom: 3px; }
-  .plot-soorten { font-size: 0.72rem; color: var(--wit); line-height: 1.4; }
-  .plot-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
-
-  .badge {
-    font-size: 0.55rem; padding: 3px 7px; border-radius: 2px;
-    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
-  }
-
-  .badge-zeker { background: #1a4a16; color: #7dcf75; }
-  .badge-onzeker { background: #4a3000; color: #e8a020; }
-  .badge-onbekend { background: #4a1a1a; color: #e87070; }
-  .badge-wacht { background: #1a2a3a; color: #70c8e8; }
-  .badge-gps { background: #0f1f0d; color: #6a9465; }
-
-  .soort-kaart {
-    background: #0f1f0d; border-left: 3px solid var(--zeker);
-    padding: 10px 12px; margin-bottom: 8px; border-radius: 0 2px 2px 0;
-  }
-  .soort-kaart.onzeker { border-left-color: var(--onzeker); }
-  .soort-kaart.onbekend { border-left-color: var(--onbekend); }
-
-  .soort-naam { font-family: 'Fraunces', serif; font-style: italic; font-size: 1rem; font-weight: 300; margin-bottom: 2px; }
-  .soort-nl { font-size: 0.7rem; color: #a8d4a0; margin-bottom: 6px; }
-  .soort-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .abundantie { font-size: 0.65rem; color: #6a9465; }
-
-  .ai-vraag {
-    background: #2a1f00; border: 1px solid #5a3f00;
-    border-radius: 3px; padding: 8px 10px; margin-top: 8px;
-    font-size: 0.72rem; color: #e8c070; line-height: 1.5;
-  }
-  .ai-vraag::before { content: '\1F50D  '; }
-
-  .totaal-bar {
-    background: #0f1f0d; border: 1px solid var(--lijn);
-    border-radius: 4px; padding: 12px 14px;
-    display: flex; justify-content: space-between;
-    align-items: center; margin-bottom: 12px;
-    font-size: 0.7rem; color: #6a9465;
-  }
-
-  .totaal-getal {
-    font-family: 'Fraunces', serif; font-size: 1.8rem;
-    font-weight: 600; color: var(--wit); line-height: 1;
-  }
-
-  .kaart-placeholder {
-    background: #1a2e17; border: 1px solid var(--lijn);
-    border-radius: 4px; height: 200px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 12px; color: #6a9465; font-size: 0.75rem;
-    position: relative; overflow: hidden;
-  }
-
-  .kaart-achtergrond {
-    position: absolute; inset: 0; opacity: 0.15;
-    background-image:
-      linear-gradient(rgba(168,212,160,0.3) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(168,212,160,0.3) 1px, transparent 1px);
-    background-size: 30px 30px;
-  }
-
-  .kaart-pin {
-    width: 14px; height: 14px; background: #70c8e8;
-    border-radius: 50%; border: 2px solid var(--wit);
-    box-shadow: 0 0 6px rgba(112,200,232,0.6);
-    position: absolute;
-  }
-
-  .kaart-pin.geanalyseerd {
-    background: var(--zeker);
-    box-shadow: 0 0 6px rgba(58,125,52,0.6);
-  }
-
-  .kaart-label {
-    font-size: 0.55rem; background: rgba(0,0,0,0.7);
-    padding: 2px 5px; border-radius: 2px;
-    position: absolute; top: -18px; left: 50%;
-    transform: translateX(-50%); white-space: nowrap; color: var(--wit);
-  }
-
-  .export-card {
-    background: #1e3a1a; border: 1px solid var(--lijn);
-    border-radius: 4px; padding: 16px;
-    margin-bottom: 12px; text-align: center;
-  }
-
-  .export-icon { font-size: 2rem; margin-bottom: 8px; }
-  .export-desc { font-size: 0.7rem; color: #6a9465; line-height: 1.6; margin-bottom: 12px; }
-
-  .notif {
-    position: fixed; bottom: 20px; left: 50%;
-    transform: translateX(-50%);
-    background: var(--groen); color: var(--wit);
-    padding: 10px 20px; border-radius: 4px;
-    font-size: 0.75rem; z-index: 999;
-    opacity: 0; transition: opacity 0.3s;
-    pointer-events: none; white-space: nowrap;
-  }
-  .notif.zichtbaar { opacity: 1; }
-
-  .divider { border: none; border-top: 1px solid var(--lijn); margin: 14px 0; }
-
-  .sectie-titel {
-    font-size: 0.6rem; letter-spacing: 0.12em;
-    text-transform: uppercase; color: #6a9465; margin-bottom: 10px;
-  }
-
-  canvas { display: none; }
-
-  .api-banner {
-    background: #4a2000; border: 1px solid #8b4400;
-    border-radius: 4px; padding: 12px 14px;
-    margin-bottom: 12px; font-size: 0.72rem;
-    color: #e8c070; line-height: 1.5;
-  }
-
-  .api-link {
-    display: inline-block; margin-top: 6px; margin-bottom: 2px;
-    color: #ffd080; font-size: 0.68rem;
-    text-decoration: underline; text-underline-offset: 3px;
-  }
-
-  .api-rij { display: flex; gap: 8px; margin-top: 8px; }
-
-  .api-input {
-    flex: 1; background: #0f1f0d; border: 1px solid #8b4400;
-    color: var(--wit); padding: 8px 10px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem; border-radius: 2px;
-  }
-
-  .api-banner-ok {
-    background: #1a3a16; border: 1px solid #3a6a34;
-    border-radius: 4px; padding: 10px 14px;
-    margin-bottom: 12px; font-size: 0.68rem; color: #a8d4a0;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-
-  .api-wis-btn {
-    background: none; border: 1px solid #3a6a34;
-    color: #6a9465; font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem; padding: 4px 8px; border-radius: 2px; cursor: pointer;
-  }
-
-  .veld-hint {
-    background: #1a3a16; border: 1px solid #3a6a34;
-    border-radius: 4px; padding: 10px 14px;
-    margin-bottom: 12px; font-size: 0.7rem;
-    color: #a8d4a0; line-height: 1.6;
-  }
-
-  .analyse-log {
-    background: #0f1f0d; border: 1px solid var(--lijn);
-    border-radius: 4px; padding: 12px; margin-top: 10px;
-    font-size: 0.65rem; color: #6a9465; line-height: 1.8;
-    max-height: 180px; overflow-y: auto;
-  }
-
-  .log-ok { color: #7dcf75; }
-  .log-fout { color: #e87070; }
-  .log-bezig { color: #70c8e8; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'IBM Plex Mono',monospace;background:var(--donker);color:var(--wit);min-height:100vh;overflow-x:hidden;}
+  .header{background:var(--groen);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--lichtgroen);position:sticky;top:0;z-index:100;}
+  .header-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;}
+  .header-title span{font-style:italic;font-weight:300;color:#a8d4a0;}
+  .ronde-badge{font-size:0.6rem;background:var(--donker);color:#a8d4a0;padding:4px 8px;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .tabs{display:flex;background:#0f1f0d;border-bottom:1px solid var(--lijn);}
+  .tab{flex:1;padding:10px 2px;text-align:center;font-size:.53rem;letter-spacing:.05em;text-transform:uppercase;color:#6a9465;cursor:pointer;border:none;background:none;transition:all .2s;}
+  .tab.active{color:var(--wit);background:var(--groen);border-bottom:2px solid #a8d4a0;}
+  .screen{display:none;padding:16px;}
+  .screen.active{display:block;}
+  .card{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:16px;margin-bottom:12px;}
+  .label{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#a8d4a0;margin-bottom:6px;}
+  .inp{width:100%;background:#0f1f0d;border:1px solid var(--lijn);color:var(--wit);padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:.85rem;border-radius:2px;margin-bottom:10px;}
+  .inp:focus{outline:none;border-color:var(--lichtgroen);}
+  .gps-row{display:flex;gap:8px;align-items:center;}
+  .gps-display{flex:1;background:#0f1f0d;border:1px solid var(--lijn);padding:8px 12px;font-size:.7rem;color:#6a9465;border-radius:2px;font-family:'IBM Plex Mono',monospace;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:.75rem;letter-spacing:.06em;border:none;border-radius:2px;cursor:pointer;transition:all .15s;text-transform:uppercase;}
+  .btn-primair{background:var(--groen);color:var(--wit);width:100%;padding:14px;font-size:.8rem;}
+  .btn-primair:active{background:var(--lichtgroen);transform:scale(.98);}
+  .btn-camera{background:var(--groen);color:var(--wit);border-radius:50%;width:72px;height:72px;font-size:1.8rem;flex-shrink:0;box-shadow:0 0 0 4px #1e3a1a,0 0 0 6px var(--groen);}
+  .btn-camera:active{transform:scale(.93);}
+  .btn-klein{background:#1e3a1a;color:#a8d4a0;border:1px solid var(--lijn);font-size:.65rem;padding:7px 14px;}
+  .btn-gps{background:var(--aarde);color:var(--wit);font-size:.65rem;padding:8px 12px;flex-shrink:0;}
+  .btn-gevaar{background:#4a1a1a;color:#e87070;border:1px solid #6a2a2a;}
+  /* Per-plot analyse knop */
+  .btn-plot-analyse{background:#1a3a50;color:#70c8e8;border:1px solid #2a5a70;font-size:.65rem;padding:5px 10px;border-radius:2px;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.05em;}
+  .btn-plot-analyse:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-plot-opnieuw{background:#1e3a1a;color:#a8d4a0;border:1px solid var(--lijn);font-size:.6rem;padding:4px 8px;border-radius:2px;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;}
+  /* Batch knop */
+  .btn-batch{background:#1a3a50;color:#70c8e8;border:1px solid #2a5a70;width:100%;padding:12px;font-size:.75rem;margin-bottom:8px;border-radius:2px;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;}
+  .btn-batch:disabled{opacity:.4;cursor:not-allowed;}
+  .camera-container{position:relative;background:#000;border-radius:4px;overflow:hidden;margin-bottom:12px;aspect-ratio:4/3;}
+  #videoFeed{width:100%;height:100%;object-fit:cover;}
+  #fotoPreview{width:100%;height:100%;object-fit:cover;display:none;}
+  .kader-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+  .kader-vierkant{width:75%;aspect-ratio:1;border:2px dashed rgba(168,212,160,.8);position:relative;box-shadow:0 0 0 2000px rgba(0,0,0,.35);}
+  .kader-vierkant::before{content:'1 m\00b2';position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:.65rem;color:#a8d4a0;background:rgba(0,0,0,.6);padding:2px 8px;border-radius:2px;letter-spacing:.1em;}
+  .hoek{position:absolute;width:16px;height:16px;border-color:#a8d4a0;border-style:solid;}
+  .hoek-tl{top:-2px;left:-2px;border-width:3px 0 0 3px;}
+  .hoek-tr{top:-2px;right:-2px;border-width:3px 3px 0 0;}
+  .hoek-bl{bottom:-2px;left:-2px;border-width:0 0 3px 3px;}
+  .hoek-br{bottom:-2px;right:-2px;border-width:0 3px 3px 0;}
+  .plot-teller{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.7);color:#a8d4a0;font-size:.65rem;padding:4px 8px;border-radius:2px;letter-spacing:.08em;}
+  .camera-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;}
+  .plot-item{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:10px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;}
+  .plot-thumb{width:56px;height:56px;object-fit:cover;border-radius:2px;flex-shrink:0;border:1px solid var(--lijn);}
+  .plot-thumb-placeholder{width:56px;height:56px;background:#0f1f0d;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#2d5a27;}
+  .plot-info{flex:1;min-width:0;}
+  .plot-nr{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#a8d4a0;margin-bottom:3px;}
+  .plot-soorten{font-size:.72rem;color:var(--wit);line-height:1.4;}
+  .plot-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;}
+  .badge{font-size:.55rem;padding:3px 7px;border-radius:2px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;}
+  .badge-zeker{background:#1a4a16;color:#7dcf75;}
+  .badge-onzeker{background:#4a3000;color:#e8a020;}
+  .badge-onbekend{background:#4a1a1a;color:#e87070;}
+  .badge-wacht{background:#1a2a3a;color:#70c8e8;}
+  .badge-gps{background:#0f1f0d;color:#6a9465;}
+  .soort-kaart{background:#0f1f0d;border-left:3px solid var(--zeker);padding:10px 12px;margin-bottom:6px;border-radius:0 2px 2px 0;}
+  .soort-kaart.onzeker{border-left-color:var(--onzeker);}
+  .soort-kaart.onbekend{border-left-color:var(--onbekend);}
+  .soort-naam{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;font-weight:300;margin-bottom:2px;}
+  .soort-nl{font-size:.7rem;color:#a8d4a0;margin-bottom:6px;}
+  .soort-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .abundantie{font-size:.65rem;color:#6a9465;}
+  .ai-vraag{background:#2a1f00;border:1px solid #5a3f00;border-radius:3px;padding:8px 10px;margin-top:8px;font-size:.72rem;color:#e8c070;line-height:1.5;}
+  .totaal-bar{background:#0f1f0d;border:1px solid var(--lijn);border-radius:4px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:.7rem;color:#6a9465;}
+  .totaal-getal{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:600;color:var(--wit);line-height:1;}
+  .kaart-placeholder{background:#1a2e17;border:1px solid var(--lijn);border-radius:4px;height:200px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:#6a9465;font-size:.75rem;position:relative;overflow:hidden;}
+  .kaart-achtergrond{position:absolute;inset:0;opacity:.15;background-image:linear-gradient(rgba(168,212,160,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(168,212,160,.3) 1px,transparent 1px);background-size:30px 30px;}
+  .kaart-pin{width:14px;height:14px;background:#70c8e8;border-radius:50%;border:2px solid var(--wit);box-shadow:0 0 6px rgba(112,200,232,.6);position:absolute;}
+  .kaart-pin.geanalyseerd{background:var(--zeker);box-shadow:0 0 6px rgba(58,125,52,.6);}
+  .kaart-label{font-size:.55rem;background:rgba(0,0,0,.7);padding:2px 5px;border-radius:2px;position:absolute;top:-18px;left:50%;transform:translateX(-50%);white-space:nowrap;color:var(--wit);}
+  .export-card{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:16px;margin-bottom:12px;text-align:center;}
+  .export-icon{font-size:2rem;margin-bottom:8px;}
+  .export-desc{font-size:.7rem;color:#6a9465;line-height:1.6;margin-bottom:12px;}
+  .notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--groen);color:var(--wit);padding:10px 20px;border-radius:4px;font-size:.75rem;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+  .notif.zichtbaar{opacity:1;}
+  .divider{border:none;border-top:1px solid var(--lijn);margin:14px 0;}
+  .sectie-titel{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#6a9465;margin-bottom:10px;}
+  canvas{display:none;}
+  .api-banner{background:#4a2000;border:1px solid #8b4400;border-radius:4px;padding:12px 14px;margin-bottom:12px;font-size:.72rem;color:#e8c070;line-height:1.5;}
+  .api-link{display:inline-block;margin-top:6px;margin-bottom:2px;color:#ffd080;font-size:.68rem;text-decoration:underline;text-underline-offset:3px;}
+  .api-rij{display:flex;gap:8px;margin-top:8px;}
+  .api-input{flex:1;background:#0f1f0d;border:1px solid #8b4400;color:var(--wit);padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:.7rem;border-radius:2px;}
+  .api-banner-ok{background:#1a3a16;border:1px solid #3a6a34;border-radius:4px;padding:10px 14px;margin-bottom:12px;font-size:.68rem;color:#a8d4a0;display:flex;justify-content:space-between;align-items:center;}
+  .api-wis-btn{background:none;border:1px solid #3a6a34;color:#6a9465;font-family:'IBM Plex Mono',monospace;font-size:.6rem;padding:4px 8px;border-radius:2px;cursor:pointer;}
+  .veld-hint{background:#1a3a16;border:1px solid #3a6a34;border-radius:4px;padding:10px 14px;margin-bottom:12px;font-size:.7rem;color:#a8d4a0;line-height:1.6;}
+  /* Plot analyse kaart */
+  .analyse-kaart{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:12px;margin-bottom:10px;}
+  .analyse-kaart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .plot-log{font-size:.65rem;padding:6px 8px;background:#0f1f0d;border-radius:3px;margin-top:6px;display:none;}
+  .log-ok{color:#7dcf75;}
+  .log-fout{color:#e87070;}
+  .log-bezig{color:#70c8e8;}
+  /* Batch log */
+  .batch-log{background:#0f1f0d;border:1px solid var(--lijn);border-radius:4px;padding:10px;margin-bottom:10px;font-size:.65rem;color:#6a9465;line-height:1.8;max-height:120px;overflow-y:auto;display:none;}
 </style>
 </head>
 <body>
@@ -434,7 +129,6 @@
 <!-- SETUP -->
 <div id="scherm-setup" class="screen active">
   <div id="apiBanner"></div>
-
   <div class="card">
     <div class="label">Locatie / Traject</div>
     <input type="text" class="inp" id="locatieNaam" placeholder="bijv. Pastoriepad Hapert km 0-0.5">
@@ -446,48 +140,40 @@
       <button class="btn btn-gps" onclick="bepaalGPS()">&#128205; GPS</button>
     </div>
   </div>
-
   <div class="card">
     <div class="label">Plotgrootte</div>
     <input type="text" class="inp" id="plotGrootte" value="1 m2" readonly>
     <div class="label">Aantal plots (streef)</div>
     <input type="number" class="inp" id="aantalPlots" value="10" min="1" max="50">
   </div>
-
   <button class="btn btn-primair" onclick="startRonde()">&#9654; Start nieuwe ronde</button>
 </div>
 
 <!-- VELD -->
 <div id="scherm-camera" class="screen">
   <div class="veld-hint">
-    &#128247; Maak foto en sla direct op. Geen wachttijd in het veld.<br>
+    &#128247; Maak foto en sla direct op. Geen wachttijd.<br>
     AI-analyse doe je thuis via het Analyse-tabblad.
   </div>
-
   <div class="camera-container">
     <video id="videoFeed" autoplay playsinline muted></video>
-    <img id="fotoPreview" alt="Foto plot">
+    <img id="fotoPreview" alt="Foto">
     <div class="kader-overlay">
       <div class="kader-vierkant">
-        <div class="hoek hoek-tl"></div>
-        <div class="hoek hoek-tr"></div>
-        <div class="hoek hoek-bl"></div>
-        <div class="hoek hoek-br"></div>
+        <div class="hoek hoek-tl"></div><div class="hoek hoek-tr"></div>
+        <div class="hoek hoek-bl"></div><div class="hoek hoek-br"></div>
       </div>
     </div>
     <div class="plot-teller" id="plotTeller">Plot 1 / 10</div>
   </div>
-
   <div class="camera-controls">
     <button class="btn btn-klein" onclick="nieuweCamera()">&#8617; Opnieuw</button>
     <button class="btn btn-camera" onclick="maakFoto()">&#128247;</button>
     <button class="btn btn-klein" onclick="slaPlotOp()" id="slaOpBtn" style="display:none">&#10003; Opslaan</button>
   </div>
-
   <canvas id="fotoCanvas"></canvas>
-
   <div class="sectie-titel" style="margin-top:10px">Plots deze ronde</div>
-  <div id="veldPlotLijst" style="font-size:0.72rem;color:#6a9465">Nog geen plots</div>
+  <div id="veldPlotLijst" style="font-size:.72rem;color:#6a9465">Nog geen plots</div>
 </div>
 
 <!-- ANALYSE -->
@@ -495,30 +181,20 @@
   <div id="apiBannerAnalyse"></div>
 
   <div class="card">
-    <div class="label">AI-analyse van opgeslagen plots</div>
-    <div style="font-size:0.7rem;color:#6a9465;line-height:1.7;margin-bottom:12px">
-      Verbind met wifi en klik hieronder om alle foto's door Gemini te laten analyseren.
-      Al geanalyseerde plots worden overgeslagen.
+    <div class="label">AI-analyse</div>
+    <div style="font-size:.7rem;color:#6a9465;line-height:1.7;margin-bottom:10px">
+      Analyseer plots <strong style="color:#a8d4a0">een voor een</strong> via de knop per plot,
+      of gebruik de batch-knop voor alle wachtende plots tegelijk.<br>
+      <span style="color:#e8c070">Bij quota-fout: wacht ~3 min en probeer opnieuw.</span><br>
+      Model: <span style="color:#a8d4a0">gemini-1.5-flash-8b</span>
     </div>
-
-    <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:#a8d4a0;margin-bottom:6px">
-      <span id="analyseStatus">Laad ronde...</span>
-      <span id="analyseVoortgangTekst"></span>
-    </div>
-    <div class="voortgang-balk-wrap">
-      <div class="voortgang-balk" id="voortgangBalk"></div>
-    </div>
-
-    <button class="btn btn-analyse" id="btnAnalyseer" onclick="startBatchAnalyse()">
-      Analyseer alle plots
-    </button>
-    <button class="btn btn-klein" style="width:100%" onclick="heranalyseerAlles()">
-      Heranalyseer alles opnieuw
+    <button class="btn-batch" id="btnBatch" onclick="startBatchAnalyse()">
+      &#9654; Analyseer alle wachtende plots
     </button>
   </div>
 
-  <div class="analyse-log" id="analyseLog" style="display:none"></div>
-  <div id="analyseResultaten"></div>
+  <div class="batch-log" id="batchLog"></div>
+  <div id="analysePlotLijst"></div>
 </div>
 
 <!-- RONDE OVERZICHT -->
@@ -526,18 +202,17 @@
   <div class="totaal-bar">
     <div>
       <div class="totaal-getal" id="totaalSoorten">0</div>
-      <div style="font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:#6a9465">soorten</div>
+      <div style="font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#6a9465">soorten</div>
     </div>
     <div style="text-align:center">
       <div class="totaal-getal" id="totaalPlots">0</div>
-      <div style="font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:#6a9465">plots</div>
+      <div style="font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#6a9465">plots</div>
     </div>
     <div style="text-align:right">
       <div class="totaal-getal" id="totaalOnzeker">0</div>
-      <div style="font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:#6a9465">te controleren</div>
+      <div style="font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#6a9465">te controleren</div>
     </div>
   </div>
-
   <div class="sectie-titel">Kaart</div>
   <div class="kaart-placeholder" id="kaartContainer">
     <div class="kaart-achtergrond"></div>
@@ -546,10 +221,9 @@
       <div>Start een ronde om plots te zien</div>
     </div>
   </div>
-
   <div class="sectie-titel">Alle plots</div>
   <div id="plotsLijst">
-    <div style="font-size:0.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>
+    <div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>
   </div>
 </div>
 
@@ -558,29 +232,20 @@
   <div class="export-card">
     <div class="export-icon">&#128196;</div>
     <div class="sectie-titel">CSV Export</div>
-    <div class="export-desc">
-      Alle plots, soorten, abundantie en betrouwbaarheidsstatus.<br>
-      Datum en GPS inbegrepen. Klaar voor de bioloog.
-    </div>
+    <div class="export-desc">Alle plots, soorten, abundantie, betrouwbaarheid, GPS.</div>
     <button class="btn btn-primair" onclick="exporteerCSV()">&#8595; Download CSV</button>
   </div>
-
   <div class="export-card">
     <div class="export-icon">&#128203;</div>
     <div class="sectie-titel">Twijfellijst</div>
-    <div class="export-desc">
-      Alleen onzekere en onbekende soorten met AI-vragen.
-    </div>
+    <div class="export-desc">Alleen onzekere en onbekende soorten met AI-vragen.</div>
     <button class="btn btn-primair" onclick="exporteerTwijfel()">&#8595; Download twijfellijst</button>
   </div>
-
   <hr class="divider">
-
   <div class="card">
     <div class="label">Huidige ronde</div>
-    <div id="rondesArchief" style="font-size:0.72rem;color:#6a9465">Laden...</div>
+    <div id="rondesArchief" style="font-size:.72rem;color:#6a9465">Laden...</div>
   </div>
-
   <button class="btn btn-klein btn-gevaar" onclick="verwijderRonde()" style="width:100%;margin-top:8px">
     &#10005; Huidige ronde wissen
   </button>
@@ -599,43 +264,33 @@ var state = {
 };
 
 window.addEventListener('load', function() {
-  var vandaag = new Date().toISOString().split('T')[0];
-  document.getElementById('datumInput').value = vandaag;
+  document.getElementById('datumInput').value = new Date().toISOString().split('T')[0];
   laadOpgeslagenData();
   updateApiBanner();
   updateOverzicht();
   updateVeldLijst();
-  updateAnalyseScherm();
+  bouwAnalyseLijst();
 });
 
-// ── API KEY ──────────────────────────────────
+// ── API KEY ──────────────────────────────────────────────
 function updateApiBanner() {
-  var ids = ['apiBanner', 'apiBannerAnalyse'];
-  ids.forEach(function(id) {
+  ['apiBanner','apiBannerAnalyse'].forEach(function(id) {
     var el = document.getElementById(id);
     if (!el) return;
     if (state.apiKey) {
-      el.innerHTML =
-        '<div class="api-banner-ok">' +
-        '<span>&#10003; API-sleutel actief</span>' +
-        '<button class="api-wis-btn" onclick="wisApiKey()">Wijzigen</button>' +
-        '</div>';
+      el.innerHTML = '<div class="api-banner-ok"><span>&#10003; API-sleutel actief</span><button class="api-wis-btn" onclick="wisApiKey()">Wijzigen</button></div>';
     } else {
       el.innerHTML =
-        '<div class="api-banner">' +
-        '&#9888; Gemini API-sleutel vereist voor analyse.<br>' +
-        '<a class="api-link" href="https://aistudio.google.com/app/apikey" target="_blank">' +
-        '&#8594; Maak gratis sleutel aan (Google AI Studio)</a>' +
-        '<div class="api-rij">' +
-        '<input type="password" class="api-input" id="apiIn_' + id + '" placeholder="Plak sleutel...">' +
-        '<button class="btn btn-gps" onclick="slaApiKeyOp(\'' + id + '\')">OK</button>' +
-        '</div></div>';
+        '<div class="api-banner">&#9888; Gemini API-sleutel vereist.<br>' +
+        '<a class="api-link" href="https://aistudio.google.com/app/apikey" target="_blank">&#8594; Maak gratis sleutel aan (Google AI Studio)</a>' +
+        '<div class="api-rij"><input type="password" class="api-input" id="apiIn_' + id + '" placeholder="Plak sleutel...">' +
+        '<button class="btn btn-gps" onclick="slaApiKeyOp(\'' + id + '\')">OK</button></div></div>';
     }
   });
 }
 
-function slaApiKeyOp(bannerId) {
-  var el = document.getElementById('apiIn_' + bannerId);
+function slaApiKeyOp(id) {
+  var el = document.getElementById('apiIn_' + id);
   if (!el) return;
   var key = el.value.trim();
   if (!key) return;
@@ -651,84 +306,73 @@ function wisApiKey() {
   updateApiBanner();
 }
 
-// ── TABS ─────────────────────────────────────
+// ── TABS ─────────────────────────────────────────────────
 function toonScherm(naam) {
-  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
-  document.getElementById('scherm-' + naam).classList.add('active');
-  var namen = ['setup','camera','analyse','overzicht','export'];
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('scherm-'+naam).classList.add('active');
   var tabs = document.querySelectorAll('.tab');
-  var idx = namen.indexOf(naam);
-  if (idx >= 0) tabs[idx].classList.add('active');
-
+  var namen = ['setup','camera','analyse','overzicht','export'];
+  var i = namen.indexOf(naam);
+  if (i >= 0) tabs[i].classList.add('active');
   if (naam === 'camera') { startCamera(); updateVeldLijst(); }
   else stopCamera();
   if (naam === 'overzicht') updateOverzicht();
   if (naam === 'export') updateExportScherm();
-  if (naam === 'analyse') updateAnalyseScherm();
+  if (naam === 'analyse') { updateApiBanner(); bouwAnalyseLijst(); }
 }
 
-// ── RONDE ─────────────────────────────────────
+// ── RONDE ────────────────────────────────────────────────
 function startRonde() {
   var loc = document.getElementById('locatieNaam').value.trim();
-  var datum = document.getElementById('datumInput').value;
   if (!loc) { toonNotif('Vul een locatienaam in'); return; }
   if (!confirm('Nieuwe ronde starten?')) return;
-
   state.ronde = {
     id: Date.now(),
     locatie: loc,
-    datum: datum,
+    datum: document.getElementById('datumInput').value,
     gps: document.getElementById('gpsDisplay').textContent,
     aantalPlots: parseInt(document.getElementById('aantalPlots').value) || 10
   };
   state.plots = [];
   slaDataOp();
-
   document.getElementById('rondeLabel').textContent = loc.substring(0,22) + (loc.length > 22 ? '...' : '');
   updatePlotTeller();
   toonScherm('camera');
   toonNotif('Ronde gestart');
 }
 
-// ── GPS ───────────────────────────────────────
+// ── GPS ──────────────────────────────────────────────────
 function bepaalGPS() {
   if (!navigator.geolocation) { toonNotif('GPS niet beschikbaar'); return; }
   navigator.geolocation.getCurrentPosition(function(pos) {
-    var lat = pos.coords.latitude.toFixed(5);
-    var lon = pos.coords.longitude.toFixed(5);
-    document.getElementById('gpsDisplay').textContent = lat + ', ' + lon;
-    if (state.ronde) { state.ronde.gps = lat + ', ' + lon; slaDataOp(); }
+    var coords = pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5);
+    document.getElementById('gpsDisplay').textContent = coords;
+    if (state.ronde) { state.ronde.gps = coords; slaDataOp(); }
     toonNotif('GPS bepaald');
   }, function() { toonNotif('GPS mislukt'); });
 }
 
-// ── CAMERA ───────────────────────────────────
+// ── CAMERA ───────────────────────────────────────────────
 function startCamera() {
   if (state.stream) return;
-  navigator.mediaDevices.getUserMedia({
-    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } }
-  }).then(function(stream) {
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:960}}})
+  .then(function(stream) {
     state.stream = stream;
     var v = document.getElementById('videoFeed');
-    v.srcObject = stream;
-    v.style.display = 'block';
+    v.srcObject = stream; v.style.display = 'block';
     document.getElementById('fotoPreview').style.display = 'none';
     document.getElementById('slaOpBtn').style.display = 'none';
     state.huidigeFotoData = null;
-  }).catch(function(err) { toonNotif('Camera: ' + err.message); });
+  }).catch(function(e) { toonNotif('Camera: ' + e.message); });
 }
 
 function stopCamera() {
-  if (state.stream) {
-    state.stream.getTracks().forEach(function(t) { t.stop(); });
-    state.stream = null;
-  }
+  if (state.stream) { state.stream.getTracks().forEach(function(t){t.stop();}); state.stream = null; }
 }
 
 function nieuweCamera() {
-  stopCamera();
-  state.huidigeFotoData = null;
+  stopCamera(); state.huidigeFotoData = null;
   document.getElementById('fotoPreview').style.display = 'none';
   document.getElementById('videoFeed').style.display = 'block';
   document.getElementById('slaOpBtn').style.display = 'none';
@@ -739,11 +383,9 @@ function maakFoto() {
   if (!state.ronde) { toonNotif('Start eerst een ronde'); return; }
   var v = document.getElementById('videoFeed');
   var c = document.getElementById('fotoCanvas');
-  c.width = v.videoWidth || 640;
-  c.height = v.videoHeight || 480;
+  c.width = v.videoWidth || 640; c.height = v.videoHeight || 480;
   c.getContext('2d').drawImage(v, 0, 0);
   state.huidigeFotoData = c.toDataURL('image/jpeg', 0.82);
-
   document.getElementById('fotoPreview').src = state.huidigeFotoData;
   document.getElementById('fotoPreview').style.display = 'block';
   document.getElementById('videoFeed').style.display = 'none';
@@ -751,337 +393,315 @@ function maakFoto() {
 }
 
 function updatePlotTeller() {
-  var s = state.ronde ? state.ronde.aantalPlots : 10;
-  document.getElementById('plotTeller').textContent = 'Plot ' + (state.plots.length + 1) + ' / ' + s;
+  document.getElementById('plotTeller').textContent =
+    'Plot ' + (state.plots.length + 1) + ' / ' + (state.ronde ? state.ronde.aantalPlots : 10);
 }
 
-// ── PLOT OPSLAAN (direct, geen AI) ───────────
+// ── PLOT OPSLAAN ─────────────────────────────────────────
 function slaPlotOp() {
   if (!state.huidigeFotoData) { toonNotif('Maak eerst een foto'); return; }
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    _opslaanMetGPS(pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5));
-  }, function() {
-    _opslaanMetGPS(state.ronde ? state.ronde.gps : '');
-  }, { timeout: 3000 });
+  navigator.geolocation.getCurrentPosition(
+    function(pos) { _opslaan(pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5)); },
+    function() { _opslaan(state.ronde ? state.ronde.gps : ''); },
+    { timeout: 3000 }
+  );
 }
 
-function _opslaanMetGPS(gps) {
-  var plot = {
-    nr: state.plots.length + 1,
-    timestamp: new Date().toISOString(),
-    gps: gps,
-    foto: state.huidigeFotoData,
-    analyse: null
-  };
+function _opslaan(gps) {
+  var plot = { nr: state.plots.length + 1, timestamp: new Date().toISOString(), gps: gps, foto: state.huidigeFotoData, analyse: null };
   state.plots.push(plot);
-  slaDataOp();
-  nieuweCamera();
-  updatePlotTeller();
-  updateVeldLijst();
+  slaDataOp(); nieuweCamera(); updatePlotTeller(); updateVeldLijst();
   toonNotif('Plot ' + plot.nr + ' opgeslagen');
 }
 
 function updateVeldLijst() {
   var el = document.getElementById('veldPlotLijst');
-  if (!state.plots.length) {
-    el.innerHTML = '<div style="color:#6a9465;padding:4px 0">Nog geen plots</div>';
-    return;
-  }
+  if (!state.plots.length) { el.innerHTML = '<div style="color:#6a9465;padding:4px 0">Nog geen plots</div>'; return; }
   var html = '';
   state.plots.forEach(function(p) {
-    var ab = p.analyse
-      ? '<span class="badge badge-zeker">AI gereed</span>'
-      : '<span class="badge badge-wacht">wacht op AI</span>';
     html += '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--lijn)">';
-    html += '<span style="font-size:0.65rem;color:#a8d4a0;min-width:50px">Plot ' + p.nr + '</span>';
-    html += ab;
-    if (p.gps && p.gps !== 'Nog niet bepaald') {
-      html += '<span class="badge badge-gps">GPS</span>';
-    }
-    html += '<span style="font-size:0.6rem;color:#6a9465">' + (p.timestamp ? p.timestamp.substring(11,16) : '') + '</span>';
+    html += '<span style="font-size:.65rem;color:#a8d4a0;min-width:50px">Plot ' + p.nr + '</span>';
+    html += p.analyse ? '<span class="badge badge-zeker">AI gereed</span>' : '<span class="badge badge-wacht">wacht op AI</span>';
+    if (p.gps && p.gps !== 'Nog niet bepaald') html += '<span class="badge badge-gps">GPS</span>';
+    html += '<span style="font-size:.6rem;color:#6a9465">' + (p.timestamp ? p.timestamp.substring(11,16) : '') + '</span>';
     html += '</div>';
   });
   el.innerHTML = html;
 }
 
-// ── BATCH ANALYSE ────────────────────────────
-function updateAnalyseScherm() {
-  var wacht = state.plots.filter(function(p) { return !p.analyse; }).length;
-  var el = document.getElementById('analyseStatus');
-  if (el) el.textContent = wacht + ' plot' + (wacht !== 1 ? 's' : '') + ' wacht' + (wacht !== 1 ? 'en' : '') + ' op analyse';
-  updateApiBanner();
-  toonAnalyseResultaten();
+// ── ANALYSE PER PLOT ─────────────────────────────────────
+// Bouwt de lijst opnieuw op — elk plot krijgt eigen knop en resultaat
+function bouwAnalyseLijst() {
+  var container = document.getElementById('analysePlotLijst');
+  if (!container) return;
+  if (!state.plots.length) {
+    container.innerHTML = '<div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Geen plots in deze ronde</div>';
+    return;
+  }
+
+  var html = '';
+  state.plots.forEach(function(p) {
+    html += '<div class="analyse-kaart" id="akaart_' + p.nr + '">';
+    html += '<div class="analyse-kaart-header">';
+    html += '<div>';
+    html += '<div class="label" style="margin:0">Plot ' + p.nr + '</div>';
+    html += '<div style="font-size:.6rem;color:#6a9465">' + (p.timestamp ? p.timestamp.substring(0,10) + ' ' + p.timestamp.substring(11,16) : '') + ' &nbsp;';
+    if (p.gps && p.gps !== 'Nog niet bepaald') html += '&#128205; ' + p.gps;
+    html += '</div>';
+    html += '</div>';
+    // Knop rechts
+    if (p.analyse) {
+      html += '<button class="btn-plot-opnieuw" id="btn_' + p.nr + '" onclick="heranalyseerEen(' + p.nr + ')">&#8635; Opnieuw</button>';
+    } else {
+      html += '<button class="btn-plot-analyse" id="btn_' + p.nr + '" onclick="analyseerEen(' + p.nr + ')">Analyseer</button>';
+    }
+    html += '</div>'; // header
+
+    // Foto thumbnail
+    if (p.foto) html += '<img src="' + p.foto + '" style="width:100%;border-radius:3px;margin:8px 0;max-height:120px;object-fit:cover">';
+
+    // Resultaat of wachtstatus
+    html += '<div id="res_' + p.nr + '">';
+    if (p.analyse) {
+      html += bouwSoortenHtml(p.analyse);
+    } else {
+      html += '<div style="font-size:.7rem;color:#6a9465;font-style:italic">Nog niet geanalyseerd</div>';
+    }
+    html += '</div>';
+
+    // Per-plot log
+    html += '<div class="plot-log" id="log_' + p.nr + '"></div>';
+    html += '</div>'; // kaart
+  });
+
+  container.innerHTML = html;
 }
 
-function heranalyseerAlles() {
-  if (!confirm('Alle bestaande analyses wissen en opnieuw uitvoeren?')) return;
-  state.plots.forEach(function(p) { p.analyse = null; });
+function bouwSoortenHtml(analyse) {
+  var html = '';
+  if (!analyse.soorten || !analyse.soorten.length) return '<div style="font-size:.7rem;color:#6a9465">Geen soorten herkend</div>';
+  analyse.soorten.forEach(function(s) {
+    var kl = s.betrouwbaarheid === 'zeker' ? '' : (s.betrouwbaarheid === 'onzeker' ? ' onzeker' : ' onbekend');
+    var badge = s.betrouwbaarheid === 'zeker' ? 'badge-zeker' : (s.betrouwbaarheid === 'onzeker' ? 'badge-onzeker' : 'badge-onbekend');
+    html += '<div class="soort-kaart' + kl + '">';
+    html += '<div class="soort-naam">' + (s.wetenschappelijk || '&#8212;') + '</div>';
+    html += '<div class="soort-nl">' + (s.nl || '') + '</div>';
+    html += '<div class="soort-meta"><span class="badge ' + badge + '">' + s.betrouwbaarheid + '</span><span class="abundantie">' + (s.abundantie || '') + '</span></div>';
+    if (s.vraag) html += '<div class="ai-vraag">' + s.vraag + '</div>';
+    html += '</div>';
+  });
+  if (analyse.opmerkingen) html += '<div style="font-size:.68rem;color:#6a9465;font-style:italic;margin-top:4px">&#128172; ' + analyse.opmerkingen + '</div>';
+  return html;
+}
+
+function analyseerEen(nr) {
+  var plot = state.plots.find(function(p){return p.nr===nr;});
+  if (!plot) return;
+  if (!state.apiKey) { toonNotif('Stel eerst een API-sleutel in'); return; }
+
+  var btn = document.getElementById('btn_' + nr);
+  var log = document.getElementById('log_' + nr);
+  if (btn) { btn.textContent = 'Bezig...'; btn.disabled = true; }
+  if (log) { log.style.display = 'block'; log.innerHTML = '<span class="log-bezig">Analyseren...</span>'; }
+
+  roepGeminiAan(plot, function(ok, msg) {
+    slaDataOp();
+    if (log) log.innerHTML = ok ? '<span class="log-ok">&#10003; ' + msg + '</span>' : '<span class="log-fout">&#10005; ' + msg + '</span>';
+    // Ververs alleen dit plot in de lijst
+    var res = document.getElementById('res_' + nr);
+    if (res && plot.analyse) res.innerHTML = bouwSoortenHtml(plot.analyse);
+    if (btn) {
+      if (ok) { btn.textContent = '&#8635; Opnieuw'; btn.className = 'btn-plot-opnieuw'; btn.disabled = false; btn.onclick = function(){heranalyseerEen(nr);}; }
+      else { btn.textContent = 'Analyseer'; btn.disabled = false; }
+    }
+    updateVeldLijst(); updateOverzicht();
+    toonNotif(ok ? 'Plot ' + nr + ' geanalyseerd' : 'Fout bij plot ' + nr);
+  });
+}
+
+function heranalyseerEen(nr) {
+  var plot = state.plots.find(function(p){return p.nr===nr;});
+  if (!plot) return;
+  plot.analyse = null;
   slaDataOp();
-  updateAnalyseScherm();
-  toonNotif('Analyses gewist');
+  // Reset UI voor dit plot
+  var btn = document.getElementById('btn_' + nr);
+  if (btn) { btn.textContent = 'Analyseer'; btn.className = 'btn-plot-analyse'; btn.onclick = function(){analyseerEen(nr);}; btn.disabled = false; }
+  var res = document.getElementById('res_' + nr);
+  if (res) res.innerHTML = '<div style="font-size:.7rem;color:#6a9465;font-style:italic">Nog niet geanalyseerd</div>';
+  var log = document.getElementById('log_' + nr);
+  if (log) { log.style.display = 'none'; log.innerHTML = ''; }
+  setTimeout(function(){ analyseerEen(nr); }, 100);
 }
 
+// ── BATCH ANALYSE ────────────────────────────────────────
 function startBatchAnalyse() {
   if (state.analyseBezig) return;
   if (!state.apiKey) { toonNotif('Stel eerst een API-sleutel in'); return; }
-
-  var wacht = state.plots.filter(function(p) { return !p.analyse; });
+  var wacht = state.plots.filter(function(p){return !p.analyse;});
   if (!wacht.length) { toonNotif('Alle plots zijn al geanalyseerd'); return; }
 
   state.analyseBezig = true;
-  document.getElementById('btnAnalyseer').disabled = true;
+  var batchBtn = document.getElementById('btnBatch');
+  if (batchBtn) batchBtn.disabled = true;
 
-  var log = document.getElementById('analyseLog');
-  log.style.display = 'block';
-  log.innerHTML = '';
-
-  var totaal = wacht.length;
-  var gedaan = 0;
+  var log = document.getElementById('batchLog');
+  log.style.display = 'block'; log.innerHTML = '';
 
   function volgende(i) {
     if (i >= wacht.length) {
       state.analyseBezig = false;
-      document.getElementById('btnAnalyseer').disabled = false;
-      document.getElementById('voortgangBalk').style.width = '100%';
-      document.getElementById('analyseVoortgangTekst').textContent = totaal + ' / ' + totaal;
-      slaDataOp();
-      updateAnalyseScherm();
-      updateOverzicht();
-      toonNotif('Analyse klaar');
+      if (batchBtn) batchBtn.disabled = false;
+      slaDataOp(); bouwAnalyseLijst(); updateVeldLijst(); updateOverzicht();
+      toonNotif('Batch klaar');
       return;
     }
-
     var plot = wacht[i];
-    document.getElementById('voortgangBalk').style.width = Math.round((gedaan / totaal) * 100) + '%';
-    document.getElementById('analyseVoortgangTekst').textContent = gedaan + ' / ' + totaal;
     log.innerHTML += '<div class="log-bezig">Plot ' + plot.nr + ' analyseren...</div>';
     log.scrollTop = log.scrollHeight;
 
-    analyseerPlot(plot, function(ok, msg) {
-      gedaan++;
+    roepGeminiAan(plot, function(ok, msg) {
       log.innerHTML += ok
-        ? '<div class="log-ok">Plot ' + plot.nr + ': ' + msg + '</div>'
-        : '<div class="log-fout">Plot ' + plot.nr + ': ' + msg + '</div>';
+        ? '<div class="log-ok">&#10003; Plot ' + plot.nr + ': ' + msg + '</div>'
+        : '<div class="log-fout">&#10005; Plot ' + plot.nr + ': ' + msg + '</div>';
       log.scrollTop = log.scrollHeight;
       slaDataOp();
-      setTimeout(function() { volgende(i + 1); }, 900);
+      setTimeout(function(){ volgende(i+1); }, 1000);
     });
   }
-
   volgende(0);
 }
 
-function analyseerPlot(plot, callback) {
+// ── GEMINI API AANROEP ───────────────────────────────────
+function roepGeminiAan(plot, callback) {
   if (!plot.foto) { callback(false, 'geen foto'); return; }
-
   var base64 = plot.foto.split(',')[1];
   var prompt =
     'Je bent een botanisch veldassistent. Analyseer deze foto van een berm-vegetatieplot van 1 m2.\n\n' +
     'Geef ALLEEN een JSON-object terug, geen uitleg, geen markdown:\n' +
-    '{\n  "soorten": [\n    {\n' +
-    '      "wetenschappelijk": "Naam of null",\n' +
-    '      "nl": "Nederlandse naam of onbekend",\n' +
-    '      "abundantie": "zeldzaam|schaars|frequent|abundant|dominant",\n' +
-    '      "betrouwbaarheid": "zeker|onzeker|onbekend",\n' +
-    '      "vraag": "Determinatievraag voor de bioloog als onzeker/onbekend, anders null"\n' +
-    '    }\n  ],\n' +
-    '  "opmerkingen": "Korte opmerking over het plot"\n}\n\n' +
+    '{"soorten":[{"wetenschappelijk":"naam of null","nl":"Nederlandse naam","abundantie":"zeldzaam|schaars|frequent|abundant|dominant","betrouwbaarheid":"zeker|onzeker|onbekend","vraag":"vraag voor bioloog of null"}],"opmerkingen":"korte opmerking"}\n\n' +
     'Wees botanisch nauwkeurig. Markeer onzeker als je twijfelt.';
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + state.apiKey, {
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=' + state.apiKey, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [
-        { text: prompt },
-        { inline_data: { mime_type: 'image/jpeg', data: base64 } }
-      ]}]
-    })
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({contents:[{parts:[{text:prompt},{inline_data:{mime_type:'image/jpeg',data:base64}}]}]})
   })
-  .then(function(r) { return r.json(); })
+  .then(function(r){return r.json();})
   .then(function(data) {
     var tekst = '';
-    try {
-      tekst = data.candidates[0].content.parts[0].text || '';
-    } catch(e) {
+    try { tekst = data.candidates[0].content.parts[0].text || ''; }
+    catch(e) {
       var fout = (data.error && data.error.message) ? data.error.message : 'geen response';
-      callback(false, fout);
-      return;
+      callback(false, fout); return;
     }
-
-    var start = tekst.indexOf('{');
-    var eind = tekst.lastIndexOf('}');
-    if (start === -1 || eind <= start) { callback(false, 'geen JSON'); return; }
-
+    var s = tekst.indexOf('{'), e = tekst.lastIndexOf('}');
+    if (s === -1 || e <= s) { callback(false, 'geen JSON in antwoord'); return; }
     try {
-      var res = JSON.parse(tekst.substring(start, eind + 1));
+      var res = JSON.parse(tekst.substring(s, e+1));
       plot.analyse = res;
-      var n = res.soorten ? res.soorten.length : 0;
-      callback(true, n + ' soort' + (n !== 1 ? 'en' : ''));
-    } catch(e) {
-      callback(false, 'JSON-fout: ' + e.message);
-    }
+      callback(true, (res.soorten ? res.soorten.length : 0) + ' soorten');
+    } catch(ex) { callback(false, 'JSON-fout: ' + ex.message); }
   })
-  .catch(function(err) { callback(false, err.message); });
+  .catch(function(err){ callback(false, err.message); });
 }
 
-function toonAnalyseResultaten() {
-  var container = document.getElementById('analyseResultaten');
-  if (!container) return;
-  var gedaan = state.plots.filter(function(p) { return p.analyse; });
-  if (!gedaan.length) { container.innerHTML = ''; return; }
-
-  var html = '<div class="sectie-titel" style="margin-top:12px">Resultaten (' + gedaan.length + ' plots)</div>';
-  gedaan.forEach(function(p) {
-    html += '<div class="card" style="margin-bottom:8px">';
-    html += '<div class="label">Plot ' + p.nr + ' &mdash; ' + (p.timestamp ? p.timestamp.substring(0,10) : '') + '</div>';
-    if (p.foto) html += '<img src="' + p.foto + '" style="width:100%;border-radius:3px;margin-bottom:8px;max-height:120px;object-fit:cover">';
-    if (p.analyse.soorten && p.analyse.soorten.length) {
-      p.analyse.soorten.forEach(function(s) {
-        var kl = s.betrouwbaarheid === 'zeker' ? '' : (s.betrouwbaarheid === 'onzeker' ? ' onzeker' : ' onbekend');
-        var badge = s.betrouwbaarheid === 'zeker' ? 'badge-zeker' : (s.betrouwbaarheid === 'onzeker' ? 'badge-onzeker' : 'badge-onbekend');
-        var bt = s.betrouwbaarheid === 'zeker' ? 'zeker' : (s.betrouwbaarheid === 'onzeker' ? 'onzeker' : 'onbekend');
-        html += '<div class="soort-kaart' + kl + '">';
-        html += '<div class="soort-naam">' + (s.wetenschappelijk || '&#8212;') + '</div>';
-        html += '<div class="soort-nl">' + (s.nl || '') + '</div>';
-        html += '<div class="soort-meta"><span class="badge ' + badge + '">' + bt + '</span>';
-        html += '<span class="abundantie">' + (s.abundantie || '') + '</span></div>';
-        if (s.vraag) html += '<div class="ai-vraag">' + s.vraag + '</div>';
-        html += '</div>';
-      });
-    }
-    if (p.analyse.opmerkingen) {
-      html += '<div style="font-size:0.68rem;color:#6a9465;margin-top:6px;font-style:italic">&#128172; ' + p.analyse.opmerkingen + '</div>';
-    }
-    html += '</div>';
-  });
-  container.innerHTML = html;
-}
-
-// ── OVERZICHT ─────────────────────────────────
+// ── OVERZICHT ────────────────────────────────────────────
 function updateOverzicht() {
-  var plots = state.plots;
-  var soorten = {};
-  var onzeker = 0;
-
-  plots.forEach(function(p) {
+  var soorten = {}, onzeker = 0;
+  state.plots.forEach(function(p) {
     if (!p.analyse) return;
     p.analyse.soorten.forEach(function(s) {
       soorten[s.wetenschappelijk || s.nl] = true;
       if (s.betrouwbaarheid !== 'zeker') onzeker++;
     });
   });
-
   document.getElementById('totaalSoorten').textContent = Object.keys(soorten).length;
-  document.getElementById('totaalPlots').textContent = plots.length;
+  document.getElementById('totaalPlots').textContent = state.plots.length;
   document.getElementById('totaalOnzeker').textContent = onzeker;
 
   var kaart = document.getElementById('kaartContainer');
-  if (plots.length > 0) {
+  if (state.plots.length) {
     var html = '<div class="kaart-achtergrond"></div>';
-    plots.forEach(function(p, i) {
-      var x = 10 + (i % 6) * 15;
-      var y = 15 + Math.floor(i / 6) * 35;
-      var kl = p.analyse ? ' geanalyseerd' : '';
-      html += '<div class="kaart-pin' + kl + '" style="left:' + x + '%;top:' + y + '%">';
-      html += '<div class="kaart-label">P' + p.nr + '</div></div>';
+    state.plots.forEach(function(p,i) {
+      var x = 10+(i%6)*15, y = 15+Math.floor(i/6)*35;
+      html += '<div class="kaart-pin' + (p.analyse?' geanalyseerd':'') + '" style="left:'+x+'%;top:'+y+'%"><div class="kaart-label">P'+p.nr+'</div></div>';
     });
     kaart.innerHTML = html;
   }
 
   var lijst = '';
-  plots.forEach(function(p) {
-    var st = p.analyse
-      ? p.analyse.soorten.slice(0,3).map(function(s){return s.nl;}).join(', ')
-      : 'Wacht op AI-analyse';
+  state.plots.forEach(function(p) {
+    var st = p.analyse ? p.analyse.soorten.slice(0,3).map(function(s){return s.nl;}).join(', ') : 'Wacht op analyse';
     var onz = p.analyse ? p.analyse.soorten.filter(function(s){return s.betrouwbaarheid!=='zeker';}).length : 0;
-
     lijst += '<div class="plot-item">';
-    if (p.foto) {
-      lijst += '<img class="plot-thumb" src="' + p.foto + '" alt="P' + p.nr + '">';
-    } else {
-      lijst += '<div class="plot-thumb-placeholder">&#127807;</div>';
-    }
-    lijst += '<div class="plot-info">';
-    lijst += '<div class="plot-nr">Plot ' + p.nr + ' &mdash; ' + (p.timestamp ? p.timestamp.substring(11,16) : '') + '</div>';
-    lijst += '<div class="plot-soorten">' + st;
-    if (p.analyse && p.analyse.soorten.length > 3) lijst += ' +' + (p.analyse.soorten.length - 3) + ' meer';
-    lijst += '</div><div class="plot-badges">';
+    if (p.foto) lijst += '<img class="plot-thumb" src="'+p.foto+'" alt="P'+p.nr+'">';
+    else lijst += '<div class="plot-thumb-placeholder">&#127807;</div>';
+    lijst += '<div class="plot-info"><div class="plot-nr">Plot '+p.nr+' &mdash; '+(p.timestamp?p.timestamp.substring(11,16):'')+'</div>';
+    lijst += '<div class="plot-soorten">'+st+(p.analyse&&p.analyse.soorten.length>3?' +'+(p.analyse.soorten.length-3)+' meer':'')+'</div>';
+    lijst += '<div class="plot-badges">';
     if (!p.analyse) lijst += '<span class="badge badge-wacht">wacht op AI</span>';
-    if (onz > 0) lijst += '<span class="badge badge-onzeker">&#9888; ' + onz + ' controleren</span>';
-    if (p.gps && p.gps !== 'Nog niet bepaald') lijst += '<span class="badge badge-gps">GPS</span>';
+    if (onz>0) lijst += '<span class="badge badge-onzeker">&#9888; '+onz+' controleren</span>';
+    if (p.gps && p.gps!=='Nog niet bepaald') lijst += '<span class="badge badge-gps">GPS</span>';
     lijst += '</div></div></div>';
   });
-
-  document.getElementById('plotsLijst').innerHTML = lijst ||
-    '<div style="font-size:0.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
+  document.getElementById('plotsLijst').innerHTML = lijst || '<div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
 }
 
-// ── EXPORT ─────────────────────────────────────
+// ── EXPORT ───────────────────────────────────────────────
 function exporteerCSV() {
   if (!state.plots.length) { toonNotif('Geen data'); return; }
   var rijen = [['Plot','Datum','Tijd','GPS','Wetenschappelijk','Nederlands','Abundantie','Betrouwbaarheid','Vraag AI']];
-
   state.plots.forEach(function(p) {
     var dt = p.timestamp ? p.timestamp.split('T') : ['',''];
     if (p.analyse && p.analyse.soorten.length) {
       p.analyse.soorten.forEach(function(s) {
-        rijen.push([p.nr, dt[0], dt[1].substring(0,5), p.gps,
-          s.wetenschappelijk||'', s.nl, s.abundantie, s.betrouwbaarheid, s.vraag||'']);
+        rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,s.wetenschappelijk||'',s.nl,s.abundantie,s.betrouwbaarheid,s.vraag||'']);
       });
     } else {
-      rijen.push([p.nr, dt[0], dt[1].substring(0,5), p.gps, '','','','nog niet geanalyseerd','']);
+      rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,'','','','nog niet geanalyseerd','']);
     }
   });
-
-  var csv = rijen.map(function(r){
-    return r.map(function(c){ return '"'+(c+'').replace(/"/g,'""')+'"'; }).join(',');
-  }).join('\n');
-  var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a'); a.href = url;
-  a.download = 'bermapp_' + (state.ronde ? state.ronde.datum : 'export') + '.csv';
-  a.click();
-  toonNotif('CSV gedownload');
+  var csv = rijen.map(function(r){return r.map(function(c){return '"'+(c+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download = 'bermapp_'+(state.ronde?state.ronde.datum:'export')+'.csv';
+  a.click(); toonNotif('CSV gedownload');
 }
 
 function exporteerTwijfel() {
   if (!state.plots.length) { toonNotif('Geen data'); return; }
   var r = ['TWIJFELLIJST - BermApp\n'];
-  if (state.ronde) r.push('Locatie: ' + state.ronde.locatie + '\nDatum: ' + state.ronde.datum + '\n\n');
-
+  if (state.ronde) r.push('Locatie: '+state.ronde.locatie+'\nDatum: '+state.ronde.datum+'\n\n');
   state.plots.forEach(function(p) {
     if (!p.analyse) return;
-    var tw = p.analyse.soorten.filter(function(s){ return s.betrouwbaarheid !== 'zeker'; });
+    var tw = p.analyse.soorten.filter(function(s){return s.betrouwbaarheid!=='zeker';});
     if (!tw.length) return;
-    r.push('PLOT ' + p.nr + ' - GPS: ' + p.gps);
+    r.push('PLOT '+p.nr+' - GPS: '+p.gps);
     tw.forEach(function(s) {
-      r.push('  * ' + s.nl + ' (' + (s.wetenschappelijk||'?') + ') [' + s.betrouwbaarheid + ']');
-      if (s.vraag) r.push('    Vraag: ' + s.vraag);
+      r.push('  * '+s.nl+' ('+(s.wetenschappelijk||'?')+') ['+s.betrouwbaarheid+']');
+      if (s.vraag) r.push('    Vraag: '+s.vraag);
     });
     r.push('');
   });
-
-  var blob = new Blob([r.join('\n')], {type:'text/plain;charset=utf-8'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a'); a.href = url;
-  a.download = 'twijfellijst_' + (state.ronde ? state.ronde.datum : 'export') + '.txt';
-  a.click();
-  toonNotif('Twijfellijst gedownload');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([r.join('\n')],{type:'text/plain;charset=utf-8'}));
+  a.download = 'twijfellijst_'+(state.ronde?state.ronde.datum:'export')+'.txt';
+  a.click(); toonNotif('Twijfellijst gedownload');
 }
 
-// ── OPSLAG ─────────────────────────────────────
+// ── OPSLAG ───────────────────────────────────────────────
 function slaDataOp() {
   try {
     localStorage.setItem('bermapp_ronde', JSON.stringify(state.ronde));
     var meta = state.plots.map(function(p) {
-      return { nr: p.nr, timestamp: p.timestamp, gps: p.gps, analyse: p.analyse, foto: p.foto ? 'aanwezig' : null };
+      return {nr:p.nr,timestamp:p.timestamp,gps:p.gps,analyse:p.analyse,foto:p.foto?'aanwezig':null};
     });
     localStorage.setItem('bermapp_plots_meta', JSON.stringify(meta));
-    state.plots.forEach(function(p, i) {
-      if (p.foto) { try { localStorage.setItem('bermapp_foto_' + i, p.foto); } catch(e) {} }
+    state.plots.forEach(function(p,i) {
+      if (p.foto) try{localStorage.setItem('bermapp_foto_'+i,p.foto);}catch(e){}
     });
-  } catch(e) {}
+  } catch(e){}
 }
 
 function laadOpgeslagenData() {
@@ -1091,55 +711,43 @@ function laadOpgeslagenData() {
     if (r) {
       state.ronde = JSON.parse(r);
       if (state.ronde) {
-        var l = document.getElementById('locatieNaam');
-        var d = document.getElementById('datumInput');
-        var g = document.getElementById('gpsDisplay');
-        var a = document.getElementById('aantalPlots');
-        if (l && state.ronde.locatie) l.value = state.ronde.locatie;
-        if (d && state.ronde.datum) d.value = state.ronde.datum;
-        if (g && state.ronde.gps) g.textContent = state.ronde.gps;
-        if (a && state.ronde.aantalPlots) a.value = state.ronde.aantalPlots;
+        document.getElementById('locatieNaam').value = state.ronde.locatie || '';
+        document.getElementById('datumInput').value = state.ronde.datum || '';
+        document.getElementById('gpsDisplay').textContent = state.ronde.gps || 'Nog niet bepaald';
+        document.getElementById('aantalPlots').value = state.ronde.aantalPlots || 10;
         document.getElementById('rondeLabel').textContent = state.ronde.locatie.substring(0,22);
       }
     }
     if (pm) {
-      state.plots = JSON.parse(pm).map(function(p, i) {
-        if (p.foto === 'aanwezig') p.foto = localStorage.getItem('bermapp_foto_' + i) || null;
+      state.plots = JSON.parse(pm).map(function(p,i) {
+        if (p.foto==='aanwezig') p.foto = localStorage.getItem('bermapp_foto_'+i) || null;
         return p;
       });
     }
     updatePlotTeller();
-  } catch(e) {}
+  } catch(e){}
 }
 
 function updateExportScherm() {
   var el = document.getElementById('rondesArchief');
   if (state.ronde) {
     var g = state.plots.filter(function(p){return p.analyse;}).length;
-    el.innerHTML =
-      '<div style="color:var(--wit);margin-bottom:4px">' + state.ronde.locatie + '</div>' +
-      '<div>' + state.ronde.datum + ' &mdash; ' + state.plots.length + ' plots, ' + g + ' geanalyseerd</div>';
-  } else {
-    el.textContent = 'Geen ronde actief';
-  }
+    el.innerHTML = '<div style="color:var(--wit);margin-bottom:4px">'+state.ronde.locatie+'</div><div>'+state.ronde.datum+' &mdash; '+state.plots.length+' plots, '+g+' geanalyseerd</div>';
+  } else { el.textContent = 'Geen ronde actief'; }
 }
 
 function verwijderRonde() {
   if (!confirm('Huidige ronde wissen? Exporteer eerst!')) return;
   state.ronde = null; state.plots = [];
-  localStorage.removeItem('bermapp_ronde');
-  localStorage.removeItem('bermapp_plots_meta');
+  localStorage.removeItem('bermapp_ronde'); localStorage.removeItem('bermapp_plots_meta');
   document.getElementById('rondeLabel').textContent = 'Geen ronde';
-  updateOverzicht();
-  toonNotif('Ronde gewist');
+  updateOverzicht(); toonNotif('Ronde gewist');
 }
 
-// ── NOTIF ──────────────────────────────────────
 function toonNotif(tekst) {
   var n = document.getElementById('notif');
-  n.textContent = tekst;
-  n.classList.add('zichtbaar');
-  setTimeout(function(){ n.classList.remove('zichtbaar'); }, 2400);
+  n.textContent = tekst; n.classList.add('zichtbaar');
+  setTimeout(function(){n.classList.remove('zichtbaar');}, 2400);
 }
 </script>
 </body>
