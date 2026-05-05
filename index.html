@@ -77,11 +77,10 @@
   .ai-vraag{background:#2a1f00;border:1px solid #5a3f00;border-radius:3px;padding:8px 10px;margin-top:8px;font-size:.72rem;color:#e8c070;line-height:1.5;}
   .totaal-bar{background:#0f1f0d;border:1px solid var(--lijn);border-radius:4px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:.7rem;color:#6a9465;}
   .totaal-getal{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:600;color:var(--wit);line-height:1;}
-  .kaart-placeholder{background:#1a2e17;border:1px solid var(--lijn);border-radius:4px;height:200px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:#6a9465;font-size:.75rem;position:relative;overflow:hidden;}
-  .kaart-achtergrond{position:absolute;inset:0;opacity:.15;background-image:linear-gradient(rgba(168,212,160,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(168,212,160,.3) 1px,transparent 1px);background-size:30px 30px;}
-  .kaart-pin{width:14px;height:14px;background:#70c8e8;border-radius:50%;border:2px solid var(--wit);box-shadow:0 0 6px rgba(112,200,232,.6);position:absolute;}
-  .kaart-pin.geanalyseerd{background:var(--zeker);box-shadow:0 0 6px rgba(58,125,52,.6);}
-  .kaart-label{font-size:.55rem;background:rgba(0,0,0,.7);padding:2px 5px;border-radius:2px;position:absolute;top:-18px;left:50%;transform:translateX(-50%);white-space:nowrap;color:var(--wit);}
+  #kaartContainer{height:260px;border-radius:4px;overflow:hidden;margin-bottom:12px;border:1px solid var(--lijn);}
+  .kaart-geen{background:#1a2e17;height:260px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--lijn);border-radius:4px;color:#6a9465;font-size:.75rem;text-align:center;}
+  .leaflet-popup-content-wrapper{background:#1e3a1a !important;color:var(--wit) !important;border:1px solid var(--lijn);border-radius:4px !important;font-family:'IBM Plex Mono',monospace;font-size:.7rem;}
+  .leaflet-popup-tip{background:#1e3a1a !important;}
   .export-card{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:16px;margin-bottom:12px;text-align:center;}
   .export-icon{font-size:2rem;margin-bottom:8px;}
   .export-desc{font-size:.7rem;color:#6a9465;line-height:1.6;margin-bottom:12px;}
@@ -109,6 +108,8 @@
   /* Resultaat weergave */
   .analyse-resultaat{margin-top:8px;}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -205,13 +206,7 @@
     </div>
   </div>
   <div class="sectie-titel">Kaart</div>
-  <div class="kaart-placeholder" id="kaartContainer">
-    <div class="kaart-achtergrond"></div>
-    <div style="position:relative;z-index:1;text-align:center">
-      <div style="font-size:1.5rem;margin-bottom:4px">&#128506;</div>
-      <div>Start een ronde om plots te zien</div>
-    </div>
-  </div>
+  <div id="kaartContainer"><div class="kaart-geen"><div>&#128506;<br>Start een ronde om plots te zien</div></div></div>
   <div class="sectie-titel">Alle plots</div>
   <div id="plotsLijst">
     <div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>
@@ -283,7 +278,7 @@ function toonScherm(naam) {
   });
   if (naam==='camera'){startCamera();updateVeldLijst();}
   else stopCamera();
-  if (naam==='overzicht') updateOverzicht();
+  if (naam==='overzicht') { updateOverzicht(); }
   if (naam==='export') updateExportScherm();
   if (naam==='analyse') bouwAnalyseLijst();
 }
@@ -602,6 +597,117 @@ function escapeHtml(t) {
   return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
+// ── LEAFLET KAART ─────────────────────────────────────────
+var kaartObj = null;
+var kaartMarkers = [];
+
+function tekenKaart() {
+  // Gooi altijd de oude kaart weg en maak opnieuw — voorkomt display:none problemen
+  if (kaartObj) {
+    kaartObj.remove();
+    kaartObj = null;
+    kaartMarkers = [];
+  }
+
+  var container = document.getElementById('kaartContainer');
+  if (!container) return;
+
+  var plotsMetGPS = state.plots.filter(function(p){
+    return p.gps && p.gps !== 'Nog niet bepaald' && p.gps.indexOf(',') !== -1;
+  });
+
+  if (!plotsMetGPS.length) {
+    container.innerHTML = '<div class="kaart-geen"><div style="font-size:1.4rem">&#128506;</div><div style="margin-top:6px">Geen GPS-coördinaten beschikbaar</div></div>';
+    return;
+  }
+
+  // Maak vers kaart-element
+  container.innerHTML = '';
+  container.style.height = '260px';
+
+  // Controleer of Leaflet beschikbaar is (geen internet = script niet geladen)
+  if (typeof L === 'undefined') {
+    container.innerHTML =
+      '<div class="kaart-geen">' +
+      '<div style="font-size:1.4rem;margin-bottom:8px">&#128506;</div>' +
+      '<div style="color:#e8c070;font-size:.75rem;margin-bottom:4px">&#9888; Geen internetverbinding</div>' +
+      '<div style="font-size:.65rem;color:#6a9465;line-height:1.6">De kaartondergrond (OpenStreetMap)<br>is alleen beschikbaar met internet.<br>GPS-punten worden wel opgeslagen.</div>' +
+      '</div>';
+    return;
+  }
+
+  kaartObj = L.map(container, {
+    zoomControl: true,
+    attributionControl: true
+  });
+
+  // Toon waarschuwing als tiles niet laden na 5 seconden
+  var tilesGeladen = false;
+  var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  });
+  tileLayer.on('tileload', function() { tilesGeladen = true; });
+  tileLayer.addTo(kaartObj);
+
+  setTimeout(function() {
+    if (!tilesGeladen && kaartObj) {
+      // Voeg waarschuwingsbanner toe boven de kaart
+      var waarsch = document.createElement('div');
+      waarsch.style.cssText = 'position:absolute;top:0;left:0;right:0;z-index:1000;background:rgba(74,32,0,.92);color:#e8c070;font-size:.65rem;padding:6px 10px;text-align:center;font-family:IBM Plex Mono,monospace;';
+      waarsch.innerHTML = '&#9888; Kaartondergrond niet beschikbaar — internetverbinding vereist';
+      container.style.position = 'relative';
+      container.appendChild(waarsch);
+    }
+  }, 5000);
+
+  var coords = [];
+  plotsMetGPS.forEach(function(p) {
+    var parts = p.gps.split(',');
+    var lat = parseFloat(parts[0].trim());
+    var lon = parseFloat(parts[1].trim());
+    if (isNaN(lat) || isNaN(lon)) return;
+    coords.push([lat, lon]);
+
+    var kleur = p.analyse ? '#3a7d34' : '#1a5a7a';
+    var icon = L.divIcon({
+      className: '',
+      html: '<div style="background:' + kleur + ';color:#fff;border:2px solid #fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.5);line-height:1">P' + p.nr + '</div>',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15],
+      popupAnchor: [0, -18]
+    });
+
+    var soortTekst = 'Nog niet geanalyseerd';
+    if (p.analyse) {
+      soortTekst = p.analyse.vrijeTekst ? 'Analyse aanwezig' :
+        (p.analyse.soorten||[]).slice(0,3).map(function(s){return s.nl;}).join(', ');
+    }
+
+    var popup = '<b style="font-family:monospace">Plot ' + p.nr + '</b><br>' +
+      '<span style="font-size:.85em;color:#888">' +
+      (p.timestamp ? p.timestamp.substring(0,10) + ' ' + p.timestamp.substring(11,16) : '') +
+      '</span><br>' + soortTekst;
+
+    L.marker([lat, lon], {icon: icon}).addTo(kaartObj).bindPopup(popup);
+  });
+
+  if (coords.length === 1) {
+    kaartObj.setView(coords[0], 18);
+  } else if (coords.length > 1) {
+    kaartObj.fitBounds(L.latLngBounds(coords), {padding: [40, 40], maxZoom: 18});
+  }
+
+  // Forceer correcte grootte na render
+  setTimeout(function(){
+    if (kaartObj) {
+      kaartObj.invalidateSize();
+      if (coords.length === 1) kaartObj.setView(coords[0], 18);
+      else if (coords.length > 1) kaartObj.fitBounds(L.latLngBounds(coords), {padding:[40,40], maxZoom:18});
+    }
+  }, 200);
+}
+
 // ── OVERZICHT ─────────────────────────────────────────────
 function updateOverzicht() {
   var soorten={},onzeker=0;
@@ -616,15 +722,7 @@ function updateOverzicht() {
   document.getElementById('totaalPlots').textContent=state.plots.length;
   document.getElementById('totaalOnzeker').textContent=onzeker;
 
-  var kaart=document.getElementById('kaartContainer');
-  if (state.plots.length){
-    var html='<div class="kaart-achtergrond"></div>';
-    state.plots.forEach(function(p,i){
-      var x=10+(i%6)*15,y=15+Math.floor(i/6)*35;
-      html+='<div class="kaart-pin'+(p.analyse?' geanalyseerd':'')+'" style="left:'+x+'%;top:'+y+'%"><div class="kaart-label">P'+p.nr+'</div></div>';
-    });
-    kaart.innerHTML=html;
-  }
+  tekenKaart();
 
   var lijst='';
   state.plots.forEach(function(p){
@@ -650,19 +748,40 @@ function updateOverzicht() {
 // ── EXPORT ────────────────────────────────────────────────
 function exporteerCSV() {
   if (!state.plots.length){toonNotif('Geen data');return;}
-  var rijen=[['Plot','Datum','Tijd','GPS','Wetenschappelijk','Nederlands','Abundantie','Betrouwbaarheid','Vraag','Analyse (tekst)']];
+  var locatie = state.ronde ? state.ronde.locatie : '';
+  var rondeDatum = state.ronde ? state.ronde.datum : '';
+
+  // Header
+  var rijen=[['Locatie','Datum ronde','Plot nr','Plot datum','Tijd','GPS lat','GPS lon','Wetenschappelijk','Nederlands','Abundantie','Betrouwbaarheid','Vraag voor bioloog']];
+
   state.plots.forEach(function(p){
     var dt=p.timestamp?p.timestamp.split('T'):['',''];
-    if (p.analyse&&!p.analyse.vrijeTekst&&p.analyse.soorten.length){
+    var tijd=dt[1]?dt[1].substring(0,5):'';
+    var gpsLat='', gpsLon='';
+    if (p.gps && p.gps.indexOf(',')!==-1){
+      var gp=p.gps.split(',');
+      gpsLat=gp[0].trim(); gpsLon=gp[1].trim();
+    }
+
+    if (p.analyse && !p.analyse.vrijeTekst && p.analyse.soorten && p.analyse.soorten.length){
+      // Een rij per soort
       p.analyse.soorten.forEach(function(s){
-        rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,s.wetenschappelijk||'',s.nl,s.abundantie,s.betrouwbaarheid,s.vraag||'','']);
+        rijen.push([locatie,rondeDatum,p.nr,dt[0],tijd,gpsLat,gpsLon,
+          s.wetenschappelijk||'',s.nl||'',s.abundantie||'',s.betrouwbaarheid||'',s.vraag||'']);
       });
-    } else if (p.analyse&&p.analyse.vrijeTekst) {
-      rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,'','','','','',p.analyseRauw||'']);
+      // Lege scheidingsrij na elk plot
+      rijen.push(['','','','','','','','','','','','']);
+    } else if (p.analyse && p.analyse.vrijeTekst) {
+      rijen.push([locatie,rondeDatum,p.nr,dt[0],tijd,gpsLat,gpsLon,
+        '(vrije tekst)','Zie twijfellijst.txt','','','']);
+      rijen.push(['','','','','','','','','','','','']);
     } else {
-      rijen.push([p.nr,dt[0],dt[1].substring(0,5),p.gps,'','','','nog niet geanalyseerd','','']);
+      rijen.push([locatie,rondeDatum,p.nr,dt[0],tijd,gpsLat,gpsLon,
+        '','','','nog niet geanalyseerd','']);
+      rijen.push(['','','','','','','','','','','','']);
     }
   });
+
   var csv=rijen.map(function(r){return r.map(function(c){return '"'+(c+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
   var a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
