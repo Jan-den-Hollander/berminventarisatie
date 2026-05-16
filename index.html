@@ -29,8 +29,6 @@
   .label{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#a8d4a0;margin-bottom:6px;}
   .inp{width:100%;background:#0f1f0d;border:1px solid var(--lijn);color:var(--wit);padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:.85rem;border-radius:2px;margin-bottom:10px;}
   .inp:focus{outline:none;border-color:var(--lichtgroen);}
-  .inp-klein{width:100%;background:#0f1f0d;border:1px solid var(--lijn);color:var(--wit);padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:.75rem;border-radius:2px;margin-bottom:8px;}
-  .inp-klein:focus{outline:none;border-color:var(--lichtgroen);}
   .gps-row{display:flex;gap:8px;align-items:center;}
   .gps-display{flex:1;background:#0f1f0d;border:1px solid var(--lijn);padding:8px 12px;font-size:.7rem;color:#6a9465;border-radius:2px;font-family:'IBM Plex Mono',monospace;}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:.75rem;letter-spacing:.06em;border:none;border-radius:2px;cursor:pointer;transition:all .15s;text-transform:uppercase;}
@@ -46,23 +44,26 @@
   .btn-opslaan-analyse{background:var(--groen);color:var(--wit);font-size:.7rem;padding:9px 14px;width:100%;margin-top:6px;}
   .btn-reset-analyse{background:#1e3a1a;color:#a8d4a0;border:1px solid var(--lijn);font-size:.6rem;padding:5px 10px;border-radius:2px;cursor:pointer;}
   .btn-pdf{background:#1a2a4a;color:#a0c8f0;border:1px solid #2a4a7a;font-size:.75rem;padding:12px;width:100%;font-family:'IBM Plex Mono',monospace;cursor:pointer;border-radius:2px;letter-spacing:.06em;text-transform:uppercase;}
-
-  /* Info-knop */
-  .btn-info{background:none;border:1px solid #3a6a34;color:#a8d4a0;border-radius:50%;width:26px;height:26px;font-size:.75rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fraunces',serif;font-style:italic;}
-  .btn-info:active{background:#1e3a1a;}
-
-  /* Foto-tips modal */
+  .btn-fototips{display:flex;align-items:center;gap:8px;width:100%;background:#1a3a16;border:1px solid #4a8a42;color:#a8d4a0;border-radius:4px;padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:.75rem;cursor:pointer;margin-bottom:10px;letter-spacing:.04em;}
+  .btn-fototips:active{background:#2a5a22;}
+  .btn-fototips-ikon{font-size:1.3rem;line-height:1;}
+  .btn-fototips-tekst{flex:1;text-align:left;line-height:1.4;}
+  .btn-fototips-pijl{font-size:.9rem;color:#4a8a42;}
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
   .modal-overlay.open{opacity:1;pointer-events:all;}
-  .modal-box{background:#1a2e17;border:1px solid var(--lichtgroen);border-radius:8px 8px 0 0;width:100%;max-width:520px;padding:20px 18px 32px;transform:translateY(20px);transition:transform .25s;}
+  .modal-box{background:#1a2e17;border:1px solid var(--lichtgroen);border-radius:8px 8px 0 0;width:100%;max-width:520px;padding:20px 18px 0;transform:translateY(20px);transition:transform .25s;max-height:85vh;display:flex;flex-direction:column;}
   .modal-overlay.open .modal-box{transform:translateY(0);}
-  .modal-titel{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:#a8d4a0;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+  .modal-inhoud{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:16px;flex:1;}
+  .modal-titel{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:#a8d4a0;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
   .modal-sluit{background:none;border:none;color:#6a9465;font-size:1.3rem;cursor:pointer;line-height:1;}
+  .modal-footer{border-top:1px solid var(--lijn);padding:12px 0 28px;flex-shrink:0;}
+  .btn-terug-camera{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--groen);color:var(--wit);border:none;border-radius:4px;padding:14px;font-family:'IBM Plex Mono',monospace;font-size:.8rem;letter-spacing:.06em;cursor:pointer;}
+  .btn-terug-camera:active{background:var(--lichtgroen);transform:scale(.98);}
   .tip-blok{background:#0f1f0d;border-left:3px solid var(--lichtgroen);border-radius:0 3px 3px 0;padding:10px 13px;margin-bottom:10px;}
-  .tip-ikon{font-size:1.1rem;margin-right:6px;}
   .tip-titel{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#a8d4a0;margin-bottom:4px;}
   .tip-tekst{font-size:.72rem;color:var(--wit);line-height:1.65;}
-
+  .schaal-inp{width:100%;background:#0f1f0d;border:1px solid var(--lijn);color:var(--wit);padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;border-radius:2px;margin-bottom:10px;}
+  .schaal-inp:focus{outline:none;border-color:var(--lichtgroen);}
   .camera-container{position:relative;background:#000;border-radius:4px;overflow:hidden;margin-bottom:12px;aspect-ratio:4/3;}
   #videoFeed{width:100%;height:100%;object-fit:cover;}
   #fotoPreview{width:100%;height:100%;object-fit:cover;display:none;}
@@ -76,7 +77,6 @@
   .hoek-br{bottom:-2px;right:-2px;border-width:0 3px 3px 0;}
   .plot-teller{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.7);color:#a8d4a0;font-size:.65rem;padding:4px 8px;border-radius:2px;letter-spacing:.08em;}
   .camera-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;}
-  .camera-info-rij{display:flex;justify-content:flex-end;margin-bottom:6px;}
   .plot-item{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:10px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;}
   .plot-thumb{width:56px;height:56px;object-fit:cover;border-radius:2px;flex-shrink:0;border:1px solid var(--lijn);}
   .plot-thumb-placeholder{width:56px;height:56px;background:#0f1f0d;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#2d5a27;}
@@ -127,8 +127,6 @@
   .resultaat-input::placeholder{color:#3a6a34;}
   .analyse-resultaat{margin-top:8px;}
   .ai-naam-tag{font-size:.58rem;background:#1a2a3a;color:#70c8e8;padding:2px 7px;border-radius:2px;letter-spacing:.06em;display:inline-block;margin-top:4px;}
-
-  /* ── PRINT / PDF ─────────────────────────────────────── */
   @media print {
     @page{margin:15mm 12mm;size:A4;}
     body{background:#fff !important;color:#111 !important;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10pt;}
@@ -165,24 +163,37 @@
 <div class="modal-overlay" id="fotoTipsModal" onclick="sluitModal(event)">
   <div class="modal-box">
     <div class="modal-titel">
-      <span>&#128247; Tips voor betere foto&#8217;s</span>
+      <span>&#128247; Tips voor betere foto's</span>
       <button class="modal-sluit" onclick="sluitModalDirect()">&#10005;</button>
     </div>
-    <div class="tip-blok">
-      <div class="tip-titel"><span class="tip-ikon">&#128260;</span>Gezichtspunt</div>
-      <div class="tip-tekst">Fotografeer zo recht mogelijk van boven (nadir view). Bij een schuine hoek kloppen de dekkingspercentages van de 1&nbsp;m&#178; niet meer door perspectief-vertekening.</div>
+    <div class="modal-inhoud">
+      <div class="tip-blok">
+        <div class="tip-titel">&#128260; Gezichtspunt</div>
+        <div class="tip-tekst">Fotografeer zo recht mogelijk van boven (nadir view). Bij een schuine hoek kloppen de dekkingspercentages van de 1&nbsp;m&#178; niet meer door perspectief-vertekening.</div>
+      </div>
+      <div class="tip-blok">
+        <div class="tip-titel">&#128207; Referentie-object</div>
+        <div class="tip-tekst">
+          Leg een herkenbaar object met bekende afmeting in het plot. De AI gebruikt dit als schaalbepaling. Alles werkt:<br><br>
+          &#128208; Lineaal of rolmaat <em>(meest nauwkeurig)</em><br>
+          &#128273; Sleutelbos <em>(gemiddeld 10&#8211;12 cm)</em><br>
+          &#128095; Je voet &#8212; vermeld je schoenmaat in het veld hieronder<br>
+          &#128179; Bankpas of telefoon <em>(standaardmaten bekend bij AI)</em><br>
+          &#9995; Hand: duim tot pink &#8776; 18&#8211;22 cm<br><br>
+          Je hoeft de 1&nbsp;m&#178; <strong>niet</strong> fysiek af te bakenen. &#233;&#233;n zichtbaar referentie-object volstaat.
+        </div>
+      </div>
+      <div class="tip-blok">
+        <div class="tip-titel">&#9728;&#65039; Belichting</div>
+        <div class="tip-tekst">Vermijd harde schaduwen (midden op een zonnige dag). Een licht bewolkte dag geeft de meest egale kleuren voor bladherkenning &#8212; ideaal voor kleur-gebaseerde soortselectie.</div>
+      </div>
+      <div class="tip-blok" style="border-left-color:var(--onzeker)">
+        <div class="tip-titel" style="color:#e8a020">&#128300; Betere AI-analyse</div>
+        <div class="tip-tekst">De prompt vraagt de AI om de foto in segmenten te verdelen (zoals een telraam), dekking&nbsp;% te schatten en de fytosociologische context te benoemen. Hoe scherper de foto en hoe duidelijker het referentie-object, hoe beter het resultaat.</div>
+      </div>
     </div>
-    <div class="tip-blok">
-      <div class="tip-titel"><span class="tip-ikon">&#128207;</span>Referentie</div>
-      <div class="tip-tekst">Leg een duimstok of opvouwbaar houten kader van 1&#xd7;1&nbsp;m neer in het plot. De AI herkent dit en kan aan de hand daarvan de schaal van bladeren nauwkeuriger berekenen.</div>
-    </div>
-    <div class="tip-blok">
-      <div class="tip-titel"><span class="tip-ikon">&#9728;&#65039;</span>Belichting</div>
-      <div class="tip-tekst">Vermijd harde schaduwen (midden op een zonnige dag). Een licht bewolkte dag geeft de meest egale kleuren voor bladherkenning &#8212; ideaal voor kleur-gebaseerde soortselectie.</div>
-    </div>
-    <div class="tip-blok" style="border-left-color:var(--onzeker)">
-      <div class="tip-titel" style="color:#e8a020"><span class="tip-ikon">&#128300;</span>Betere AI-analyse</div>
-      <div class="tip-tekst">De prompt vraagt de AI om de foto in segmenten te verdelen (zoals een telraam), dekking&#160;% te schatten en de fytosociologische context te benoemen. Hoe scherper de foto, hoe beter het resultaat.</div>
+    <div class="modal-footer">
+      <button class="btn-terug-camera" onclick="sluitModalDirect()">&#128247; Terug naar foto maken</button>
     </div>
   </div>
 </div>
@@ -224,23 +235,34 @@
   <div class="sectie-titel">Werkwijze</div>
   <div class="veld-hint" style="background:#0f1f0d;border-color:var(--lijn)">
     <strong>1. Start</strong> &#8594; locatie, GPS, ronde starten<br>
-    <strong>2. Veld</strong> &#8594; foto per plot, opslaan<br>
-    <strong>3. Analyse</strong> &#8594; foto delen met AI naar keuze (Gemini, Claude, Le Chat&#8230;), antwoord plakken<br>
+    <strong>2. Veld</strong> &#8594; foto per plot, referentie-object in beeld, opslaan<br>
+    <strong>3. Analyse</strong> &#8594; foto delen met AI naar keuze, antwoord plakken<br>
     <strong>4. Ronde</strong> &#8594; kaartoverzicht<br>
-    <strong>5. Export</strong> &#8594; CSV voor vergelijking of PDF-rapport voor bioloog
+    <strong>5. Export</strong> &#8594; CSV of PDF-rapport voor bioloog
+  </div>
+  <hr class="divider">
+  <div class="sectie-titel">Foto-opslag</div>
+  <div class="veld-hint" style="background:#0f1f0d;border-color:var(--lijn);color:#6a9465">
+    &#128241; Foto's worden <strong style="color:#a8d4a0">lokaal opgeslagen</strong> in de browser van je telefoon (localStorage). Ze worden <strong style="color:#a8d4a0">niet</strong> naar een server gestuurd.<br><br>
+    &#9888;&#65039; Ze verdwijnen als je browsercache of sitedata wist.<br>
+    <strong style="color:#e8a020">Exporteer altijd via CSV of PDF voordat je de cache wist.</strong>
   </div>
 </div>
 
 <!-- VELD -->
 <div id="scherm-camera" class="screen">
-  <div class="camera-info-rij">
-    <button class="btn-info" onclick="openModal()" title="Fototips voor betere AI-analyse">i</button>
-  </div>
+  <button class="btn-fototips" onclick="openModal()">
+    <span class="btn-fototips-ikon">&#128247;</span>
+    <span class="btn-fototips-tekst"><strong>Fototips voor betere AI-analyse</strong><br>
+    <span style="font-size:.65rem;color:#6a9465">nadir &middot; referentie &middot; belichting</span></span>
+    <span class="btn-fototips-pijl">&#8250;</span>
+  </button>
   <div class="veld-hint">
-    &#128247; Maak foto per 1m&#178; plot en sla op.<br>
-    Analyse doe je daarna via het Analyse-tabblad.<br>
-    <span style="color:#6a9465;font-size:.65rem">Tik op <strong style="color:#a8d4a0">i</strong> rechtsboven voor fototips.</span>
+    Maak foto per 1m&#178; plot. Leg een referentie-object in beeld.<br>
+    <span style="font-size:.65rem;color:#6a9465">Vul hieronder het object in &#8212; dit wordt meegestuurd in de prompt.</span>
   </div>
+  <div class="label">&#128207; Schaalreferentie in beeld</div>
+  <input type="text" class="schaal-inp" id="schaalReferentie" placeholder="bijv. rolmaat 30 cm / schoenmaat 43 / bankpas / geen referentie">
   <div class="camera-container">
     <video id="videoFeed" autoplay playsinline muted></video>
     <img id="fotoPreview" alt="Foto">
@@ -267,9 +289,9 @@
   <div class="veld-hint" style="border-color:#5a3f00;background:#2a1f00;color:#e8c070">
     <strong>Per plot:</strong><br>
     1. &#8679; <strong>Deel foto</strong> &#8594; kies je AI-app (Gemini, Claude, Le Chat&#8230;)<br>
-    2. &#128203; <strong>Kopieer prompt</strong> &#8594; plak in de AI<br>
+    2. &#128203; <strong>Kopieer prompt</strong> &#8594; plak in de AI (schaalreferentie is al ingevuld)<br>
     3. Kopieer het AI-antwoord<br>
-    4. Vul de <strong>AI-naam</strong> in, plak het antwoord, druk <strong>Opslaan</strong>
+    4. Plak het antwoord hieronder en druk <strong>Opslaan</strong>
   </div>
   <div id="analysePlotLijst"></div>
 </div>
@@ -302,9 +324,9 @@
     <div class="export-icon">&#128196;</div>
     <div class="sectie-titel">CSV &#8212; data voor vergelijking</div>
     <div class="export-desc">
-      Per soort &#233;&#233;n rij: locatie, plot, datum, GPS,<br>
-      wetenschappelijke naam, Nederlandse naam,<br>
-      dekking&nbsp;%, abundantie, betrouwbaarheid, vraag voor bioloog,<br>
+      Per soort &#233;&#233;n rij: locatie, plot, datum, GPS, schaalreferentie,<br>
+      wetenschappelijke naam, Nederlandse naam, dekking&nbsp;%,<br>
+      abundantie, betrouwbaarheid, vraag voor bioloog,<br>
       gebruikte AI, fytosociologische context en algemene indruk.
     </div>
     <button class="btn btn-primair" onclick="exporteerCSV()">&#8595; Download CSV</button>
@@ -313,8 +335,8 @@
     <div class="export-icon">&#128196;</div>
     <div class="sectie-titel">PDF-rapport &#8212; voor de bioloog</div>
     <div class="export-desc">
-      Per plot: foto, tabel met soorten, dekking&nbsp;%,<br>
-      betrouwbaarheid, vragen en fytosociologische context.<br>
+      Per plot: foto, schaalreferentie, tabel met soorten,<br>
+      dekking&nbsp;%, betrouwbaarheid, vragen en fytosociologische context.<br>
       Kies daarna "Opslaan als PDF" in het afdrukvenster.
     </div>
     <button class="btn-pdf" onclick="maakPDF()">&#128196; Genereer &amp; print PDF-rapport</button>
@@ -335,18 +357,20 @@
   </button>
 </div>
 
-<!-- PDF (verborgen, alleen zichtbaar bij afdrukken) -->
+<!-- PDF scherm -->
 <div id="scherm-pdf" class="screen"></div>
-
 <div class="notif" id="notif"></div>
 
 <script>
 var state={ronde:null,plots:[],stream:null,huidigeFotoData:null};
 
-// ── VERBETERDE PROMPT ─────────────────────────────────────────────────────────
-var PROMPT='Begin je antwoord altijd met een korte introductieregel zoals:\n"Analyse door: [jouw naam en versie, bijv. Gemini 2.0 Flash / Claude Sonnet 4 / Le Chat Mistral Large]"\n\nJe bent een deskundige botanisch veldassistent. Analyseer deze foto van een vegetatieplot van precies 1 m². Voer een quadraat-analyse uit waarbij je de foto mentaal opdeelt in segmenten om overlappingen te herkennen en bodembedekkers niet te missen.\n\nGeef een overzichtelijke lijst per aangetroffen soort met de volgende kolommen:\n• Wetenschappelijke naam\n• Nederlandse naam\n• Geschat dekkingspercentage (%) — geef een concrete schatting van het bladoppervlak op deze m²\n• Abundantie (zeldzaam / schaars / frequent / abundant / dominant)\n• Betrouwbaarheid (0–100% zekerheid)\n• Eventuele determinatievraag voor de bioloog\n\nSpecifieke instructies:\n— Let extra op kiemplanten of kleine rozetten die zich onder de hogere vegetatie bevinden.\n— Als een soort niet met zekerheid tot op soortniveau te determineren is (bijv. grassen zonder bloeiwijze), noem dan het genus en de determinatiekenmerken die ontbreken.\n— Wees conservatief: markeer als onzeker bij twijfel en licht toe waarom.\n\nAlgemene beschouwing (verplicht):\nBeschrijf (1) de structuur en gelaagdheid, (2) de voedingstoestand (stikstofrijk vs. schraal), en (3) de fytosociologische context: welke plantengemeenschap wordt hier gesuggereerd?';
+var PROMPT_BASIS='Begin je antwoord altijd met een korte introductieregel zoals:\n"Analyse door: [jouw naam en versie, bijv. Gemini 2.0 Flash / Claude Sonnet 4 / Le Chat Mistral Large]"\n\nJe bent een deskundige botanisch veldassistent. Analyseer deze foto van een vegetatieplot van precies 1\u00a0m\u00b2.\n\nSchaalreferentie in beeld: [SCHAAL]\nGebruik dit referentie-object om de werkelijke bladafmetingen en dekkingspercentages nauwkeuriger te berekenen.\n\nVoer een quadraat-analyse uit waarbij je de foto mentaal opdeelt in segmenten om overlappingen te herkennen en bodembedekkers niet te missen.\n\nGeef een overzichtelijke lijst per aangetroffen soort met de volgende kolommen:\n\u2022 Wetenschappelijke naam\n\u2022 Nederlandse naam\n\u2022 Geschat dekkingspercentage (%) \u2014 concrete schatting van het bladoppervlak op deze m\u00b2\n\u2022 Abundantie (zeldzaam / schaars / frequent / abundant / dominant)\n\u2022 Betrouwbaarheid (0\u2013100% zekerheid)\n\u2022 Eventuele determinatievraag voor de bioloog\n\nSpecifieke instructies:\n\u2014 Let extra op kiemplanten of kleine rozetten onder de hogere vegetatie.\n\u2014 Als een soort niet tot op soortniveau te determineren is (bijv. grassen zonder bloeiwijze), noem het genus en de ontbrekende determinatiekenmerken.\n\u2014 Wees conservatief: markeer als onzeker bij twijfel en licht toe waarom.\n\nAlgemene beschouwing (verplicht):\nBeschrijf (1) de structuur en gelaagdheid, (2) de voedingstoestand (stikstofrijk vs. schraal), en (3) de fytosociologische context: welke plantengemeenschap wordt hier gesuggereerd?';
 
-// ── MODAL ─────────────────────────────────────────────────────────────────────
+function getPromptVoorPlot(p){
+  var schaal=(p&&p.schaal&&p.schaal!=='geen referentie')?p.schaal:(document.getElementById('schaalReferentie').value.trim()||'geen referentie opgegeven');
+  return PROMPT_BASIS.replace('[SCHAAL]',schaal);
+}
+
 function openModal(){document.getElementById('fotoTipsModal').classList.add('open');}
 function sluitModalDirect(){document.getElementById('fotoTipsModal').classList.remove('open');}
 function sluitModal(e){if(e.target===document.getElementById('fotoTipsModal'))sluitModalDirect();}
@@ -381,8 +405,7 @@ function startRonde(){
 }
 
 function bepaalGPS(){
-  var d=document.getElementById('gpsDisplay');
-  var k=document.getElementById('gpsKnop');
+  var d=document.getElementById('gpsDisplay'),k=document.getElementById('gpsKnop');
   d.textContent='Zoeken...';d.style.color='#e8a020';
   if(k){k.innerHTML='&#9203;';k.disabled=true;}
   if(!navigator.geolocation){d.textContent='GPS niet beschikbaar';if(k){k.innerHTML='&#128205; GPS';k.disabled=false;}return;}
@@ -429,7 +452,7 @@ function nieuweCamera(){
 
 function maakFoto(){
   if(!state.ronde){toonNotif('Start eerst een ronde');return;}
-  var v=document.getElementById('videoFeed');var c=document.getElementById('fotoCanvas');
+  var v=document.getElementById('videoFeed'),c=document.getElementById('fotoCanvas');
   c.width=v.videoWidth||640;c.height=v.videoHeight||480;
   c.getContext('2d').drawImage(v,0,0);
   state.huidigeFotoData=c.toDataURL('image/jpeg',0.82);
@@ -445,14 +468,16 @@ function updatePlotTeller(){
 
 function slaPlotOp(){
   if(!state.huidigeFotoData){toonNotif('Maak eerst een foto');return;}
+  var schaal=document.getElementById('schaalReferentie').value.trim()||'geen referentie';
   navigator.geolocation.getCurrentPosition(
-    function(pos){_opslaan(pos.coords.latitude.toFixed(5)+', '+pos.coords.longitude.toFixed(5));},
-    function(){_opslaan(state.ronde?state.ronde.gps:'');},{timeout:3000}
+    function(pos){_opslaan(pos.coords.latitude.toFixed(5)+', '+pos.coords.longitude.toFixed(5),schaal);},
+    function(){_opslaan(state.ronde?state.ronde.gps:'',schaal);},{timeout:3000}
   );
 }
 
-function _opslaan(gps){
+function _opslaan(gps,schaal){
   var p={nr:state.plots.length+1,timestamp:new Date().toISOString(),gps:gps,
+    schaal:schaal||'geen referentie',
     foto:state.huidigeFotoData,analyse:null,analyseRauw:'',analyseAI:''};
   state.plots.push(p);slaDataOp();nieuweCamera();updatePlotTeller();updateVeldLijst();
   toonNotif('Plot '+p.nr+' opgeslagen');
@@ -486,18 +511,19 @@ function bouwAnalyseLijst(){
     if(p.timestamp)h+=p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16);
     if(p.gps&&p.gps!=='Nog niet bepaald')h+=' &#128205; '+p.gps;
     h+='</div>';
+    if(p.schaal&&p.schaal!=='geen referentie')h+='<div style="font-size:.58rem;color:#6a9465;margin-top:2px">&#128207; '+esc(p.schaal)+'</div>';
     if(p.analyseAI)h+='<div class="ai-naam-tag">&#129302; '+esc(p.analyseAI)+'</div>';
     h+='</div>';
     if(p.analyse)h+='<button class="btn-reset-analyse" onclick="resetAnalyse('+p.nr+')">&#8635; Opnieuw</button>';
     h+='</div>';
     if(p.foto)h+='<img src="'+p.foto+'" class="analyse-foto">';
     h+='<div id="wf_'+p.nr+'" style="'+(p.analyse?'display:none':'')+'">';
-    h+='<div class="stap-hint">Stap 1 &amp; 2: Deel de foto met je AI-app en kopieer de prompt</div>';
+    h+='<div class="stap-hint">Stap 1 &amp; 2: Deel de foto en kopieer de prompt (schaal is al ingevuld)</div>';
     h+='<div class="stap-rij">';
     h+='<button class="btn btn-deel" onclick="deelFoto('+p.nr+')">&#8679; Deel foto</button>';
-    h+='<button class="btn btn-prompt" onclick="kopieerPrompt()">&#128203; Kopieer prompt</button>';
+    h+='<button class="btn btn-prompt" onclick="kopieerPrompt('+p.nr+')">&#128203; Kopieer prompt</button>';
     h+='</div>';
-    h+='<div class="stap-hint">Stap 3: Plak het AI-antwoord hieronder (de AI stelt zich zelf voor)</div>';
+    h+='<div class="stap-hint">Stap 3: Plak het AI-antwoord hieronder</div>';
     h+='<textarea class="resultaat-input" id="ta_'+p.nr+'" placeholder="Plak hier het antwoord van de AI..."></textarea>';
     h+='<button class="btn btn-opslaan-analyse" onclick="slaAnalyseOp('+p.nr+')">&#10003; Opslaan analyse</button>';
     h+='</div>';
@@ -513,8 +539,9 @@ function deelFoto(nr){
   var arr=p.foto.split(','),mime=arr[0].match(/:(.*?);/)[1],bstr=atob(arr[1]),n=bstr.length,u=new Uint8Array(n);
   while(n--)u[n]=bstr.charCodeAt(n);
   var blob=new Blob([u],{type:mime}),file=new File([blob],'plot_'+nr+'.jpg',{type:'image/jpeg'});
+  var prompt=getPromptVoorPlot(p);
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    navigator.share({title:'BermApp Plot '+nr,text:PROMPT,files:[file]})
+    navigator.share({title:'BermApp Plot '+nr,text:prompt,files:[file]})
     .then(function(){toonNotif('Gedeeld \u2713');})
     .catch(function(e){if(e.name!=='AbortError')toonNotif('Delen mislukt');});
   } else {
@@ -523,13 +550,15 @@ function deelFoto(nr){
   }
 }
 
-function kopieerPrompt(){
+function kopieerPrompt(nr){
+  var p=nr?state.plots.find(function(x){return x.nr===nr;}):null;
+  var prompt=getPromptVoorPlot(p);
   if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(PROMPT).then(function(){toonNotif('Prompt gekopieerd \u2713 \u2014 plak in je AI-app');}).catch(function(){_kopFb();});
-  } else _kopFb();
+    navigator.clipboard.writeText(prompt).then(function(){toonNotif('Prompt gekopieerd \u2713');}).catch(function(){_kopFb(prompt);});
+  } else _kopFb(prompt);
 }
-function _kopFb(){
-  var t=document.createElement('textarea');t.value=PROMPT;t.style.position='fixed';t.style.opacity='0';
+function _kopFb(tekst){
+  var t=document.createElement('textarea');t.value=tekst;t.style.position='fixed';t.style.opacity='0';
   document.body.appendChild(t);t.focus();t.select();
   try{document.execCommand('copy');toonNotif('Prompt gekopieerd \u2713');}catch(e){toonNotif('Kopieer handmatig');}
   document.body.removeChild(t);
@@ -540,13 +569,9 @@ function slaAnalyseOp(nr){
   var ta=document.getElementById('ta_'+nr);
   if(!ta||!ta.value.trim()){toonNotif('Plak eerst het AI-antwoord');return;}
   p.analyseRauw=ta.value.trim();
-
-  // Automatisch AI-naam uit introductieregel halen
   var regels=p.analyseRauw.split('\n');
-  var eersteRegel=regels[0]||'';
-  var aiMatch=eersteRegel.match(/Analyse door:\s*(.+)/i);
+  var aiMatch=(regels[0]||'').match(/Analyse door:\s*(.+)/i);
   p.analyseAI=aiMatch?aiMatch[1].trim():'AI';
-
   var t=p.analyseRauw,s=t.indexOf('{'),e=t.lastIndexOf('}');
   if(s!==-1&&e>s){try{p.analyse=JSON.parse(t.substring(s,e+1));}catch(x){p.analyse=vrij(t);}}
   else p.analyse=vrij(t);
@@ -569,18 +594,14 @@ function resetAnalyse(nr){
   p.analyse=null;p.analyseRauw='';slaDataOp();bouwAnalyseLijst();toonNotif('Analyse gewist');
 }
 
-// ── RESULTAAT HTML — toont ook dekking% en betrouwbaarheid ───────────────────
 function resultaatHtml(p){
   if(!p.analyse)return '';
   var h='';
   if(p.analyseAI)h+='<div class="ai-naam-tag">&#129302; '+esc(p.analyseAI)+'</div>';
   if(p.analyse.vrijeTekst){
-    // Vrije tekst: probeer fytosociologische alinea's te herkennen
-    var tekst=p.analyse.opmerkingen||'';
-    var fytoMatch=tekst.match(/(fytosocio[^\n]*(?:\n[^\n]+)*)/i);
     h+='<div style="background:#0f1f0d;border-left:3px solid var(--lichtgroen);padding:12px;border-radius:0 3px 3px 0;margin-top:4px">';
     h+='<div class="label" style="margin-bottom:6px">AI-analyse</div>';
-    h+='<div style="font-size:.72rem;line-height:1.8;white-space:pre-wrap;color:var(--wit)">'+esc(tekst)+'</div></div>';
+    h+='<div style="font-size:.72rem;line-height:1.8;white-space:pre-wrap;color:var(--wit)">'+esc(p.analyse.opmerkingen)+'</div></div>';
   } else {
     (p.analyse.soorten||[]).forEach(function(s){
       var kl=s.betrouwbaarheid==='zeker'?'':(s.betrouwbaarheid==='onzeker'?' onzeker':' onbekend');
@@ -598,16 +619,13 @@ function resultaatHtml(p){
       h+='</div>';
     });
     if(p.analyse.opmerkingen)h+='<div style="font-size:.68rem;color:#6a9465;font-style:italic;margin-top:4px;padding:6px;background:#0f1f0d;border-radius:2px">&#128172; '+esc(p.analyse.opmerkingen)+'</div>';
-    if(p.analyse.fytosociologie){
-      h+='<div class="fyto-blok"><div class="fyto-label">Fytosociologische context</div>'+esc(p.analyse.fytosociologie)+'</div>';
-    }
+    if(p.analyse.fytosociologie)h+='<div class="fyto-blok"><div class="fyto-label">Fytosociologische context</div>'+esc(p.analyse.fytosociologie)+'</div>';
   }
   return h;
 }
 
 function esc(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// KAART
 var kaartObj=null;
 function tekenKaart(){
   if(kaartObj){kaartObj.remove();kaartObj=null;}
@@ -661,7 +679,6 @@ function updateOverzicht(){
   document.getElementById('plotsLijst').innerHTML=l||'<div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
 }
 
-// ── PDF — uitgebreid met dekking% en fytosociologie ──────────────────────────
 function maakPDF(){
   if(!state.plots.length){toonNotif('Geen plots');return;}
   var r=state.ronde||{locatie:'Onbekend',datum:'',gps:''};
@@ -678,6 +695,7 @@ function maakPDF(){
     h+='<div class="pdf-info"><h3>Plot '+p.nr+'</h3><div class="meta">';
     if(p.timestamp)h+='<strong>Datum/tijd:</strong> '+p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16)+'<br>';
     if(p.gps&&p.gps!=='Nog niet bepaald')h+='<strong>GPS:</strong> '+esc(p.gps)+'<br>';
+    if(p.schaal)h+='<strong>Schaalreferentie:</strong> '+esc(p.schaal)+'<br>';
     if(p.analyseAI)h+='<strong>Geanalyseerd met:</strong> '+esc(p.analyseAI)+'<br>';
     h+='</div></div></div>';
     if(!p.analyse){
@@ -689,10 +707,9 @@ function maakPDF(){
         h+='<table><thead><tr><th>Wetenschappelijke naam</th><th>Nederlandse naam</th><th>Dekking&nbsp;%</th><th>Abundantie</th><th>Betrouwbaarheid</th><th>Vraag voor bioloog</th></tr></thead><tbody>';
         p.analyse.soorten.forEach(function(s){
           var bd=s.betrouwbaarheid==='zeker'?'<span class="z">zeker</span>':s.betrouwbaarheid==='onzeker'?'<span class="o">onzeker</span>':'<span class="u">onbekend</span>';
-          var dk=s.dekking!=null?s.dekking+'%':'—';
-          var zt=s.zekerheid!=null?s.zekerheid+'%':'—';
-          h+='<tr><td><em>'+esc(s.wetenschappelijk||'&#8212;')+'</em></td><td>'+esc(s.nl||'&#8212;')+'</td><td>'+dk+'</td><td>'+esc(s.abundantie||'&#8212;')+'</td>';
-          h+='<td>'+bd+' ('+zt+')</td>';
+          h+='<tr><td><em>'+esc(s.wetenschappelijk||'&#8212;')+'</em></td><td>'+esc(s.nl||'&#8212;')+'</td>';
+          h+='<td>'+(s.dekking!=null?s.dekking+'%':'&#8212;')+'</td><td>'+esc(s.abundantie||'&#8212;')+'</td>';
+          h+='<td>'+bd+(s.zekerheid!=null?' ('+s.zekerheid+'%)':'')+'</td>';
           h+='<td class="pdf-vraag">'+esc(s.vraag||'')+'</td></tr>';
         });
         h+='</tbody></table>';
@@ -702,36 +719,37 @@ function maakPDF(){
     }
     h+='</div>';
   });
-  h+='<div class="pdf-footer">BermApp &mdash; '+nu+'</div>';
+  h+='<div class="pdf-footer">BermApp &#8212; '+nu+'</div>';
   document.getElementById('scherm-pdf').innerHTML=h;
   setTimeout(function(){window.print();},300);
 }
 
-// ── CSV — uitgebreid met dekking% en fytosociologie ──────────────────────────
 function exporteerCSV(){
   if(!state.plots.length){toonNotif('Geen data');return;}
   var loc=state.ronde?state.ronde.locatie:'',rd=state.ronde?state.ronde.datum:'';
-  var rijen=[['Locatie','Datum ronde','Plot nr','Plot datum','Tijd','GPS lat','GPS lon',
-    'Wetenschappelijk','Nederlands','Dekking %','Abundantie','Betrouwbaarheid (cat)','Zekerheid %','Vraag voor bioloog',
-    'Geanalyseerd met','Algemene indruk plot','Fytosociologische context']];
+  var rijen=[['Locatie','Datum ronde','Plot nr','Plot datum','Tijd','GPS lat','GPS lon','Schaalreferentie',
+    'Wetenschappelijk','Nederlands','Dekking %','Abundantie','Betrouwbaarheid','Zekerheid %',
+    'Vraag voor bioloog','Geanalyseerd met','Algemene indruk','Fytosociologische context']];
   state.plots.forEach(function(p){
     var dt=p.timestamp?p.timestamp.split('T'):['',''];
     var tid=dt[1]?dt[1].substring(0,5):'';
     var la='',lo='';
     if(p.gps&&p.gps.indexOf(',')!==-1){var gp=p.gps.split(',');la=gp[0].trim();lo=gp[1].trim();}
-    var ai=p.analyseAI||'';var indr='';var fyto='';
+    var ai=p.analyseAI||'',indr='',fyto='',schaal=p.schaal||'';
     if(p.analyse&&!p.analyse.vrijeTekst&&(p.analyse.soorten||[]).length){
       indr=p.analyse.opmerkingen||'';fyto=p.analyse.fytosociologie||'';
       p.analyse.soorten.forEach(function(s){
-        rijen.push([loc,rd,p.nr,dt[0],tid,la,lo,s.wetenschappelijk||'',s.nl||'',s.dekking!=null?s.dekking:'',s.abundantie||'',s.betrouwbaarheid||'',s.zekerheid!=null?s.zekerheid:'',s.vraag||'',ai,indr,fyto]);
+        rijen.push([loc,rd,p.nr,dt[0],tid,la,lo,schaal,
+          s.wetenschappelijk||'',s.nl||'',s.dekking!=null?s.dekking:'',
+          s.abundantie||'',s.betrouwbaarheid||'',s.zekerheid!=null?s.zekerheid:'',
+          s.vraag||'',ai,indr,fyto]);
       });
     } else if(p.analyse&&p.analyse.vrijeTekst){
-      indr=p.analyse.opmerkingen||'';
-      rijen.push([loc,rd,p.nr,dt[0],tid,la,lo,'','','','','','','',ai,indr,'']);
+      rijen.push([loc,rd,p.nr,dt[0],tid,la,lo,schaal,'','','','','','','',ai,p.analyse.opmerkingen||'','']);
     } else {
-      rijen.push([loc,rd,p.nr,dt[0],tid,la,lo,'','','','','nog niet geanalyseerd','','','','','']);
+      rijen.push([loc,rd,p.nr,dt[0],tid,la,lo,schaal,'','','','','nog niet geanalyseerd','','','','','']);
     }
-    rijen.push(new Array(17).fill(''));
+    rijen.push(new Array(18).fill(''));
   });
   var csv=rijen.map(function(r){return r.map(function(c){return '"'+(c+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
   var a=document.createElement('a');
@@ -747,10 +765,11 @@ function exporteerTwijfel(){
   var ht=false;
   state.plots.forEach(function(p){
     if(!p.analyse)return;
-    if(p.analyse.vrijeTekst){r.push('PLOT '+p.nr+' ['+( p.analyseAI||'AI')+'] GPS: '+p.gps+'\n  (vrije tekst - zie CSV)\n');return;}
+    if(p.analyse.vrijeTekst){r.push('PLOT '+p.nr+' ['+(p.analyseAI||'AI')+'] GPS: '+p.gps+'\n  (vrije tekst)\n');return;}
     var tw=(p.analyse.soorten||[]).filter(function(s){return s.betrouwbaarheid!=='zeker';});
     if(!tw.length)return;ht=true;
     r.push('PLOT '+p.nr+' ['+(p.analyseAI||'AI')+'] GPS: '+p.gps+' '+(p.timestamp?p.timestamp.substring(0,16).replace('T',' '):''));
+    if(p.schaal)r.push('  Schaal: '+p.schaal);
     tw.forEach(function(s){
       r.push('  * '+s.nl+' ('+(s.wetenschappelijk||'?')+') ['+s.betrouwbaarheid+(s.zekerheid!=null?' / '+s.zekerheid+'%':'')+']');
       if(s.vraag)r.push('    Vraag: '+s.vraag);
@@ -766,11 +785,10 @@ function exporteerTwijfel(){
   a.click();toonNotif('Twijfellijst gedownload');
 }
 
-// OPSLAG
 function slaDataOp(){
   try{
     localStorage.setItem('bermapp_ronde',JSON.stringify(state.ronde));
-    var m=state.plots.map(function(p){return{nr:p.nr,timestamp:p.timestamp,gps:p.gps,analyse:p.analyse,analyseRauw:p.analyseRauw||'',analyseAI:p.analyseAI||'',foto:p.foto?'aanwezig':null};});
+    var m=state.plots.map(function(p,i){return{nr:p.nr,timestamp:p.timestamp,gps:p.gps,schaal:p.schaal||'',analyse:p.analyse,analyseRauw:p.analyseRauw||'',analyseAI:p.analyseAI||'',foto:p.foto?'aanwezig':null};});
     localStorage.setItem('bermapp_plots_meta',JSON.stringify(m));
     state.plots.forEach(function(p,i){if(p.foto)try{localStorage.setItem('bermapp_foto_'+i,p.foto);}catch(e){}});
   }catch(e){}
@@ -779,7 +797,13 @@ function slaDataOp(){
 function laadOpgeslagenData(){
   try{
     var r=localStorage.getItem('bermapp_ronde'),pm=localStorage.getItem('bermapp_plots_meta');
-    if(r){state.ronde=JSON.parse(r);if(state.ronde){document.getElementById('locatieNaam').value=state.ronde.locatie||'';document.getElementById('datumInput').value=state.ronde.datum||'';document.getElementById('gpsDisplay').textContent=state.ronde.gps||'Nog niet bepaald';document.getElementById('aantalPlots').value=state.ronde.aantalPlots||10;document.getElementById('rondeLabel').textContent=state.ronde.locatie.substring(0,22);}}
+    if(r){state.ronde=JSON.parse(r);if(state.ronde){
+      document.getElementById('locatieNaam').value=state.ronde.locatie||'';
+      document.getElementById('datumInput').value=state.ronde.datum||'';
+      document.getElementById('gpsDisplay').textContent=state.ronde.gps||'Nog niet bepaald';
+      document.getElementById('aantalPlots').value=state.ronde.aantalPlots||10;
+      document.getElementById('rondeLabel').textContent=state.ronde.locatie.substring(0,22);
+    }}
     if(pm){state.plots=JSON.parse(pm).map(function(p,i){if(p.foto==='aanwezig')p.foto=localStorage.getItem('bermapp_foto_'+i)||null;return p;});}
     updatePlotTeller();
   }catch(e){}
@@ -787,7 +811,8 @@ function laadOpgeslagenData(){
 
 function updateExportScherm(){
   var el=document.getElementById('rondesArchief');
-  if(state.ronde){var g=state.plots.filter(function(p){return p.analyse;}).length;el.innerHTML='<div style="color:var(--wit);margin-bottom:4px">'+esc(state.ronde.locatie)+'</div><div>'+state.ronde.datum+' &mdash; '+state.plots.length+' plots, '+g+' geanalyseerd</div>';}
+  if(state.ronde){var g=state.plots.filter(function(p){return p.analyse;}).length;
+    el.innerHTML='<div style="color:var(--wit);margin-bottom:4px">'+esc(state.ronde.locatie)+'</div><div>'+state.ronde.datum+' &mdash; '+state.plots.length+' plots, '+g+' geanalyseerd</div>';}
   else el.textContent='Geen ronde actief';
 }
 
