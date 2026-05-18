@@ -32,36 +32,8 @@
   .header-title span{font-style:italic;font-weight:300;color:#a8d4a0;}
   .ronde-badge{font-size:.6rem;background:var(--donker);color:#a8d4a0;padding:4px 8px;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .tabs{display:flex;background:#0f1f0d;border-bottom:1px solid var(--lijn);}
-  .tab{flex:1;padding:10px 1px;text-align:center;font-size:.48rem;letter-spacing:.03em;text-transform:uppercase;color:#6a9465;cursor:pointer;border:none;background:none;transition:all .2s;}
+  .tab{flex:1;padding:10px 2px;text-align:center;font-size:.53rem;letter-spacing:.05em;text-transform:uppercase;color:#6a9465;cursor:pointer;border:none;background:none;transition:all .2s;}
   .tab.active{color:var(--wit);background:var(--groen);border-bottom:2px solid #a8d4a0;}
-  /* Copyright waarschuwing */
-  .cr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:flex-end;justify-content:center;}
-  .cr-box{background:#2a0a0a;border:2px solid #e87070;border-radius:8px 8px 0 0;width:100%;max-width:520px;padding:22px 18px 36px;}
-  .cr-titel{font-family:'Fraunces',serif;font-size:1.1rem;color:#e87070;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-  .cr-tekst{font-size:.72rem;color:#f5d0d0;line-height:1.8;}
-  .cr-ref{font-size:.62rem;color:#8a4a4a;margin-top:10px;font-style:italic;}
-  .kaart-naam-bar{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
-  .kaart-naam-inp{flex:1;background:#0f1f0d;border:1px solid var(--lijn);color:var(--wit);padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;border-radius:2px;}
-  .kaart-naam-inp:focus{outline:none;border-color:var(--lichtgroen);}
-  .btn-kaart-refresh{background:#1e3a1a;border:1px solid var(--lijn);color:#a8d4a0;padding:8px 10px;border-radius:2px;cursor:pointer;font-size:.9rem;flex-shrink:0;}
-  #totaalKaartContainer{height:calc(100vh - 280px);min-height:320px;border-radius:4px;overflow:hidden;border:1px solid var(--lijn);margin-bottom:10px;}
-  .kaart-legenda{display:flex;gap:12px;flex-wrap:wrap;font-size:.62rem;color:#a8d4a0;padding:8px 10px;background:#0f1f0d;border-radius:3px;margin-bottom:10px;}
-  .legenda-item{display:flex;align-items:center;gap:5px;}
-  .legenda-stip{width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.4);flex-shrink:0;}
-  .btn-kaart-print{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#1a2a4a;color:#a0c8f0;border:1px solid #2a4a7a;padding:12px;font-family:'IBM Plex Mono',monospace;font-size:.75rem;letter-spacing:.06em;cursor:pointer;border-radius:2px;text-transform:uppercase;margin-bottom:8px;}
-  @media print{
-    @page{margin:10mm;size:A4 landscape;}
-    body{background:#fff !important;color:#111 !important;}
-    .header,.tabs,.notif,.btn,button,.screen:not(#scherm-kaartprint),.modal-overlay,.kaart-naam-bar,.btn-kaart-print,.btn-kaart-refresh,.kaart-legenda-print-verberg{display:none !important;}
-    #scherm-kaartprint{display:block !important;padding:0 !important;}
-    .print-kaart-kop{font-family:Georgia,serif;font-size:14pt;color:#2d5a27;border-bottom:2px solid #2d5a27;padding-bottom:6px;margin-bottom:10px;}
-    .print-kaart-meta{font-size:9pt;color:#555;margin-bottom:8px;line-height:1.6;}
-    #totaalKaartPrint{width:100%;height:160mm;border:1px solid #ccc;border-radius:4px;}
-    .print-legenda{display:flex;gap:16px;font-size:8pt;color:#333;margin-top:8px;flex-wrap:wrap;}
-    .print-legenda-item{display:flex;align-items:center;gap:4px;}
-    .print-stip{width:10px;height:10px;border-radius:50%;display:inline-block;}
-  }
-  #scherm-kaartprint{display:none;}
   .screen{display:none;padding:16px;}
   .screen.active{display:block;}
   .card{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:16px;margin-bottom:12px;}
@@ -249,15 +221,12 @@
   <button class="tab" onclick="toonScherm('camera')">&#128247; Veld</button>
   <button class="tab" onclick="toonScherm('analyse')">&#128300; Analyse</button>
   <button class="tab" onclick="toonScherm('overzicht')">&#128203; Ronde</button>
-  <button class="tab" onclick="toonScherm('kaart')">&#128506; Kaart</button>
   <button class="tab" onclick="toonScherm('export')">&#8599; Export</button>
 </div>
 
 <!-- START -->
 <div id="scherm-setup" class="screen active">
   <div class="card">
-    <div class="label">&#128100; Veldmedewerker</div>
-    <input type="text" class="inp" id="veldmedewerker" placeholder="Naam van de veldmedewerker">
     <div class="label">Locatie / Traject</div>
     <input type="text" class="inp" id="locatieNaam" placeholder="bijv. Pastoriepad Hapert km 0-0.5">
     <div class="label">Datum ronde</div>
@@ -381,34 +350,6 @@
   <button class="btn btn-klein btn-gevaar" onclick="verwijderRonde()" style="width:100%;margin-top:8px">&#10005; Huidige ronde wissen</button>
 </div>
 
-<!-- TOTAALKAART -->
-<div id="scherm-kaart" class="screen">
-  <div class="kaart-naam-bar">
-    <input type="text" class="kaart-naam-inp" id="kaartNaam" placeholder="Naam gebied bijv. Valkenswaard noord — Eindhovenseweg t.h.v. hmp 4.2">
-    <button class="btn-kaart-refresh" onclick="tekenTotaalKaart()" title="Kaart vernieuwen">&#8635;</button>
-  </div>
-  <div class="kaart-legenda kaart-legenda-print-verberg">
-    <div class="legenda-item"><div class="legenda-stip" style="background:#1a5a7a"></div>Niet geanalyseerd</div>
-    <div class="legenda-item"><div class="legenda-stip" style="background:#e8a020"></div>Geanalyseerd, wacht op controle</div>
-    <div class="legenda-item"><div class="legenda-stip" style="background:#3a7d34"></div>Gereed &amp; geëxporteerd</div>
-  </div>
-  <div id="totaalKaartContainer"><div class="kaart-geen" style="height:100%;display:flex;align-items:center;justify-content:center;color:#6a9465;font-size:.75rem;text-align:center"><div>&#128506;<br>Geen GPS-punten beschikbaar</div></div></div>
-  <button class="btn-kaart-print" onclick="printKaart()">&#128196; Kaart afdrukken / opslaan als PDF</button>
-  <div style="font-size:.65rem;color:#6a9465;text-align:center;margin-top:4px">Kies "Liggend" en "Opslaan als PDF" in het afdrukvenster</div>
-</div>
-
-<!-- PRINT-KAART (alleen zichtbaar bij afdrukken) -->
-<div id="scherm-kaartprint">
-  <div class="print-kaart-kop" id="printKaartTitel">BermApp — Totaalkaart</div>
-  <div class="print-kaart-meta" id="printKaartMeta"></div>
-  <div id="totaalKaartPrint"></div>
-  <div class="print-legenda">
-    <div class="print-legenda-item"><div class="print-stip" style="background:#1a5a7a"></div> Niet geanalyseerd</div>
-    <div class="print-legenda-item"><div class="print-stip" style="background:#e8a020"></div> Geanalyseerd, wacht op controle</div>
-    <div class="print-legenda-item"><div class="print-stip" style="background:#3a7d34"></div> Gereed &amp; geëxporteerd</div>
-  </div>
-</div>
-
 <div id="scherm-pdf" class="screen"></div>
 <div class="notif" id="notif"></div>
 <div style="text-align:center;padding:18px 16px 28px;font-size:.55rem;color:#2d5a27;letter-spacing:.08em;border-top:1px solid var(--lijn);margin-top:8px">
@@ -434,65 +375,25 @@ function sluitModal(e){if(e.target===document.getElementById('fotoTipsModal'))sl
 window.addEventListener('load',function(){
   document.getElementById('datumInput').value=new Date().toISOString().split('T')[0];
   laadOpgeslagenData();updateOverzicht();updateVeldLijst();bouwAnalyseLijst();
-  controleerCopyright();
 });
-
-function controleerCopyright(){
-  // Lees de volledige paginabron als tekst
-  var bron=document.documentElement.outerHTML;
-  // Vingerafdruk: combinatie van unieke termen die samen het copyright vormen
-  var vingerafdruk=[
-    'Auteurswet 1912',
-    'Berner Conventie',
-    'Copyright (c) 2025',
-    'BermApp'
-  ];
-  var intact=vingerafdruk.every(function(term){return bron.indexOf(term)!==-1;});
-  if(!intact){toonCopyrightWaarschuwing();}
-}
-
-function toonCopyrightWaarschuwing(){
-  var ts=new Date().toISOString();
-  var overlay=document.createElement('div');
-  overlay.className='cr-overlay';
-  overlay.innerHTML=
-    '<div class="cr-box">'+
-    '<div class="cr-titel">&#9888;&#65039; Auteursrecht-waarschuwing</div>'+
-    '<div class="cr-tekst">'+
-    'De auteursrechtvermelding van <strong>BermApp</strong> is gewijzigd of verwijderd.<br><br>'+
-    'BermApp is beschermd onder de <strong>Auteurswet 1912 (Nederland)</strong> en de '+
-    '<strong>Berner Conventie</strong>. Ongeautoriseerd gebruik, aanpassing of distributie '+
-    'zonder toestemming van de rechthebbende is <strong>niet toegestaan</strong> en kan '+
-    'leiden tot juridische stappen.<br><br>'+
-    'Als u deze software rechtmatig heeft verkregen, herstel dan de originele '+
-    'auteursrechtvermelding bovenaan het bestand.'+
-    '</div>'+
-    '<div class="cr-ref">Ref: BA-'+ts+' &#8212; Deze melding is gegenereerd bij het openen van de applicatie.</div>'+
-    '</div>';
-  document.body.appendChild(overlay);
-}
 
 function toonScherm(naam){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
   document.getElementById('scherm-'+naam).classList.add('active');
   var tabs=document.querySelectorAll('.tab');
-  ['setup','camera','analyse','overzicht','kaart','export'].forEach(function(n,i){if(n===naam)tabs[i].classList.add('active');});
+  ['setup','camera','analyse','overzicht','export'].forEach(function(n,i){if(n===naam)tabs[i].classList.add('active');});
   if(naam==='camera'){startCamera();updateVeldLijst();}else stopCamera();
   if(naam==='overzicht')updateOverzicht();
   if(naam==='export')updateExportScherm();
   if(naam==='analyse')bouwAnalyseLijst();
-  if(naam==='kaart')setTimeout(tekenTotaalKaart,100);
 }
 
 function startRonde(){
   var loc=document.getElementById('locatieNaam').value.trim();
   if(!loc){toonNotif('Vul een locatienaam in');return;}
   if(!confirm('Nieuwe ronde starten? Huidige data wordt gewist.'))return;
-  state.ronde={id:Date.now(),locatie:loc,datum:document.getElementById('datumInput').value,
-    gps:document.getElementById('gpsDisplay').textContent,
-    aantalPlots:parseInt(document.getElementById('aantalPlots').value)||10,
-    medewerker:document.getElementById('veldmedewerker').value.trim()||'Onbekend'};
+  state.ronde={id:Date.now(),locatie:loc,datum:document.getElementById('datumInput').value,gps:document.getElementById('gpsDisplay').textContent,aantalPlots:parseInt(document.getElementById('aantalPlots').value)||10};
   state.plots=[];slaDataOp();
   document.getElementById('rondeLabel').textContent=loc.substring(0,22)+(loc.length>22?'...':'');
   updatePlotTeller();toonScherm('camera');toonNotif('Ronde gestart');
@@ -732,7 +633,7 @@ function maakPDF(){
   var r=state.ronde||{locatie:'Onbekend',datum:'',gps:''};
   var nu=new Date().toLocaleDateString('nl-NL',{day:'2-digit',month:'long',year:'numeric'});
   var h='<div class="pdf-kop"><h1>BermApp &#8212; Vegetatie Inventarisatie</h1>';
-  h+='<div class="pdf-meta"><strong>Locatie:</strong> '+esc(r.locatie)+'<br><strong>Datum:</strong> '+esc(r.datum)+'<br><strong>GPS:</strong> '+esc(r.gps)+'<br>'+(r.medewerker?'<strong>Veldmedewerker:</strong> '+esc(r.medewerker)+'<br>':'')+'<strong>Gegenereerd:</strong> '+nu+'<br><strong>Plots:</strong> '+state.plots.length+'</div></div>';
+  h+='<div class="pdf-meta"><strong>Locatie:</strong> '+esc(r.locatie)+'<br><strong>Datum:</strong> '+esc(r.datum)+'<br><strong>GPS:</strong> '+esc(r.gps)+'<br><strong>Gegenereerd:</strong> '+nu+'<br><strong>Plots:</strong> '+state.plots.length+'</div></div>';
   state.plots.forEach(function(p){
     h+='<div class="pdf-plot"><div class="pdf-plot-kop">';
     if(p.foto)h+='<img src="'+p.foto+'" class="pdf-foto" alt="Plot '+p.nr+'">';
@@ -767,8 +668,7 @@ function maakPDF(){
 function exporteerCSV(){
   if(!state.plots.length){toonNotif('Geen data');return;}
   var loc=state.ronde?state.ronde.locatie:'',rd=state.ronde?state.ronde.datum:'';
-  var rijen=[['Veldmedewerker','Locatie','Datum ronde','Plot nr','Plot datum','Tijd','GPS lat','GPS lon','Regio/type','Schaalreferentie','Wetenschappelijk','Nederlands','Dekking %','Abundantie','Betrouwbaarheid','Zekerheid %','Vraag voor bioloog','Geanalyseerd met','Algemene indruk','Fytosociologische context']];
-  var medewerker=state.ronde?state.ronde.medewerker||'':'';
+  var rijen=[['Locatie','Datum ronde','Plot nr','Plot datum','Tijd','GPS lat','GPS lon','Regio/type','Schaalreferentie','Wetenschappelijk','Nederlands','Dekking %','Abundantie','Betrouwbaarheid','Zekerheid %','Vraag voor bioloog','Geanalyseerd met','Algemene indruk','Fytosociologische context']];
   state.plots.forEach(function(p){
     var dt=p.timestamp?p.timestamp.split('T'):['',''];
     var tid=dt[1]?dt[1].substring(0,5):'';
@@ -777,19 +677,19 @@ function exporteerCSV(){
     var ai=p.analyseAI||'',indr='',fyto='',schaal=p.schaal||'',regio=p.regio||'';
     if(p.analyse&&!p.analyse.vrijeTekst&&(p.analyse.soorten||[]).length){
       indr=p.analyse.opmerkingen||'';fyto=p.analyse.fytosociologie||'';
-      p.analyse.soorten.forEach(function(s){rijen.push([medewerker,loc,rd,p.nr,dt[0],tid,la,lo,regio,schaal,s.wetenschappelijk||'',s.nl||'',s.dekking!=null?s.dekking:'',s.abundantie||'',s.betrouwbaarheid||'',s.zekerheid!=null?s.zekerheid:'',s.vraag||'',ai,indr,fyto]);});
+      p.analyse.soorten.forEach(function(s){rijen.push([loc,rd,p.nr,dt[0],tid,la,lo,regio,schaal,s.wetenschappelijk||'',s.nl||'',s.dekking!=null?s.dekking:'',s.abundantie||'',s.betrouwbaarheid||'',s.zekerheid!=null?s.zekerheid:'',s.vraag||'',ai,indr,fyto]);});
     } else if(p.analyse&&p.analyse.vrijeTekst){
-      rijen.push([medewerker,loc,rd,p.nr,dt[0],tid,la,lo,regio,schaal,'','','','','','','',ai,p.analyse.opmerkingen||'','']);
+      rijen.push([loc,rd,p.nr,dt[0],tid,la,lo,regio,schaal,'','','','','','','',ai,p.analyse.opmerkingen||'','']);
     } else {
-      rijen.push([medewerker,loc,rd,p.nr,dt[0],tid,la,lo,regio,schaal,'','','','','nog niet geanalyseerd','','','','','']);
+      rijen.push([loc,rd,p.nr,dt[0],tid,la,lo,regio,schaal,'','','','','nog niet geanalyseerd','','','','','']);
     }
-    rijen.push(new Array(20).fill(''));
+    rijen.push(new Array(19).fill(''));
   });
   var csv=rijen.map(function(r){return r.map(function(c){return '"'+(c+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
   var a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
   a.download='bermapp_'+(state.ronde?state.ronde.datum+'_'+state.ronde.locatie.substring(0,15).replace(/\s/g,'_'):'export')+'.csv';
-  a.click();toonNotif('CSV gedownload \u2713');markeerGeexporteerd();
+  a.click();toonNotif('CSV gedownload \u2713');
 }
 
 function exporteerTwijfel(){
@@ -828,14 +728,7 @@ function slaDataOp(){
 function laadOpgeslagenData(){
   try{
     var r=localStorage.getItem('bermapp_ronde'),pm=localStorage.getItem('bermapp_plots_meta');
-    if(r){state.ronde=JSON.parse(r);if(state.ronde){
-      document.getElementById('locatieNaam').value=state.ronde.locatie||'';
-      document.getElementById('datumInput').value=state.ronde.datum||'';
-      document.getElementById('gpsDisplay').textContent=state.ronde.gps||'Nog niet bepaald';
-      document.getElementById('aantalPlots').value=state.ronde.aantalPlots||10;
-      document.getElementById('rondeLabel').textContent=state.ronde.locatie.substring(0,22);
-      if(state.ronde.medewerker)document.getElementById('veldmedewerker').value=state.ronde.medewerker;
-    }}
+    if(r){state.ronde=JSON.parse(r);if(state.ronde){document.getElementById('locatieNaam').value=state.ronde.locatie||'';document.getElementById('datumInput').value=state.ronde.datum||'';document.getElementById('gpsDisplay').textContent=state.ronde.gps||'Nog niet bepaald';document.getElementById('aantalPlots').value=state.ronde.aantalPlots||10;document.getElementById('rondeLabel').textContent=state.ronde.locatie.substring(0,22);}}
     if(pm){state.plots=JSON.parse(pm).map(function(p,i){if(p.foto==='aanwezig')p.foto=localStorage.getItem('bermapp_foto_'+i)||null;return p;});}
     updatePlotTeller();
   }catch(e){}
@@ -853,73 +746,6 @@ function verwijderRonde(){
   localStorage.removeItem('bermapp_ronde');localStorage.removeItem('bermapp_plots_meta');
   document.getElementById('rondeLabel').textContent='Geen ronde';
   updateOverzicht();toonNotif('Ronde gewist');
-}
-
-// ── TOTAALKAART ───────────────────────────────────────────────────────────────
-var totaalKaartObj=null;
-function tekenTotaalKaart(){
-  if(totaalKaartObj){totaalKaartObj.remove();totaalKaartObj=null;}
-  var c=document.getElementById('totaalKaartContainer');if(!c)return;
-  var plots=state.plots.filter(function(p){return p.gps&&p.gps!=='Nog niet bepaald'&&p.gps.indexOf(',')!==-1;});
-  if(!plots.length){c.innerHTML='<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#6a9465;font-size:.75rem;text-align:center"><div>&#128506;<br>Geen GPS-punten beschikbaar.<br>Voeg plots toe met GPS.</div></div>';return;}
-  c.innerHTML='';
-  if(typeof L==='undefined'){c.innerHTML='<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#6a9465;font-size:.75rem">&#9888; Geen internet</div>';return;}
-  totaalKaartObj=L.map(c,{zoomControl:true,attributionControl:true});
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&#169; OpenStreetMap'}).addTo(totaalKaartObj);
-  var coords=[];
-  plots.forEach(function(p){
-    var pts=p.gps.split(','),lat=parseFloat(pts[0].trim()),lon=parseFloat(pts[1].trim());
-    if(isNaN(lat)||isNaN(lon))return;
-    coords.push([lat,lon]);
-    // Kleur op basis van status
-    var kleur=p.geexporteerd?'#3a7d34':(p.analyse?'#e8a020':'#1a5a7a');
-    var rand=p.geexporteerd?'#7dcf75':(p.analyse?'#f5c842':'#70c8e8');
-    var ic=L.divIcon({
-      className:'',
-      html:'<div style="background:'+kleur+';color:#fff;border:2px solid '+rand+';border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.6);cursor:pointer">'+p.nr+'</div>',
-      iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-20]
-    });
-    var status=p.geexporteerd?'&#10003; Gereed':'';
-    if(!p.geexporteerd&&p.analyse)status='&#9888; Wacht op controle';
-    if(!p.geexporteerd&&!p.analyse)status='&#128247; Foto aanwezig';
-    var soorten=(!p.analyse||p.analyse.vrijeTekst)?'—':(p.analyse.soorten||[]).slice(0,4).map(function(s){return '<em>'+s.nl+'</em>';}).join(', ');
-    var popup='<strong>Plot '+p.nr+'</strong><br>'+(p.regio?'&#127807; '+p.regio+'<br>':'')+(p.timestamp?p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16)+'<br>':'')+status+'<br>'+(soorten!=='—'?'<span style="font-size:.9em">'+soorten+'</span>':'');
-    L.marker([lat,lon],{icon:ic}).addTo(totaalKaartObj).bindPopup(popup);
-  });
-  if(coords.length===1)totaalKaartObj.setView(coords[0],17);
-  else totaalKaartObj.fitBounds(L.latLngBounds(coords),{padding:[50,50],maxZoom:18});
-  setTimeout(function(){if(totaalKaartObj)totaalKaartObj.invalidateSize();},200);
-}
-
-function printKaart(){
-  if(!totaalKaartObj){toonNotif('Teken eerst de kaart');return;}
-  var naam=document.getElementById('kaartNaam').value.trim()||'BermApp Totaalkaart';
-  var r=state.ronde||{locatie:'',datum:''};
-  var nu=new Date().toLocaleDateString('nl-NL',{day:'2-digit',month:'long',year:'numeric'});
-  document.getElementById('printKaartTitel').textContent='BermApp \u2014 '+naam;
-  document.getElementById('printKaartMeta').innerHTML=
-    (r.medewerker?'<strong>Veldmedewerker:</strong> '+esc(r.medewerker)+'<br>':'')+
-    (r.locatie?'<strong>Locatie:</strong> '+esc(r.locatie)+'<br>':'')+
-    (r.datum?'<strong>Datum:</strong> '+esc(r.datum)+'<br>':'')+
-    '<strong>Plots:</strong> '+state.plots.length+' ('+
-    state.plots.filter(function(p){return p.geexporteerd;}).length+' gereed, '+
-    state.plots.filter(function(p){return !p.geexporteerd&&p.analyse;}).length+' wacht op controle, '+
-    state.plots.filter(function(p){return !p.analyse;}).length+' niet geanalyseerd)<br>'+
-    '<strong>Gegenereerd:</strong> '+nu;
-  // Kloon kaartcontainer voor print
-  var printDiv=document.getElementById('totaalKaartPrint');
-  printDiv.innerHTML='';
-  var kaartClone=document.getElementById('totaalKaartContainer').cloneNode(true);
-  kaartClone.id='totaalKaartPrintKaart';
-  kaartClone.style.height='160mm';
-  kaartClone.style.width='100%';
-  printDiv.appendChild(kaartClone);
-  setTimeout(function(){window.print();},400);
-}
-
-function markeerGeexporteerd(){
-  state.plots.forEach(function(p){if(p.analyse)p.geexporteerd=true;});
-  slaDataOp();
 }
 
 function toonNotif(t){var n=document.getElementById('notif');n.textContent=t;n.classList.add('zichtbaar');setTimeout(function(){n.classList.remove('zichtbaar');},2400);}
