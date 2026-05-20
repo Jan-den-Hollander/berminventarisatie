@@ -753,37 +753,72 @@ function updateOverzicht(){
   });
   document.getElementById('plotsLijst').innerHTML=l||'<div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
 }
-
 function maakPDF(){
   if(!state.plots.length){toonNotif('Geen plots');return;}
   var r=state.ronde||{locatie:'Onbekend',datum:'',gps:''};
   var nu=new Date().toLocaleDateString('nl-NL',{day:'2-digit',month:'long',year:'numeric'});
-  var h='<div class="pdf-kop"><h1>BermApp &#8212; Vegetatie Inventarisatie</h1>';
-  h+='<div class="pdf-meta"><strong>Locatie:</strong> '+esc(r.locatie)+'<br><strong>Datum:</strong> '+esc(r.datum)+'<br><strong>GPS:</strong> '+esc(r.gps)+'<br>'+(r.medewerker?'<strong>Veldmedewerker:</strong> '+esc(r.medewerker)+'<br>':'')+'<strong>Gegenereerd:</strong> '+nu+'<br><strong>Plots:</strong> '+state.plots.length+'</div></div>';
+
+  var body='<div class="pdf-kop"><h1>BermApp &#8212; Vegetatie Inventarisatie</h1>';
+  body+='<div class="pdf-meta"><strong>Locatie:</strong> '+esc(r.locatie)+'<br><strong>Datum:</strong> '+esc(r.datum)+'<br><strong>GPS:</strong> '+esc(r.gps)+'<br>'+(r.medewerker?'<strong>Veldmedewerker:</strong> '+esc(r.medewerker)+'<br>':'')+'<strong>Gegenereerd:</strong> '+nu+'<br><strong>Plots:</strong> '+state.plots.length+'</div></div>';
+
   state.plots.forEach(function(p){
-    h+='<div class="pdf-plot"><div class="pdf-plot-kop">';
-    if(p.foto)h+='<img src="'+p.foto+'" class="pdf-foto" alt="Plot '+p.nr+'">';
-    h+='<div class="pdf-info"><h3>Plot '+p.nr+'</h3><div class="meta">';
-    if(p.timestamp)h+='<strong>Datum/tijd:</strong> '+p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16)+'<br>';
-    if(p.gps&&p.gps!=='Nog niet bepaald')h+='<strong>GPS:</strong> '+esc(p.gps)+'<br>';
-    if(p.regio)h+='<strong>Regio/type:</strong> '+esc(p.regio)+'<br>';
-    if(p.schaal)h+='<strong>Schaalreferentie:</strong> '+esc(p.schaal)+'<br>';
-    if(p.analyseAI)h+='<strong>Geanalyseerd met:</strong> '+esc(p.analyseAI)+'<br>';
-    h+='</div></div></div>';
-    if(!p.analyse){h+='<div class="pdf-geen">Nog niet geanalyseerd</div>';}
-    else if(p.analyse.vrijeTekst){h+='<div class="pdf-vrije">'+esc(p.analyse.opmerkingen)+'</div>';}
+    body+='<div class="pdf-plot"><div class="pdf-plot-kop">';
+    if(p.foto)body+='<img src="'+p.foto+'" class="pdf-foto" alt="Plot '+p.nr+'">';
+    body+='<div class="pdf-info"><h3>Plot '+p.nr+'</h3><div class="meta">';
+    if(p.timestamp)body+='<strong>Datum/tijd:</strong> '+p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16)+'<br>';
+    if(p.gps&&p.gps!=='Nog niet bepaald')body+='<strong>GPS:</strong> '+esc(p.gps)+'<br>';
+    if(p.regio)body+='<strong>Regio/type:</strong> '+esc(p.regio)+'<br>';
+    if(p.schaal)body+='<strong>Schaalreferentie:</strong> '+esc(p.schaal)+'<br>';
+    if(p.analyseAI)body+='<strong>Geanalyseerd met:</strong> '+esc(p.analyseAI)+'<br>';
+    body+='</div></div></div>';
+    if(!p.analyse){body+='<div class="pdf-geen">Nog niet geanalyseerd</div>';}
+    else if(p.analyse.vrijeTekst){body+='<div class="pdf-vrije">'+esc(p.analyse.opmerkingen)+'</div>';}
     else{
       if(p.analyse.soorten&&p.analyse.soorten.length){
-        h+='<table><thead><tr><th>Wetenschappelijke naam</th><th>Nederlandse naam</th><th>Dekking&nbsp;%</th><th>Abundantie</th><th>Betrouwbaarheid</th><th>Vraag voor bioloog</th></tr></thead><tbody>';
+        body+='<table><thead><tr><th>Wetenschappelijke naam</th><th>Nederlandse naam</th><th>Dekking&nbsp;%</th><th>Abundantie</th><th>Betrouwbaarheid</th><th>Vraag voor bioloog</th></tr></thead><tbody>';
         p.analyse.soorten.forEach(function(s){
           var bd=s.betrouwbaarheid==='zeker'?'<span class="z">zeker</span>':s.betrouwbaarheid==='onzeker'?'<span class="o">onzeker</span>':'<span class="u">onbekend</span>';
-          h+='<tr><td><em>'+esc(s.wetenschappelijk||'&#8212;')+'</em></td><td>'+esc(s.nl||'&#8212;')+'</td><td>'+(s.dekking!=null?s.dekking+'%':'&#8212;')+'</td><td>'+esc(s.abundantie||'&#8212;')+'</td><td>'+bd+(s.zekerheid!=null?' ('+s.zekerheid+'%)':'')+'</td><td class="pdf-vraag">'+esc(s.vraag||'')+'</td></tr>';
+          body+='<tr><td><em>'+esc(s.wetenschappelijk||'&#8212;')+'</em></td><td>'+esc(s.nl||'&#8212;')+'</td><td>'+(s.dekking!=null?s.dekking+'%':'&#8212;')+'</td><td>'+esc(s.abundantie||'&#8212;')+'</td><td>'+bd+(s.zekerheid!=null?' ('+s.zekerheid+'%)':'')+'</td><td class="pdf-vraag">'+esc(s.vraag||'')+'</td></tr>';
         });
-        h+='</tbody></table>';
+        body+='</tbody></table>';
       }
-      if(p.analyse.opmerkingen)h+='<div class="pdf-indruk"><strong>Algemene indruk:</strong> '+esc(p.analyse.opmerkingen)+'</div>';
-      if(p.analyse.fytosociologie)h+='<div class="pdf-fyto"><strong>Fytosociologische context:</strong> '+esc(p.analyse.fytosociologie)+'</div>';
+      if(p.analyse.opmerkingen)body+='<div class="pdf-indruk"><strong>Algemene indruk:</strong> '+esc(p.analyse.opmerkingen)+'</div>';
+      if(p.analyse.fytosociologie)body+='<div class="pdf-fyto"><strong>Fytosociologische context:</strong> '+esc(p.analyse.fytosociologie)+'</div>';
     }
+    body+='</div>';
+  });
+  body+='<div class="pdf-footer">BermApp v1.1 &#8212; '+nu+' &#8212; &#169; 2025 Jan den Hollander</div>';
+
+  var css='body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:10pt;color:#111;background:#fff;margin:0;padding:0;}'+
+    '@page{margin:15mm 12mm;size:A4;}'+
+    '.pdf-kop{border-bottom:2px solid #2d5a27;padding-bottom:8px;margin-bottom:16px;}'+
+    '.pdf-kop h1{font-family:Georgia,serif;font-size:18pt;color:#2d5a27;margin:0 0 4px 0;}'+
+    '.pdf-meta{font-size:9pt;color:#555;line-height:1.8;}'+
+    '.pdf-plot{border:1px solid #ccc;border-radius:4px;padding:12px;margin-bottom:16px;page-break-inside:avoid;}'+
+    '.pdf-plot-kop{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:8px;}'+
+    '.pdf-foto{width:110px;height:85px;object-fit:cover;border-radius:3px;border:1px solid #ddd;flex-shrink:0;}'+
+    '.pdf-info h3{font-size:11pt;color:#2d5a27;margin:0 0 4px 0;}'+
+    '.pdf-info .meta{font-size:8.5pt;color:#666;line-height:1.7;}'+
+    'table{width:100%;border-collapse:collapse;margin-top:8px;font-size:9pt;}'+
+    'th{background:#f0f5ee;color:#2d5a27;padding:4px 8px;text-align:left;font-size:8pt;border:1px solid #ddd;}'+
+    'td{padding:5px 8px;border:1px solid #eee;vertical-align:top;line-height:1.5;}'+
+    'tr:nth-child(even) td{background:#fafafa;}'+
+    '.pdf-indruk{margin-top:8px;font-size:9pt;color:#333;background:#f5f9f4;padding:7px 10px;border-left:3px solid #2d5a27;border-radius:0 3px 3px 0;line-height:1.6;}'+
+    '.pdf-fyto{margin-top:6px;font-size:9pt;color:#555;background:#f9f9e8;padding:7px 10px;border-left:3px solid #8a8a20;border-radius:0 3px 3px 0;line-height:1.6;}'+
+    '.pdf-vrije{margin-top:6px;font-size:9pt;color:#333;line-height:1.7;white-space:pre-wrap;background:#f9f9f9;padding:8px 10px;border-left:3px solid #4a7c42;}'+
+    '.pdf-geen{font-size:9pt;color:#999;font-style:italic;margin-top:6px;}'+
+    '.z{display:inline-block;background:#e8f5e9;color:#2d6a24;padding:1px 6px;border-radius:3px;font-size:8pt;}'+
+    '.o{display:inline-block;background:#fff3e0;color:#b35c00;padding:1px 6px;border-radius:3px;font-size:8pt;font-weight:bold;}'+
+    '.u{display:inline-block;background:#fce4e4;color:#8b0000;padding:1px 6px;border-radius:3px;font-size:8pt;}'+
+    '.pdf-vraag{font-size:8pt;color:#7a5000;font-style:italic;}'+
+    '.pdf-footer{text-align:center;font-size:8pt;color:#aaa;margin-top:20px;border-top:1px solid #eee;padding-top:8px;}';
+
+  var win=window.open('','_blank');
+  if(!win){toonNotif('Pop-up geblokkeerd \u2014 sta pop-ups toe');return;}
+  win.document.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><title>BermApp PDF \u2014 '+esc(r.locatie)+'</title><style>'+css+'</style></head><body>'+body+'<script>window.onload=function(){setTimeout(function(){window.print();},600);};<\/script></body></html>');
+  win.document.close();
+  markeerGeexporteerd();
+}
     h+='</div>';
   });
   h+='<div class="pdf-footer">BermApp v1.1 &#8212; '+nu+' &#8212; &#169; 2025 Jan den Hollander</div>';
