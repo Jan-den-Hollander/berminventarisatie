@@ -168,33 +168,6 @@
   .resultaat-input::placeholder{color:#3a6a34;}
   .analyse-resultaat{margin-top:8px;}
   .ai-naam-tag{font-size:.58rem;background:#1a2a3a;color:#70c8e8;padding:2px 7px;border-radius:2px;letter-spacing:.06em;display:inline-block;margin-top:4px;}
-  @media print{
-    @page{margin:15mm 12mm;size:A4;}
-    body{background:#fff !important;color:#111 !important;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10pt;}
-    .header,.tabs,.notif,.btn,button,.screen:not(#scherm-pdf),.modal-overlay{display:none !important;}
-    #scherm-pdf{display:block !important;padding:0 !important;}
-    .pdf-kop{border-bottom:2px solid #2d5a27;padding-bottom:8px;margin-bottom:16px;}
-    .pdf-kop h1{font-family:Georgia,serif;font-size:18pt;color:#2d5a27;margin-bottom:4px;}
-    .pdf-meta{font-size:9pt;color:#555;line-height:1.8;}
-    .pdf-plot{border:1px solid #ccc;border-radius:4px;padding:12px;margin-bottom:16px;page-break-inside:avoid;}
-    .pdf-plot-kop{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:8px;}
-    .pdf-foto{width:110px;height:85px;object-fit:cover;border-radius:3px;border:1px solid #ddd;flex-shrink:0;}
-    .pdf-info h3{font-size:11pt;color:#2d5a27;margin-bottom:4px;}
-    .pdf-info .meta{font-size:8.5pt;color:#666;line-height:1.7;}
-    table{width:100%;border-collapse:collapse;margin-top:8px;font-size:9pt;}
-    th{background:#f0f5ee;color:#2d5a27;padding:4px 8px;text-align:left;font-size:8pt;border:1px solid #ddd;}
-    td{padding:5px 8px;border:1px solid #eee;vertical-align:top;line-height:1.5;}
-    tr:nth-child(even) td{background:#fafafa;}
-    .pdf-indruk{margin-top:8px;font-size:9pt;color:#333;background:#f5f9f4;padding:7px 10px;border-left:3px solid #2d5a27;border-radius:0 3px 3px 0;line-height:1.6;}
-    .pdf-fyto{margin-top:6px;font-size:9pt;color:#555;background:#f9f9e8;padding:7px 10px;border-left:3px solid #8a8a20;border-radius:0 3px 3px 0;line-height:1.6;}
-    .pdf-vrije{margin-top:6px;font-size:9pt;color:#333;line-height:1.7;white-space:pre-wrap;background:#f9f9f9;padding:8px 10px;border-left:3px solid #4a7c42;}
-    .pdf-geen{font-size:9pt;color:#999;font-style:italic;margin-top:6px;}
-    .z{display:inline-block;background:#e8f5e9;color:#2d6a24;padding:1px 6px;border-radius:3px;font-size:8pt;}
-    .o{display:inline-block;background:#fff3e0;color:#b35c00;padding:1px 6px;border-radius:3px;font-size:8pt;font-weight:bold;}
-    .u{display:inline-block;background:#fce4e4;color:#8b0000;padding:1px 6px;border-radius:3px;font-size:8pt;}
-    .pdf-vraag{font-size:8pt;color:#7a5000;font-style:italic;}
-    .pdf-footer{text-align:center;font-size:8pt;color:#aaa;margin-top:20px;border-top:1px solid #eee;padding-top:8px;}
-  }
   #scherm-pdf{display:none;}
 </style>
 </head>
@@ -377,7 +350,8 @@
   <div class="export-card">
     <div style="font-size:2rem;margin-bottom:8px">&#128196;</div>
     <div class="sectie-titel">PDF-rapport &#8212; voor de bioloog</div>
-    <div class="export-desc">Per plot: foto, regio, tabel met soorten, dekking&nbsp;%, fytosociologische context.</div>
+    <div class="export-desc">Per plot: foto, regio, tabel met soorten, dekking&nbsp;%, fytosociologische context.<br><br>
+    <span style="color:#e8a020;font-size:.65rem;">&#9888; Sta pop-ups toe in je browser als het venster niet opent.</span></div>
     <button class="btn-pdf" onclick="maakPDF()">&#128196; Genereer &amp; print PDF</button>
   </div>
   <div class="export-card">
@@ -432,7 +406,7 @@
 <script>
 var state={ronde:null,plots:[],stream:null,huidigeFotoData:null};
 
-var PROMPT_BASIS='Begin your response with a short introduction line:\n"Analysis by: [your name and version, e.g. Gemini 2.0 Flash / Claude Sonnet 4 / Le Chat Mistral Large]"\n\nYou are an expert botanical field assistant. Analyze this photo of a vegetation plot of exactly 1 m².\n\nLocation/region: [REGIO]\nScale reference visible in photo: [SCHAAL]\nUse the region context to apply appropriate phytosociological expectations for Dutch vegetation types (e.g. coastal dunes, chalk grasslands of South Limburg, peat meadows, river clay, sandy heathlands, urban verges). Use the scale reference to calculate accurate cover percentages.\n\nPerform a quadrat analysis by mentally dividing the photo into segments to detect overlapping layers and avoid missing ground-cover species.\n\nProvide a structured list per species with these columns:\n• Scientific name\n• Dutch name\n• Estimated cover percentage (%) — concrete estimate of leaf surface on this m²\n• Abundance (rare / scarce / frequent / abundant / dominant)\n• Reliability (0–100% certainty)\n• Optional determination question for the botanist\n\nSpecific instructions:\n— Pay extra attention to seedlings or small rosettes hidden beneath taller vegetation.\n— If a species cannot be determined to species level (e.g. grasses without inflorescence), name the genus and list the missing determination features.\n— Be conservative: mark as uncertain when in doubt and explain why.\n\nGeneral assessment (mandatory):\nDescribe (1) vegetation structure and layering, (2) nutrient status (nutrient-rich vs. nutrient-poor/calcareous), and (3) phytosociological context: which plant community is suggested here, and does this match the indicated region? your awnser must be in Dutch';
+var PROMPT_BASIS='Begin your response with a short introduction line:\n"Analysis by: [your name and version, e.g. Gemini 2.0 Flash / Claude Sonnet 4 / Le Chat Mistral Large]"\n\nYou are an expert botanical field assistant. Analyze this photo of a vegetation plot of exactly 1 m\u00b2.\n\nLocation/region: [REGIO]\nScale reference visible in photo: [SCHAAL]\nUse the region context to apply appropriate phytosociological expectations for Dutch vegetation types (e.g. coastal dunes, chalk grasslands of South Limburg, peat meadows, river clay, sandy heathlands, urban verges). Use the scale reference to calculate accurate cover percentages.\n\nPerform a quadrat analysis by mentally dividing the photo into segments to detect overlapping layers and avoid missing ground-cover species.\n\nProvide a structured list per species with these columns:\n\u2022 Scientific name\n\u2022 Dutch name\n\u2022 Estimated cover percentage (%) \u2014 concrete estimate of leaf surface on this m\u00b2\n\u2022 Abundance (rare / scarce / frequent / abundant / dominant)\n\u2022 Reliability (0\u2013100% certainty)\n\u2022 Optional determination question for the botanist\n\nSpecific instructions:\n\u2014 Pay extra attention to seedlings or small rosettes hidden beneath taller vegetation.\n\u2014 If a species cannot be determined to species level (e.g. grasses without inflorescence), name the genus and list the missing determination features.\n\u2014 Be conservative: mark as uncertain when in doubt and explain why.\n\nGeneral assessment (mandatory):\nDescribe (1) vegetation structure and layering, (2) nutrient status (nutrient-rich vs. nutrient-poor/calcareous), and (3) phytosociological context: which plant community is suggested here, and does this match the indicated region? your awnser must be in Dutch';
 
 function getPromptVoorPlot(p){
   var regio=(p&&p.regio)||document.getElementById('regioHint').value.trim()||'not specified';
@@ -465,15 +439,8 @@ window.addEventListener('load',function(){
 });
 
 function controleerCopyright(){
-  // Lees de volledige paginabron als tekst
   var bron=document.documentElement.outerHTML;
-  // Vingerafdruk: combinatie van unieke termen die samen het copyright vormen
-  var vingerafdruk=[
-    'Auteurswet 1912',
-    'Berner Conventie',
-    'Copyright (c) 2025',
-    'BermApp'
-  ];
+  var vingerafdruk=['Auteurswet 1912','Berner Conventie','Copyright (c) 2025','BermApp'];
   var intact=vingerafdruk.every(function(term){return bron.indexOf(term)!==-1;});
   if(!intact){toonCopyrightWaarschuwing();}
 }
@@ -754,41 +721,121 @@ function updateOverzicht(){
   document.getElementById('plotsLijst').innerHTML=l||'<div style="font-size:.75rem;color:#6a9465;text-align:center;padding:20px">Nog geen plots</div>';
 }
 
+// ── PDF — opent in nieuw venster (werkt betrouwbaar op Android) ───────────────
 function maakPDF(){
   if(!state.plots.length){toonNotif('Geen plots');return;}
-  var r=state.ronde||{locatie:'Onbekend',datum:'',gps:''};
+  var r=state.ronde||{locatie:'Onbekend',datum:'',gps:'',medewerker:''};
   var nu=new Date().toLocaleDateString('nl-NL',{day:'2-digit',month:'long',year:'numeric'});
-  var h='<div class="pdf-kop"><h1>BermApp &#8212; Vegetatie Inventarisatie</h1>';
-  h+='<div class="pdf-meta"><strong>Locatie:</strong> '+esc(r.locatie)+'<br><strong>Datum:</strong> '+esc(r.datum)+'<br><strong>GPS:</strong> '+esc(r.gps)+'<br>'+(r.medewerker?'<strong>Veldmedewerker:</strong> '+esc(r.medewerker)+'<br>':'')+'<strong>Gegenereerd:</strong> '+nu+'<br><strong>Plots:</strong> '+state.plots.length+'</div></div>';
+
+  // ── CSS voor het PDF-venster ──────────────────────────────────────────────
+  var css=[
+    'body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:10pt;color:#111;background:#fff;margin:0;padding:12mm;}',
+    '@page{margin:15mm 12mm;size:A4;}',
+    '.pdf-kop{border-bottom:2px solid #2d5a27;padding-bottom:8px;margin-bottom:16px;}',
+    '.pdf-kop h1{font-family:Georgia,serif;font-size:18pt;color:#2d5a27;margin:0 0 4px 0;}',
+    '.pdf-meta{font-size:9pt;color:#555;line-height:1.8;}',
+    '.pdf-plot{border:1px solid #ccc;border-radius:4px;padding:12px;margin-bottom:16px;page-break-inside:avoid;}',
+    '.pdf-plot-kop{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:8px;}',
+    '.pdf-foto{width:110px;height:85px;object-fit:cover;border-radius:3px;border:1px solid #ddd;flex-shrink:0;}',
+    '.pdf-info h3{font-size:11pt;color:#2d5a27;margin:0 0 4px 0;}',
+    '.pdf-info .meta{font-size:8.5pt;color:#666;line-height:1.7;}',
+    'table{width:100%;border-collapse:collapse;margin-top:8px;font-size:9pt;}',
+    'th{background:#f0f5ee;color:#2d5a27;padding:4px 8px;text-align:left;font-size:8pt;border:1px solid #ddd;}',
+    'td{padding:5px 8px;border:1px solid #eee;vertical-align:top;line-height:1.5;}',
+    'tr:nth-child(even) td{background:#fafafa;}',
+    '.pdf-indruk{margin-top:8px;font-size:9pt;color:#333;background:#f5f9f4;padding:7px 10px;border-left:3px solid #2d5a27;border-radius:0 3px 3px 0;line-height:1.6;}',
+    '.pdf-fyto{margin-top:6px;font-size:9pt;color:#555;background:#f9f9e8;padding:7px 10px;border-left:3px solid #8a8a20;border-radius:0 3px 3px 0;line-height:1.6;}',
+    '.pdf-vrije{margin-top:6px;font-size:9pt;color:#333;line-height:1.7;white-space:pre-wrap;background:#f9f9f9;padding:8px 10px;border-left:3px solid #4a7c42;}',
+    '.pdf-geen{font-size:9pt;color:#999;font-style:italic;margin-top:6px;}',
+    '.z{display:inline-block;background:#e8f5e9;color:#2d6a24;padding:1px 6px;border-radius:3px;font-size:8pt;}',
+    '.o{display:inline-block;background:#fff3e0;color:#b35c00;padding:1px 6px;border-radius:3px;font-size:8pt;font-weight:bold;}',
+    '.u{display:inline-block;background:#fce4e4;color:#8b0000;padding:1px 6px;border-radius:3px;font-size:8pt;}',
+    '.pdf-vraag{font-size:8pt;color:#7a5000;font-style:italic;}',
+    '.pdf-footer{text-align:center;font-size:8pt;color:#aaa;margin-top:20px;border-top:1px solid #eee;padding-top:8px;}'
+  ].join('');
+
+  // ── HTML inhoud opbouwen ──────────────────────────────────────────────────
+  var body='<div class="pdf-kop"><h1>BermApp \u2014 Vegetatie Inventarisatie</h1>';
+  body+='<div class="pdf-meta">';
+  body+='<strong>Locatie:</strong> '+esc(r.locatie)+'<br>';
+  body+='<strong>Datum:</strong> '+esc(r.datum)+'<br>';
+  if(r.gps&&r.gps!=='Nog niet bepaald')body+='<strong>GPS startpunt:</strong> '+esc(r.gps)+'<br>';
+  if(r.medewerker)body+='<strong>Veldmedewerker:</strong> '+esc(r.medewerker)+'<br>';
+  body+='<strong>Gegenereerd:</strong> '+nu+'<br>';
+  body+='<strong>Aantal plots:</strong> '+state.plots.length;
+  body+='</div></div>';
+
   state.plots.forEach(function(p){
-    h+='<div class="pdf-plot"><div class="pdf-plot-kop">';
-    if(p.foto)h+='<img src="'+p.foto+'" class="pdf-foto" alt="Plot '+p.nr+'">';
-    h+='<div class="pdf-info"><h3>Plot '+p.nr+'</h3><div class="meta">';
-    if(p.timestamp)h+='<strong>Datum/tijd:</strong> '+p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16)+'<br>';
-    if(p.gps&&p.gps!=='Nog niet bepaald')h+='<strong>GPS:</strong> '+esc(p.gps)+'<br>';
-    if(p.regio)h+='<strong>Regio/type:</strong> '+esc(p.regio)+'<br>';
-    if(p.schaal)h+='<strong>Schaalreferentie:</strong> '+esc(p.schaal)+'<br>';
-    if(p.analyseAI)h+='<strong>Geanalyseerd met:</strong> '+esc(p.analyseAI)+'<br>';
-    h+='</div></div></div>';
-    if(!p.analyse){h+='<div class="pdf-geen">Nog niet geanalyseerd</div>';}
-    else if(p.analyse.vrijeTekst){h+='<div class="pdf-vrije">'+esc(p.analyse.opmerkingen)+'</div>';}
-    else{
+    body+='<div class="pdf-plot">';
+    body+='<div class="pdf-plot-kop">';
+    if(p.foto)body+='<img src="'+p.foto+'" class="pdf-foto" alt="Plot '+p.nr+'">';
+    body+='<div class="pdf-info"><h3>Plot '+p.nr+'</h3><div class="meta">';
+    if(p.timestamp)body+='<strong>Datum/tijd:</strong> '+p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16)+'<br>';
+    if(p.gps&&p.gps!=='Nog niet bepaald')body+='<strong>GPS:</strong> '+esc(p.gps)+'<br>';
+    if(p.regio)body+='<strong>Regio/type:</strong> '+esc(p.regio)+'<br>';
+    if(p.schaal)body+='<strong>Schaalreferentie:</strong> '+esc(p.schaal)+'<br>';
+    if(p.analyseAI)body+='<strong>Geanalyseerd met:</strong> '+esc(p.analyseAI)+'<br>';
+    body+='</div></div></div>';
+
+    if(!p.analyse){
+      body+='<div class="pdf-geen">Nog niet geanalyseerd</div>';
+    } else if(p.analyse.vrijeTekst){
+      body+='<div class="pdf-vrije">'+esc(p.analyse.opmerkingen)+'</div>';
+    } else {
       if(p.analyse.soorten&&p.analyse.soorten.length){
-        h+='<table><thead><tr><th>Wetenschappelijke naam</th><th>Nederlandse naam</th><th>Dekking&nbsp;%</th><th>Abundantie</th><th>Betrouwbaarheid</th><th>Vraag voor bioloog</th></tr></thead><tbody>';
+        body+='<table><thead><tr>';
+        body+='<th>Wetenschappelijke naam</th><th>Nederlandse naam</th>';
+        body+='<th>Dekking&nbsp;%</th><th>Abundantie</th>';
+        body+='<th>Betrouwbaarheid</th><th>Vraag voor bioloog</th>';
+        body+='</tr></thead><tbody>';
         p.analyse.soorten.forEach(function(s){
-          var bd=s.betrouwbaarheid==='zeker'?'<span class="z">zeker</span>':s.betrouwbaarheid==='onzeker'?'<span class="o">onzeker</span>':'<span class="u">onbekend</span>';
-          h+='<tr><td><em>'+esc(s.wetenschappelijk||'&#8212;')+'</em></td><td>'+esc(s.nl||'&#8212;')+'</td><td>'+(s.dekking!=null?s.dekking+'%':'&#8212;')+'</td><td>'+esc(s.abundantie||'&#8212;')+'</td><td>'+bd+(s.zekerheid!=null?' ('+s.zekerheid+'%)':'')+'</td><td class="pdf-vraag">'+esc(s.vraag||'')+'</td></tr>';
+          var bd=s.betrouwbaarheid==='zeker'
+            ?'<span class="z">zeker</span>'
+            :s.betrouwbaarheid==='onzeker'
+              ?'<span class="o">onzeker</span>'
+              :'<span class="u">onbekend</span>';
+          body+='<tr>';
+          body+='<td><em>'+esc(s.wetenschappelijk||'\u2014')+'</em></td>';
+          body+='<td>'+esc(s.nl||'\u2014')+'</td>';
+          body+='<td>'+(s.dekking!=null?s.dekking+'%':'\u2014')+'</td>';
+          body+='<td>'+esc(s.abundantie||'\u2014')+'</td>';
+          body+='<td>'+bd+(s.zekerheid!=null?' ('+s.zekerheid+'%)':'')+'</td>';
+          body+='<td class="pdf-vraag">'+esc(s.vraag||'')+'</td>';
+          body+='</tr>';
         });
-        h+='</tbody></table>';
+        body+='</tbody></table>';
       }
-      if(p.analyse.opmerkingen)h+='<div class="pdf-indruk"><strong>Algemene indruk:</strong> '+esc(p.analyse.opmerkingen)+'</div>';
-      if(p.analyse.fytosociologie)h+='<div class="pdf-fyto"><strong>Fytosociologische context:</strong> '+esc(p.analyse.fytosociologie)+'</div>';
+      if(p.analyse.opmerkingen)
+        body+='<div class="pdf-indruk"><strong>Algemene indruk:</strong> '+esc(p.analyse.opmerkingen)+'</div>';
+      if(p.analyse.fytosociologie)
+        body+='<div class="pdf-fyto"><strong>Fytosociologische context:</strong> '+esc(p.analyse.fytosociologie)+'</div>';
     }
-    h+='</div>';
+    body+='</div>';
   });
-  h+='<div class="pdf-footer">BermApp v1.1 &#8212; '+nu+' &#8212; &#169; 2025 Jan den Hollander</div>';
-  document.getElementById('scherm-pdf').innerHTML=h;
-  setTimeout(function(){window.print();},300);
+
+  body+='<div class="pdf-footer">BermApp v1.1 \u2014 '+nu+' \u2014 \u00a9 2025 Jan den Hollander</div>';
+
+  // ── Nieuw venster openen en printen ───────────────────────────────────────
+  var win=window.open('','_blank','width=900,height=700');
+  if(!win){
+    toonNotif('Pop-up geblokkeerd \u2014 sta pop-ups toe in je browser');
+    return;
+  }
+  win.document.write(
+    '<!DOCTYPE html><html lang="nl"><head>'+
+    '<meta charset="UTF-8">'+
+    '<title>BermApp PDF \u2014 '+esc(r.locatie)+'</title>'+
+    '<style>'+css+'</style>'+
+    '</head><body>'+body+
+    '<script>'+
+    'window.onload=function(){'+
+    '  setTimeout(function(){window.print();},800);'+
+    '};'+
+    '<\/script>'+
+    '</body></html>'
+  );
+  win.document.close();
+  markeerGeexporteerd();
 }
 
 function exporteerCSV(){
@@ -898,7 +945,6 @@ function tekenTotaalKaart(){
     var pts=p.gps.split(','),lat=parseFloat(pts[0].trim()),lon=parseFloat(pts[1].trim());
     if(isNaN(lat)||isNaN(lon))return;
     coords.push([lat,lon]);
-    // Kleur op basis van status
     var kleur=p.geexporteerd?'#3a7d34':(p.analyse?'#e8a020':'#1a5a7a');
     var rand=p.geexporteerd?'#7dcf75':(p.analyse?'#f5c842':'#70c8e8');
     var ic=L.divIcon({
@@ -909,8 +955,8 @@ function tekenTotaalKaart(){
     var status=p.geexporteerd?'&#10003; Gereed':'';
     if(!p.geexporteerd&&p.analyse)status='&#9888; Wacht op controle';
     if(!p.geexporteerd&&!p.analyse)status='&#128247; Foto aanwezig';
-    var soorten=(!p.analyse||p.analyse.vrijeTekst)?'—':(p.analyse.soorten||[]).slice(0,4).map(function(s){return '<em>'+s.nl+'</em>';}).join(', ');
-    var popup='<strong>Plot '+p.nr+'</strong><br>'+(p.regio?'&#127807; '+p.regio+'<br>':'')+(p.timestamp?p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16)+'<br>':'')+status+'<br>'+(soorten!=='—'?'<span style="font-size:.9em">'+soorten+'</span>':'');
+    var soorten=(!p.analyse||p.analyse.vrijeTekst)?'\u2014':(p.analyse.soorten||[]).slice(0,4).map(function(s){return '<em>'+s.nl+'</em>';}).join(', ');
+    var popup='<strong>Plot '+p.nr+'</strong><br>'+(p.regio?'&#127807; '+p.regio+'<br>':'')+(p.timestamp?p.timestamp.substring(0,10)+' '+p.timestamp.substring(11,16)+'<br>':'')+status+'<br>'+(soorten!=='\u2014'?'<span style="font-size:.9em">'+soorten+'</span>':'');
     L.marker([lat,lon],{icon:ic}).addTo(totaalKaartObj).bindPopup(popup);
   });
   if(coords.length===1)totaalKaartObj.setView(coords[0],17);
@@ -933,7 +979,6 @@ function printKaart(){
     state.plots.filter(function(p){return !p.geexporteerd&&p.analyse;}).length+' wacht op controle, '+
     state.plots.filter(function(p){return !p.analyse;}).length+' niet geanalyseerd)<br>'+
     '<strong>Gegenereerd:</strong> '+nu;
-  // Kloon kaartcontainer voor print
   var printDiv=document.getElementById('totaalKaartPrint');
   printDiv.innerHTML='';
   var kaartClone=document.getElementById('totaalKaartContainer').cloneNode(true);
@@ -952,4 +997,4 @@ function markeerGeexporteerd(){
 function toonNotif(t){var n=document.getElementById('notif');n.textContent=t;n.classList.add('zichtbaar');setTimeout(function(){n.classList.remove('zichtbaar');},2400);}
 </script>
 </body>
-  </html>
+</html>
