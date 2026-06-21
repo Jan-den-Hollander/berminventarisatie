@@ -1,17 +1,56 @@
 <!--
 ================================================================================
-  BermApp — Botanische Berm Inventarisatie Tool
-  Versie 1.2 — 2025
+  © Jan den Hollander — jandenhollander@duck.com
+  GitHub: https://github.com/Jan-den-Hollander
+  Projectnaam: BermApp
+  Versie: 1.2 | Datum: 2026-06-21
+
+  LICENTIE / LICENSE (NL | EN | IT)
+  ──────────────────────────────────────────────────────────────────────────────
+  NL: Dit werk is auteursrechtelijk beschermd. Het mag vrij worden gebruikt,
+  gedeeld en verspreid, uitsluitend voor niet-commerciële doeleinden en
+  uitsluitend in ongewijzigde vorm, met vermelding van de oorspronkelijke
+  auteur. Commercieel gebruik, wijziging, verkoop of integratie in betaalde
+  producten of diensten is uitdrukkelijk verboden zonder schriftelijke
+  toestemming van de auteur. Hulp is en blijft gratis.
+  Het gebruik van naam, projecttitel of enig kenmerkend element van dit werk
+  impliceert geen toestemming van de auteur en vormt bij commercieel gebruik
+  een zelfstandige inbreuk op het auteursrecht.
+
+  EN: This work is protected by copyright. It may be freely used, shared and
+  distributed for non-commercial purposes only, in unmodified form, with
+  attribution to the original author. Commercial use, modification, sale or
+  integration into paid products or services is strictly prohibited without
+  prior written consent of the author. Help is and remains free.
+  The use of the name, project title or any characteristic element of this
+  work does not imply the author's consent and constitutes, in case of
+  commercial use, an independent infringement of copyright.
+
+  IT: Quest'opera è protetta da diritto d'autore. Può essere liberamente
+  utilizzata, condivisa e distribuita esclusivamente per scopi non commerciali,
+  nella sua forma originale e non modificata, con attribuzione all'autore
+  originale. L'uso commerciale, la modifica, la vendita o l'integrazione in
+  prodotti o servizi a pagamento sono espressamente vietati senza il consenso
+  scritto dell'autore. L'aiuto è e rimane gratuito.
+  L'uso del nome, del titolo del progetto o di qualsiasi elemento
+  caratteristico di quest'opera non implica il consenso dell'autore e
+  costituisce, in caso di uso commerciale, una violazione autonoma del
+  diritto d'autore.
+
+  Originele broncode / Original source / Fonte originale:
+  https://github.com/Jan-den-Hollander
+
+  Alle rechten voorbehouden / All rights reserved / Tutti i diritti riservati
+  © Jan den Hollander
 ================================================================================
-  Copyright (c) 2025 Jan den Hollander 
-  Alle rechten voorbehouden.
 
-  Dit werk is beschermd onder het auteursrecht (Auteurswet 1912, Nederland)
-  en internationale verdragen (Berner Conventie).
-  Ongeautoriseerd kopiëren, distribueren of gebruik als basis voor afgeleide
-  werken is niet toegestaan zonder uitdrukkelijke schriftelijke toestemming.
-
-  Contact: jandenhollander@duck.com 
+  ⚠️  INTEGRITEITSWAARSCHUWING / INTEGRITY NOTICE
+  Dit bestand bevat een integriteitscontrole op projectnaam, footer en modal.
+  Bij verwijdering of wijziging van de copyright-sectie wordt de applicatie
+  automatisch geblokkeerd en wordt verwezen naar de originele broncode.
+  This file contains an integrity check on project name, footer and modal.
+  Removal or modification of the copyright section will automatically disable
+  the application and redirect to the original source code.
 ================================================================================
 -->
 <!DOCTYPE html>
@@ -26,7 +65,7 @@
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
   :root{--groen:#2d5a27;--lichtgroen:#4a7c42;--aarde:#8b6f47;--wit:#f5f2eb;--donker:#1a2e17;--onzeker:#e8a020;--zeker:#3a7d34;--onbekend:#8b4444;--lijn:rgba(45,90,39,0.2);}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'IBM Plex Mono',monospace;background:var(--donker);color:var(--wit);min-height:100vh;overflow-x:hidden;}
+  body{font-family:'IBM Plex Mono',monospace;background:var(--donker);color:var(--wit);min-height:100vh;overflow-x:hidden;padding-bottom:28px;}
   .header{background:var(--groen);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--lichtgroen);position:sticky;top:0;z-index:100;}
   .header-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;}
   .header-title span{font-style:italic;font-weight:300;color:#a8d4a0;}
@@ -34,11 +73,6 @@
   .tabs{display:flex;background:#0f1f0d;border-bottom:1px solid var(--lijn);}
   .tab{flex:1;padding:8px 1px;text-align:center;font-size:.42rem;letter-spacing:.02em;text-transform:uppercase;color:#6a9465;cursor:pointer;border:none;background:none;transition:all .2s;line-height:1.3;}
   .tab.active{color:var(--wit);background:var(--groen);border-bottom:2px solid #a8d4a0;}
-  .cr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:flex-end;justify-content:center;}
-  .cr-box{background:#2a0a0a;border:2px solid #e87070;border-radius:8px 8px 0 0;width:100%;max-width:520px;padding:22px 18px 36px;}
-  .cr-titel{font-family:'Fraunces',serif;font-size:1.1rem;color:#e87070;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-  .cr-tekst{font-size:.72rem;color:#f5d0d0;line-height:1.8;}
-  .cr-ref{font-size:.62rem;color:#8a4a4a;margin-top:10px;font-style:italic;}
   .kaart-naam-bar{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
   .kaart-naam-inp{flex:1;background:#0f1f0d;border:1px solid var(--lijn);color:var(--wit);padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;border-radius:2px;}
   .kaart-naam-inp:focus{outline:none;border-color:var(--lichtgroen);}
@@ -137,7 +171,7 @@
   .leaflet-popup-tip{background:#1e3a1a !important;}
   .export-card{background:#1e3a1a;border:1px solid var(--lijn);border-radius:4px;padding:16px;margin-bottom:12px;text-align:center;}
   .export-desc{font-size:.7rem;color:#6a9465;line-height:1.6;margin-bottom:12px;}
-  .notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--groen);color:var(--wit);padding:10px 20px;border-radius:4px;font-size:.75rem;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+  .notif{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--groen);color:var(--wit);padding:10px 20px;border-radius:4px;font-size:.75rem;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
   .notif.zichtbaar{opacity:1;}
   .divider{border:none;border-top:1px solid var(--lijn);margin:14px 0;}
   .sectie-titel{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#6a9465;margin-bottom:10px;}
@@ -154,10 +188,6 @@
   .analyse-resultaat{margin-top:8px;}
   .ai-naam-tag{font-size:.58rem;background:#1a2a3a;color:#70c8e8;padding:2px 7px;border-radius:2px;letter-spacing:.06em;display:inline-block;margin-top:4px;}
   #scherm-pdf{display:none;}
-  .pdf-bezig{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;}
-  .pdf-bezig-tekst{color:var(--wit);font-size:.85rem;letter-spacing:.06em;}
-  .pdf-bezig-spinner{width:36px;height:36px;border:3px solid #2d5a27;border-top-color:#a8d4a0;border-radius:50%;animation:spin .8s linear infinite;}
-  @keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
@@ -367,21 +397,13 @@
 <div id="scherm-pdf" class="screen"></div>
 <canvas id="kaartCanvas" style="display:none"></canvas>
 <div class="notif" id="notif"></div>
-<div style="text-align:center;padding:18px 16px 28px;font-size:.55rem;color:#2d5a27;letter-spacing:.08em;border-top:1px solid var(--lijn);margin-top:8px">
-  &#169; 2025 Jan den Hollander &#8212; BermApp v1.2 &#8212; Alle rechten voorbehouden.
-</div>
 
 <script>
 var state={ronde:null,plots:[],stream:null,huidigeFotoData:null,kaartAfbeelding:null};
 
 var PROMPT_BASIS='Begin your response with a short introduction line:\n"Analysis by: [your name and version, e.g. Gemini 2.0 Flash / Claude Sonnet 4 / Le Chat Mistral Large]"\n\nYou are an expert botanical field assistant. Analyze this photo of a vegetation plot of exactly 1 m\u00b2.\n\nLocation/region: [REGIO]\nScale reference visible in photo: [SCHAAL]\nUse the region context to apply appropriate phytosociological expectations for Dutch vegetation types. Use the scale reference to calculate accurate cover percentages.\n\nPerform a quadrat analysis by mentally dividing the photo into segments.\n\nProvide a structured list per species:\n\u2022 Scientific name\n\u2022 Dutch name\n\u2022 Estimated cover percentage (%)\n\u2022 Abundance (rare / scarce / frequent / abundant / dominant)\n\u2022 Reliability (0-100% certainty)\n\u2022 Optional determination question for the botanist\n\nGeneral assessment: describe (1) vegetation structure, (2) nutrient status, (3) phytosociological context.\nAnswer in Dutch.';
 
-function getPromptVoorPlot(p){
-  var regio=(p&&p.regio)||document.getElementById('regioHint').value.trim()||'niet opgegeven';
-  var schaal=(p&&p.schaal)||document.getElementById('schaalReferentie').value.trim()||'geen referentie';
-  return PROMPT_BASIS.replace('[REGIO]',regio).replace('[SCHAAL]',schaal);
-}
-
+function getPromptVoorPlot(p){var regio=(p&&p.regio)||document.getElementById('regioHint').value.trim()||'niet opgegeven';var schaal=(p&&p.schaal)||document.getElementById('schaalReferentie').value.trim()||'geen referentie';return PROMPT_BASIS.replace('[REGIO]',regio).replace('[SCHAAL]',schaal);}
 function kiesSchaal(knop,waarde){document.querySelectorAll('.schaal-knop').forEach(function(k){k.classList.remove('actief');});knop.classList.add('actief');document.getElementById('schaalReferentie').value=waarde;}
 function kiesSchaalVoet(knop){var m=prompt('Schoenmaat?','43');if(m){document.querySelectorAll('.schaal-knop').forEach(function(k){k.classList.remove('actief');});knop.classList.add('actief');document.getElementById('schaalReferentie').value='voet schoenmaat '+m;}}
 function openModal(){document.getElementById('fotoTipsModal').classList.add('open');}
@@ -391,20 +413,7 @@ function sluitModal(e){if(e.target===document.getElementById('fotoTipsModal'))sl
 window.addEventListener('load',function(){
   document.getElementById('datumInput').value=new Date().toISOString().split('T')[0];
   laadOpgeslagenData();updateOverzicht();updateVeldLijst();bouwAnalyseLijst();
-  controleerCopyright();
 });
-
-function controleerCopyright(){
-  var bron=document.documentElement.outerHTML;
-  var vingerafdruk=['Auteurswet 1912','Berner Conventie','Copyright (c) 2025','BermApp'];
-  if(!vingerafdruk.every(function(t){return bron.indexOf(t)!==-1;}))toonCopyrightWaarschuwing();
-}
-function toonCopyrightWaarschuwing(){
-  var ts=new Date().toISOString();
-  var o=document.createElement('div');o.className='cr-overlay';
-  o.innerHTML='<div class="cr-box"><div class="cr-titel">&#9888;&#65039; Auteursrecht-waarschuwing</div><div class="cr-tekst">De auteursrechtvermelding van <strong>BermApp</strong> is gewijzigd of verwijderd.<br><br>BermApp is beschermd onder de <strong>Auteurswet 1912</strong> en de <strong>Berner Conventie</strong>.</div><div class="cr-ref">Ref: BA-'+ts+'</div></div>';
-  document.body.appendChild(o);
-}
 
 function toonScherm(naam){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
@@ -509,10 +518,7 @@ function bouwAnalyseLijst(){
     if(p.foto)h+='<img src="'+p.foto+'" class="analyse-foto">';
     h+='<div id="wf_'+p.nr+'" style="'+(p.analyse?'display:none':'')+'">';
     h+='<div class="stap-hint">Stap 1 &amp; 2: Deel foto en kopieer prompt</div>';
-    h+='<div class="stap-rij">';
-    h+='<button class="btn btn-deel" onclick="deelFoto('+p.nr+')">&#8679; Deel foto</button>';
-    h+='<button class="btn btn-prompt" onclick="kopieerPrompt('+p.nr+')">&#128203; Kopieer prompt</button>';
-    h+='</div>';
+    h+='<div class="stap-rij"><button class="btn btn-deel" onclick="deelFoto('+p.nr+')">&#8679; Deel foto</button><button class="btn btn-prompt" onclick="kopieerPrompt('+p.nr+')">&#128203; Kopieer prompt</button></div>';
     h+='<div class="stap-hint">Stap 3: Plak het AI-antwoord hieronder</div>';
     h+='<textarea class="resultaat-input" id="ta_'+p.nr+'" placeholder="Plak hier het antwoord van de AI..."></textarea>';
     h+='<button class="btn btn-opslaan-analyse" onclick="slaAnalyseOp('+p.nr+')">&#10003; Opslaan analyse</button>';
@@ -600,7 +606,6 @@ function resultaatHtml(p){
 
 function esc(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ── KAART (overzicht tab) ─────────────────────────────────────────────────────
 var kaartObj=null;
 function tekenKaart(){
   if(kaartObj){kaartObj.remove();kaartObj=null;}
@@ -625,7 +630,6 @@ function tekenKaart(){
   setTimeout(function(){if(kaartObj)kaartObj.invalidateSize();},200);
 }
 
-// ── TOTAALKAART (kaart tab) ───────────────────────────────────────────────────
 var totaalKaartObj=null;
 function tekenTotaalKaart(){
   if(totaalKaartObj){totaalKaartObj.remove();totaalKaartObj=null;}
@@ -642,165 +646,44 @@ function tekenTotaalKaart(){
     if(isNaN(lat)||isNaN(lon))return;coords.push([lat,lon]);
     var kleur=p.geexporteerd?'#3a7d34':(p.analyse?'#e8a020':'#1a5a7a');
     var rand=p.geexporteerd?'#7dcf75':(p.analyse?'#f5c842':'#70c8e8');
-    var ic=L.divIcon({
-      className:'',
-      html:'<div style="background:'+kleur+';color:#fff;border:2px solid '+rand+';border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.6)">'+p.nr+'</div>',
-      iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-20]
-    });
+    var ic=L.divIcon({className:'',html:'<div style="background:'+kleur+';color:#fff;border:2px solid '+rand+';border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.6)">'+p.nr+'</div>',iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-20]});
     var status=p.geexporteerd?'\u2713 Gereed':(p.analyse?'\u26a0 Wacht op controle':'\u{1F4F7} Foto aanwezig');
     var soorten=(!p.analyse||p.analyse.vrijeTekst)?'\u2014':(p.analyse.soorten||[]).slice(0,4).map(function(s){return '<em>'+s.nl+'</em>';}).join(', ');
-    L.marker([lat,lon],{icon:ic}).addTo(totaalKaartObj).bindPopup(
-      '<strong>Plot '+p.nr+'</strong><br>'+
-      (p.regio?'&#127807; '+p.regio+'<br>':'')+
-      (p.timestamp?p.timestamp.substring(0,16).replace('T',' ')+'<br>':'')+
-      status+'<br>'+
-      (soorten!=='\u2014'?'<span style="font-size:.9em">'+soorten+'</span>':'')
-    );
+    L.marker([lat,lon],{icon:ic}).addTo(totaalKaartObj).bindPopup('<strong>Plot '+p.nr+'</strong><br>'+(p.regio?'&#127807; '+p.regio+'<br>':'')+(p.timestamp?p.timestamp.substring(0,16).replace('T',' ')+'<br>':'')+status+'<br>'+(soorten!=='\u2014'?'<span style="font-size:.9em">'+soorten+'</span>':''));
   });
   if(coords.length===1)totaalKaartObj.setView(coords[0],17);
   else totaalKaartObj.fitBounds(L.latLngBounds(coords),{padding:[50,50],maxZoom:18});
   setTimeout(function(){if(totaalKaartObj)totaalKaartObj.invalidateSize();},200);
 }
 
-// ── TOTAALKAART AFDRUKKEN ─────────────────────────────────────────────────────
 function printKaart(){
   var r=state.ronde||{locatie:'',datum:'',medewerker:''};
   var nu=new Date().toLocaleDateString('nl-NL',{day:'2-digit',month:'long',year:'numeric'});
   var naam=document.getElementById('kaartNaam')?document.getElementById('kaartNaam').value.trim()||'BermApp Totaalkaart':'BermApp Totaalkaart';
-
   var plots=state.plots.filter(function(p){return p.gps&&p.gps!=='Nog niet bepaald'&&p.gps.indexOf(',')!==-1;});
-
-  var gpsData=JSON.stringify(plots.map(function(p){
-    return{nr:p.nr,gps:p.gps||'',geexporteerd:p.geexporteerd||false,analyse:!!p.analyse,regio:p.regio||''};
-  }));
-
-  var css=[
-    '@page{margin:10mm;size:A4 landscape;}',
-    'body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:10pt;color:#111;background:#fff;margin:0;padding:8mm;}',
-    'h1{font-family:Georgia,serif;font-size:14pt;color:#2d5a27;border-bottom:2px solid #2d5a27;padding-bottom:6px;margin-bottom:8px;}',
-    '.meta{font-size:9pt;color:#555;margin-bottom:10px;line-height:1.6;}',
-    '#kaartPrint{width:100%;height:160mm;border:1px solid #ccc;border-radius:4px;}',
-    '.legenda{display:flex;gap:16px;font-size:8pt;color:#333;margin-top:8px;flex-wrap:wrap;}',
-    '.li{display:flex;align-items:center;gap:4px;}',
-    '.lp{width:10px;height:10px;border-radius:50%;display:inline-block;}'
-  ].join('');
-
-  var metaHtml=(r.medewerker?'<strong>Veldmedewerker:</strong> '+r.medewerker+'<br>':'')+
-    (r.locatie?'<strong>Locatie:</strong> '+r.locatie+'<br>':'')+
-    (r.datum?'<strong>Datum:</strong> '+r.datum+'<br>':'')+
-    '<strong>Plots:</strong> '+state.plots.length+' | '+
-    '<strong>Gegenereerd:</strong> '+nu;
-
+  var gpsData=JSON.stringify(plots.map(function(p){return{nr:p.nr,gps:p.gps||'',geexporteerd:p.geexporteerd||false,analyse:!!p.analyse,regio:p.regio||''};}));
+  var css=['@page{margin:10mm;size:A4 landscape;}','body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:10pt;color:#111;background:#fff;margin:0;padding:8mm;}','h1{font-family:Georgia,serif;font-size:14pt;color:#2d5a27;border-bottom:2px solid #2d5a27;padding-bottom:6px;margin-bottom:8px;}','.meta{font-size:9pt;color:#555;margin-bottom:10px;line-height:1.6;}','#kaartPrint{width:100%;height:160mm;border:1px solid #ccc;border-radius:4px;}','.legenda{display:flex;gap:16px;font-size:8pt;color:#333;margin-top:8px;flex-wrap:wrap;}','.li{display:flex;align-items:center;gap:4px;}','.lp{width:10px;height:10px;border-radius:50%;display:inline-block;}'].join('');
+  var metaHtml=(r.medewerker?'<strong>Veldmedewerker:</strong> '+r.medewerker+'<br>':'')+(r.locatie?'<strong>Locatie:</strong> '+r.locatie+'<br>':'')+(r.datum?'<strong>Datum:</strong> '+r.datum+'<br>':'')+'<strong>Plots:</strong> '+state.plots.length+' | <strong>Gegenereerd:</strong> '+nu;
   var win=window.open('','_blank','width=1000,height=700');
   if(!win){toonNotif('Pop-up geblokkeerd \u2014 sta pop-ups toe');return;}
-  win.document.write(
-    '<!DOCTYPE html><html lang="nl"><head>'+
-    '<meta charset="UTF-8"><title>BermApp Kaart \u2014 '+naam+'</title>'+
-    '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>'+
-    '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>'+
-    '<style>'+css+'</style></head><body>'+
-    '<h1>BermApp \u2014 '+naam+'</h1>'+
-    '<div class="meta">'+metaHtml+'</div>'+
-    '<div id="kaartPrint"></div>'+
-    '<div class="legenda">'+
-    '<div class="li"><div class="lp" style="background:#1a5a7a"></div> Niet geanalyseerd</div>'+
-    '<div class="li"><div class="lp" style="background:#e8a020"></div> Geanalyseerd</div>'+
-    '<div class="li"><div class="lp" style="background:#3a7d34"></div> Gereed &amp; ge\u00ebxporteerd</div>'+
-    '</div>'+
-    '<script>'+
-    'window.onload=function(){'+
-    '  var plots='+gpsData+';'+
-    '  var k=L.map("kaartPrint",{zoomControl:false,attributionControl:false});'+
-    '  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(k);'+
-    '  var coords=[];'+
-    '  plots.forEach(function(p){'+
-    '    var pts=p.gps.split(","),lat=parseFloat(pts[0]),lon=parseFloat(pts[1]);'+
-    '    if(!isNaN(lat)&&!isNaN(lon)){'+
-    '      coords.push([lat,lon]);'+
-    '      var kl=p.geexporteerd?"#3a7d34":(p.analyse?"#e8a020":"#1a5a7a");'+
-    '      var rand=p.geexporteerd?"#7dcf75":(p.analyse?"#f5c842":"#70c8e8");'+
-    '      var ic=L.divIcon({className:"",html:"<div style=\\"background:"+kl+";color:#fff;border:2px solid "+rand+";border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:11px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.5)\\">"+p.nr+"</div>",iconSize:[32,32],iconAnchor:[16,16]});'+
-    '      L.marker([lat,lon],{icon:ic}).addTo(k).bindTooltip(p.nr.toString());'+
-    '    }'+
-    '  });'+
-    '  if(coords.length===1)k.setView(coords[0],17);'+
-    '  else if(coords.length>1)k.fitBounds(L.latLngBounds(coords),{padding:[30,30]});'+
-    '  setTimeout(function(){k.invalidateSize();},300);'+
-    '  setTimeout(function(){window.print();},1200);'+
-    '};'+
-    '<\/script>'+
-    '</body></html>'
-  );
+  win.document.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><title>BermApp Kaart \u2014 '+naam+'</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script><style>'+css+'</style></head><body><h1>BermApp \u2014 '+naam+'</h1><div class="meta">'+metaHtml+'</div><div id="kaartPrint"></div><div class="legenda"><div class="li"><div class="lp" style="background:#1a5a7a"></div> Niet geanalyseerd</div><div class="li"><div class="lp" style="background:#e8a020"></div> Geanalyseerd</div><div class="li"><div class="lp" style="background:#3a7d34"></div> Gereed &amp; ge\u00ebxporteerd</div></div><script>window.onload=function(){var plots='+gpsData+';var k=L.map("kaartPrint",{zoomControl:false,attributionControl:false});L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(k);var coords=[];plots.forEach(function(p){var pts=p.gps.split(","),lat=parseFloat(pts[0]),lon=parseFloat(pts[1]);if(!isNaN(lat)&&!isNaN(lon)){coords.push([lat,lon]);var kl=p.geexporteerd?"#3a7d34":(p.analyse?"#e8a020":"#1a5a7a");var rand=p.geexporteerd?"#7dcf75":(p.analyse?"#f5c842":"#70c8e8");var ic=L.divIcon({className:"",html:"<div style=\\"background:"+kl+";color:#fff;border:2px solid "+rand+";border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:11px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.5)\\">"+p.nr+"</div>",iconSize:[32,32],iconAnchor:[16,16]});L.marker([lat,lon],{icon:ic}).addTo(k).bindTooltip(p.nr.toString());}});if(coords.length===1)k.setView(coords[0],17);else if(coords.length>1)k.fitBounds(L.latLngBounds(coords),{padding:[30,30]});setTimeout(function(){k.invalidateSize();},300);setTimeout(function(){window.print();},1200);};<\/script></body></html>');
   win.document.close();
 }
 
-// ── PDF RAPPORT ───────────────────────────────────────────────────────────────
 function maakPDF(){
   if(!state.plots.length){toonNotif('Geen plots');return;}
   var r=state.ronde||{locatie:'Onbekend',datum:'',gps:'',medewerker:''};
   var nu=new Date().toLocaleDateString('nl-NL',{day:'2-digit',month:'long',year:'numeric'});
-
-  var css=[
-    'body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:10pt;color:#111;background:#fff;margin:0;padding:12mm;}',
-    '@page{margin:15mm 12mm;size:A4;}',
-    '.pdf-kop{border-bottom:2px solid #2d5a27;padding-bottom:8px;margin-bottom:16px;}',
-    '.pdf-kop h1{font-family:Georgia,serif;font-size:18pt;color:#2d5a27;margin:0 0 4px 0;}',
-    '.pdf-meta{font-size:9pt;color:#555;line-height:1.8;}',
-    '.kaart-sectie{margin-bottom:20px;page-break-inside:avoid;}',
-    '.kaart-sectie h2{font-family:Georgia,serif;font-size:12pt;color:#2d5a27;margin:0 0 8px 0;border-bottom:1px solid #c8dcc6;padding-bottom:4px;}',
-    '#pdfKaartId{width:100%;height:250px;border:1px solid #ccc;border-radius:4px;}',
-    '.kaart-legenda{display:flex;gap:16px;margin-top:8px;font-size:8pt;color:#555;flex-wrap:wrap;}',
-    '.kl{display:flex;align-items:center;gap:5px;}',
-    '.kl-stip{width:11px;height:11px;border-radius:50%;display:inline-block;border:1.5px solid rgba(0,0,0,.2);}',
-    '.kaart-tabel{width:100%;border-collapse:collapse;margin-top:8px;font-size:9pt;}',
-    '.kaart-tabel th{background:#f0f5ee;color:#2d5a27;padding:4px 8px;text-align:left;border:1px solid #ddd;font-size:8pt;}',
-    '.kaart-tabel td{padding:4px 8px;border:1px solid #eee;}',
-    '.pdf-plot{border:1px solid #ccc;border-radius:4px;padding:12px;margin-bottom:16px;page-break-inside:avoid;}',
-    '.pdf-plot-kop{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:8px;}',
-    '.pdf-foto{width:110px;height:85px;object-fit:cover;border-radius:3px;border:1px solid #ddd;flex-shrink:0;}',
-    '.pdf-info h3{font-size:11pt;color:#2d5a27;margin:0 0 4px 0;}',
-    '.pdf-info .meta{font-size:8.5pt;color:#666;line-height:1.7;}',
-    'table.sp{width:100%;border-collapse:collapse;margin-top:8px;font-size:9pt;}',
-    'table.sp th{background:#f0f5ee;color:#2d5a27;padding:4px 8px;text-align:left;font-size:8pt;border:1px solid #ddd;}',
-    'table.sp td{padding:5px 8px;border:1px solid #eee;vertical-align:top;line-height:1.5;}',
-    'table.sp tr:nth-child(even) td{background:#fafafa;}',
-    '.pdf-indruk{margin-top:8px;font-size:9pt;color:#333;background:#f5f9f4;padding:7px 10px;border-left:3px solid #2d5a27;border-radius:0 3px 3px 0;line-height:1.6;}',
-    '.pdf-fyto{margin-top:6px;font-size:9pt;color:#555;background:#f9f9e8;padding:7px 10px;border-left:3px solid #8a8a20;border-radius:0 3px 3px 0;line-height:1.6;}',
-    '.pdf-vrije{margin-top:6px;font-size:9pt;color:#333;line-height:1.7;white-space:pre-wrap;background:#f9f9f9;padding:8px 10px;border-left:3px solid #4a7c42;}',
-    '.pdf-geen{font-size:9pt;color:#999;font-style:italic;margin-top:6px;}',
-    '.z{display:inline-block;background:#e8f5e9;color:#2d6a24;padding:1px 6px;border-radius:3px;font-size:8pt;}',
-    '.o{display:inline-block;background:#fff3e0;color:#b35c00;padding:1px 6px;border-radius:3px;font-size:8pt;font-weight:bold;}',
-    '.u{display:inline-block;background:#fce4e4;color:#8b0000;padding:1px 6px;border-radius:3px;font-size:8pt;}',
-    '.pdf-vraag{font-size:8pt;color:#7a5000;font-style:italic;}',
-    '.pdf-footer{text-align:center;font-size:8pt;color:#aaa;margin-top:20px;border-top:1px solid #eee;padding-top:8px;}'
-  ].join('');
-
-  var body='<div class="pdf-kop"><h1>BermApp \u2014 Vegetatie Inventarisatie</h1>';
-  body+='<div class="pdf-meta">';
-  body+='<strong>Locatie:</strong> '+esc(r.locatie)+'<br>';
-  body+='<strong>Datum:</strong> '+esc(r.datum)+'<br>';
+  var css=['body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:10pt;color:#111;background:#fff;margin:0;padding:12mm;}','@page{margin:15mm 12mm;size:A4;}','.pdf-kop{border-bottom:2px solid #2d5a27;padding-bottom:8px;margin-bottom:16px;}','.pdf-kop h1{font-family:Georgia,serif;font-size:18pt;color:#2d5a27;margin:0 0 4px 0;}','.pdf-meta{font-size:9pt;color:#555;line-height:1.8;}','.kaart-sectie{margin-bottom:20px;page-break-inside:avoid;}','.kaart-sectie h2{font-family:Georgia,serif;font-size:12pt;color:#2d5a27;margin:0 0 8px 0;border-bottom:1px solid #c8dcc6;padding-bottom:4px;}','#pdfKaartId{width:100%;height:250px;border:1px solid #ccc;border-radius:4px;}','.kaart-legenda{display:flex;gap:16px;margin-top:8px;font-size:8pt;color:#555;flex-wrap:wrap;}','.kl{display:flex;align-items:center;gap:5px;}','.kl-stip{width:11px;height:11px;border-radius:50%;display:inline-block;border:1.5px solid rgba(0,0,0,.2);}','.pdf-plot{border:1px solid #ccc;border-radius:4px;padding:12px;margin-bottom:16px;page-break-inside:avoid;}','.pdf-plot-kop{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:8px;}','.pdf-foto{width:110px;height:85px;object-fit:cover;border-radius:3px;border:1px solid #ddd;flex-shrink:0;}','.pdf-info h3{font-size:11pt;color:#2d5a27;margin:0 0 4px 0;}','.pdf-info .meta{font-size:8.5pt;color:#666;line-height:1.7;}','table.sp{width:100%;border-collapse:collapse;margin-top:8px;font-size:9pt;}','table.sp th{background:#f0f5ee;color:#2d5a27;padding:4px 8px;text-align:left;font-size:8pt;border:1px solid #ddd;}','table.sp td{padding:5px 8px;border:1px solid #eee;vertical-align:top;line-height:1.5;}','table.sp tr:nth-child(even) td{background:#fafafa;}','.pdf-indruk{margin-top:8px;font-size:9pt;color:#333;background:#f5f9f4;padding:7px 10px;border-left:3px solid #2d5a27;border-radius:0 3px 3px 0;line-height:1.6;}','.pdf-fyto{margin-top:6px;font-size:9pt;color:#555;background:#f9f9e8;padding:7px 10px;border-left:3px solid #8a8a20;border-radius:0 3px 3px 0;line-height:1.6;}','.pdf-vrije{margin-top:6px;font-size:9pt;color:#333;line-height:1.7;white-space:pre-wrap;background:#f9f9f9;padding:8px 10px;border-left:3px solid #4a7c42;}','.pdf-geen{font-size:9pt;color:#999;font-style:italic;margin-top:6px;}','.z{display:inline-block;background:#e8f5e9;color:#2d6a24;padding:1px 6px;border-radius:3px;font-size:8pt;}','.o{display:inline-block;background:#fff3e0;color:#b35c00;padding:1px 6px;border-radius:3px;font-size:8pt;font-weight:bold;}','.u{display:inline-block;background:#fce4e4;color:#8b0000;padding:1px 6px;border-radius:3px;font-size:8pt;}','.pdf-vraag{font-size:8pt;color:#7a5000;font-style:italic;}','.pdf-footer{text-align:center;font-size:8pt;color:#aaa;margin-top:20px;border-top:1px solid #eee;padding-top:8px;}'].join('');
+  var body='<div class="pdf-kop"><h1>BermApp \u2014 Vegetatie Inventarisatie</h1><div class="pdf-meta"><strong>Locatie:</strong> '+esc(r.locatie)+'<br><strong>Datum:</strong> '+esc(r.datum)+'<br>';
   if(r.gps&&r.gps!=='Nog niet bepaald')body+='<strong>GPS startpunt:</strong> '+esc(r.gps)+'<br>';
   if(r.medewerker)body+='<strong>Veldmedewerker:</strong> '+esc(r.medewerker)+'<br>';
-  body+='<strong>Gegenereerd:</strong> '+nu+'<br>';
-  body+='<strong>Aantal plots:</strong> '+state.plots.length;
-  body+='</div></div>';
-
-  // Overzichtskaart — Leaflet wordt opnieuw aangemaakt in de popup
+  body+='<strong>Gegenereerd:</strong> '+nu+'<br><strong>Aantal plots:</strong> '+state.plots.length+'</div></div>';
   var gpsPunten=state.plots.filter(function(p){return p.gps&&p.gps!=='Nog niet bepaald'&&p.gps.indexOf(',')!==-1;});
   body+='<div class="kaart-sectie"><h2>&#128506; Overzichtskaart \u2014 plotlocaties</h2>';
-  if(gpsPunten.length){
-    body+='<div id="pdfKaartId"></div>';
-    body+='<div class="kaart-legenda">';
-    body+='<div class="kl"><div class="kl-stip" style="background:#1a5a7a"></div> Niet geanalyseerd</div>';
-    body+='<div class="kl"><div class="kl-stip" style="background:#e8a020"></div> Geanalyseerd</div>';
-    body+='<div class="kl"><div class="kl-stip" style="background:#3a7d34"></div> Gereed &amp; ge\u00ebxporteerd</div>';
-    body+='</div>';
-  } else {
-    body+='<p style="font-size:9pt;color:#999;font-style:italic">Geen GPS-gegevens beschikbaar.</p>';
-  }
+  if(gpsPunten.length){body+='<div id="pdfKaartId"></div><div class="kaart-legenda"><div class="kl"><div class="kl-stip" style="background:#1a5a7a"></div> Niet geanalyseerd</div><div class="kl"><div class="kl-stip" style="background:#e8a020"></div> Geanalyseerd</div><div class="kl"><div class="kl-stip" style="background:#3a7d34"></div> Gereed &amp; ge\u00ebxporteerd</div></div>';}
+  else{body+='<p style="font-size:9pt;color:#999;font-style:italic">Geen GPS-gegevens beschikbaar.</p>';}
   body+='</div>';
-
-  // Plots
   state.plots.forEach(function(p){
     body+='<div class="pdf-plot"><div class="pdf-plot-kop">';
     if(p.foto)body+='<img src="'+p.foto+'" class="pdf-foto" alt="Plot '+p.nr+'">';
@@ -811,21 +694,12 @@ function maakPDF(){
     if(p.schaal)body+='<strong>Schaalreferentie:</strong> '+esc(p.schaal)+'<br>';
     if(p.analyseAI)body+='<strong>Geanalyseerd met:</strong> '+esc(p.analyseAI)+'<br>';
     body+='</div></div></div>';
-    if(!p.analyse){
-      body+='<div class="pdf-geen">Nog niet geanalyseerd</div>';
-    } else if(p.analyse.vrijeTekst){
-      body+='<div class="pdf-vrije">'+esc(p.analyse.opmerkingen)+'</div>';
-    } else {
+    if(!p.analyse){body+='<div class="pdf-geen">Nog niet geanalyseerd</div>';}
+    else if(p.analyse.vrijeTekst){body+='<div class="pdf-vrije">'+esc(p.analyse.opmerkingen)+'</div>';}
+    else{
       if(p.analyse.soorten&&p.analyse.soorten.length){
-        body+='<table class="sp"><thead><tr>';
-        body+='<th>Wetenschappelijke naam</th><th>Nederlandse naam</th>';
-        body+='<th>Dekking&nbsp;%</th><th>Abundantie</th>';
-        body+='<th>Betrouwbaarheid</th><th>Vraag voor bioloog</th>';
-        body+='</tr></thead><tbody>';
-        p.analyse.soorten.forEach(function(s){
-          var bd=s.betrouwbaarheid==='zeker'?'<span class="z">zeker</span>':s.betrouwbaarheid==='onzeker'?'<span class="o">onzeker</span>':'<span class="u">onbekend</span>';
-          body+='<tr><td><em>'+esc(s.wetenschappelijk||'\u2014')+'</em></td><td>'+esc(s.nl||'\u2014')+'</td><td>'+(s.dekking!=null?s.dekking+'%':'\u2014')+'</td><td>'+esc(s.abundantie||'\u2014')+'</td><td>'+bd+(s.zekerheid!=null?' ('+s.zekerheid+'%)':'')+'</td><td class="pdf-vraag">'+esc(s.vraag||'')+'</td></tr>';
-        });
+        body+='<table class="sp"><thead><tr><th>Wetenschappelijke naam</th><th>Nederlandse naam</th><th>Dekking&nbsp;%</th><th>Abundantie</th><th>Betrouwbaarheid</th><th>Vraag voor bioloog</th></tr></thead><tbody>';
+        p.analyse.soorten.forEach(function(s){var bd=s.betrouwbaarheid==='zeker'?'<span class="z">zeker</span>':s.betrouwbaarheid==='onzeker'?'<span class="o">onzeker</span>':'<span class="u">onbekend</span>';body+='<tr><td><em>'+esc(s.wetenschappelijk||'\u2014')+'</em></td><td>'+esc(s.nl||'\u2014')+'</td><td>'+(s.dekking!=null?s.dekking+'%':'\u2014')+'</td><td>'+esc(s.abundantie||'\u2014')+'</td><td>'+bd+(s.zekerheid!=null?' ('+s.zekerheid+'%)':'')+'</td><td class="pdf-vraag">'+esc(s.vraag||'')+'</td></tr>';});
         body+='</tbody></table>';
       }
       if(p.analyse.opmerkingen)body+='<div class="pdf-indruk"><strong>Algemene indruk:</strong> '+esc(p.analyse.opmerkingen)+'</div>';
@@ -833,51 +707,11 @@ function maakPDF(){
     }
     body+='</div>';
   });
-
-  body+='<div class="pdf-footer">BermApp v1.2 \u2014 '+nu+' \u2014 \u00a9 2025 Jan den Hollander</div>';
-
-  // GPS data als JSON meegeven aan de popup voor Leaflet her-generatie
-  var gpsData=JSON.stringify(state.plots.map(function(p){
-    return{nr:p.nr,gps:p.gps||'',regio:p.regio||'',geexporteerd:p.geexporteerd||false,analyse:!!p.analyse};
-  }));
-
+  body+='<div class="pdf-footer">BermApp v1.2 \u2014 '+nu+' \u2014 \u00a9 2026 Jan den Hollander</div>';
+  var gpsData=JSON.stringify(state.plots.map(function(p){return{nr:p.nr,gps:p.gps||'',regio:p.regio||'',geexporteerd:p.geexporteerd||false,analyse:!!p.analyse};}));
   var win=window.open('','_blank','width=900,height=700');
   if(!win){toonNotif('Pop-up geblokkeerd \u2014 sta pop-ups toe in browserinstellingen');return;}
-  win.document.write(
-    '<!DOCTYPE html><html lang="nl"><head>'+
-    '<meta charset="UTF-8">'+
-    '<title>BermApp PDF \u2014 '+esc(r.locatie)+'</title>'+
-    '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>'+
-    '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>'+
-    '<style>'+css+'</style>'+
-    '</head><body>'+body+
-    '<script>'+
-    'window.onload=function(){'+
-    '  var plots='+gpsData+';'+
-    '  var kaartDiv=document.getElementById("pdfKaartId");'+
-    '  var gps=plots.filter(function(p){return p.gps&&p.gps.indexOf(",")!==-1;});'+
-    '  if(gps.length>0&&kaartDiv&&typeof L!=="undefined"){'+
-    '    var k=L.map("pdfKaartId",{zoomControl:false,attributionControl:false});'+
-    '    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(k);'+
-    '    var coords=[];'+
-    '    gps.forEach(function(p){'+
-    '      var pts=p.gps.split(","),lat=parseFloat(pts[0]),lon=parseFloat(pts[1]);'+
-    '      if(!isNaN(lat)&&!isNaN(lon)){'+
-    '        coords.push([lat,lon]);'+
-    '        var kl=p.geexporteerd?"#3a7d34":(p.analyse?"#e8a020":"#1a5a7a");'+
-    '        var ic=L.divIcon({className:"",html:"<div style=\\"background:"+kl+";color:#fff;border:2px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:10px;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.4)\\">"+p.nr+"</div>",iconSize:[28,28],iconAnchor:[14,14]});'+
-    '        L.marker([lat,lon],{icon:ic}).addTo(k);'+
-    '      }'+
-    '    });'+
-    '    if(coords.length===1)k.setView(coords[0],16);'+
-    '    else k.fitBounds(L.latLngBounds(coords),{padding:[20,20]});'+
-    '    setTimeout(function(){k.invalidateSize();},200);'+
-    '  }'+
-    '  setTimeout(function(){window.print();},1200);'+
-    '};'+
-    '<\/script>'+
-    '</body></html>'
-  );
+  win.document.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><title>BermApp PDF \u2014 '+esc(r.locatie)+'</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script><style>'+css+'</style></head><body>'+body+'<script>window.onload=function(){var plots='+gpsData+';var kaartDiv=document.getElementById("pdfKaartId");var gps=plots.filter(function(p){return p.gps&&p.gps.indexOf(",")!==-1;});if(gps.length>0&&kaartDiv&&typeof L!=="undefined"){var k=L.map("pdfKaartId",{zoomControl:false,attributionControl:false});L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(k);var coords=[];gps.forEach(function(p){var pts=p.gps.split(","),lat=parseFloat(pts[0]),lon=parseFloat(pts[1]);if(!isNaN(lat)&&!isNaN(lon)){coords.push([lat,lon]);var kl=p.geexporteerd?"#3a7d34":(p.analyse?"#e8a020":"#1a5a7a");var ic=L.divIcon({className:"",html:"<div style=\\"background:"+kl+";color:#fff;border:2px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:10px;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.4)\\">"+p.nr+"</div>",iconSize:[28,28],iconAnchor:[14,14]});L.marker([lat,lon],{icon:ic}).addTo(k);}});if(coords.length===1)k.setView(coords[0],16);else k.fitBounds(L.latLngBounds(coords),{padding:[20,20]});setTimeout(function(){k.invalidateSize();},200);}setTimeout(function(){window.print();},1200);};<\/script></body></html>');
   win.document.close();
   markeerGeexporteerd();
 }
@@ -1005,5 +839,165 @@ function verwijderRonde(){
 
 function toonNotif(t){var n=document.getElementById('notif');n.textContent=t;n.classList.add('zichtbaar');setTimeout(function(){n.classList.remove('zichtbaar');},2400);}
 </script>
+
+<!-- ① ZICHTBARE FOOTER -->
+<div id="jdh-copyright-footer" style="
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.82);
+  color: #ccc;
+  font-size: 11px;
+  text-align: center;
+  padding: 4px 8px;
+  z-index: 99999;
+  font-family: sans-serif;
+  letter-spacing: 0.3px;
+  user-select: none;
+">
+  © <span id="jdh-year"></span> Jan den Hollander &nbsp;|&nbsp;
+  <span id="jdh-project-title" style="color:#7eb8f7"></span> &nbsp;|&nbsp;
+  Vrij gebruik · niet-commercieel · ongewijzigd &nbsp;|&nbsp;
+  <span style="color:#aaa; cursor:pointer; text-decoration:underline"
+        onclick="document.getElementById('jdh-modal').style.display='flex'">
+    ℹ️ Licentie
+  </span>
+</div>
+
+<!-- ② LICENTIE MODAL -->
+<div id="jdh-modal" style="
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.7);
+  z-index:999999;
+  align-items:center; justify-content:center;
+">
+  <div style="
+    background:#1a1a2e; color:#e0e0e0;
+    border:1px solid #444; border-radius:10px;
+    max-width:480px; width:90%; padding:24px;
+    font-family:sans-serif; font-size:13px; line-height:1.6;
+  ">
+    <h3 style="color:#7eb8f7; margin-top:0">
+      © Jan den Hollander &nbsp;·&nbsp;
+      <span id="jdh-modal-title" style="font-weight:normal;font-size:12px"></span>
+    </h3>
+    <p>Dit hulpmiddel is <strong>gratis</strong> en mag vrij worden gedeeld,
+    uitsluitend <strong>ongewijzigd</strong> en voor
+    <strong>niet-commerciële</strong> doeleinden, met bronvermelding.</p>
+    <p>Commercieel gebruik, wijziging of verkoop is <strong>verboden</strong>
+    zonder schriftelijke toestemming. Het gebruik van naam of projecttitel
+    impliceert geen toestemming en vormt bij commercieel gebruik een
+    zelfstandige auteursrechtinbreuk.</p>
+    <p style="color:#aaa;font-size:11px">
+      This tool is free and may be shared freely, unmodified, for non-commercial
+      purposes only, with attribution. Commercial use, modification or sale is
+      prohibited.<br><br>
+      Quest'opera è gratuita e può essere condivisa liberamente, senza modifiche,
+      per scopi non commerciali, con attribuzione. L'uso commerciale è vietato.
+    </p>
+    <p style="margin-bottom:4px">
+      📧 <a href="mailto:jandenhollander@duck.com" style="color:#7eb8f7">jandenhollander@duck.com</a>
+    </p>
+    <p style="margin-top:4px;margin-bottom:0">
+      🔗 <a href="https://github.com/Jan-den-Hollander" target="_blank" style="color:#7eb8f7">github.com/Jan-den-Hollander</a>
+    </p>
+    <button onclick="document.getElementById('jdh-modal').style.display='none'"
+            style="margin-top:16px;padding:8px 20px;background:#7eb8f7;color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
+      Sluiten
+    </button>
+  </div>
+</div>
+
+<!-- ③ INTEGRITEITSCHECK + URL-CHECK -->
+<script>
+(function() {
+  'use strict';
+  var projectName = document.title || 'Onbekend project';
+  var yearEl = document.getElementById('jdh-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  var titleEl = document.getElementById('jdh-project-title');
+  if (titleEl) titleEl.textContent = projectName;
+  var modalTitleEl = document.getElementById('jdh-modal-title');
+  if (modalTitleEl) modalTitleEl.textContent = projectName;
+
+  // ── URL-check: toegestane domeinen voor BermApp ──────────────────────
+  var ALLOWED = [
+    'localhost',
+    '127.0.0.1',
+    'jan-den-hollander.github.io',
+    'bermapp.vercel.app',
+    'bermapp',
+    'claude.ai',
+    'stackblitz.io',
+    'stackblitz.com'
+  ];
+
+  function domainAllowed() {
+    var host = window.location.hostname.toLowerCase();
+    if (window.location.protocol === 'file:') return true;
+    if (!host || host === '') return true;
+    return ALLOWED.some(function(a) {
+      return host === a || host.endsWith('.' + a) || host.indexOf(a) !== -1;
+    });
+  }
+
+  function warnDomain() {
+    var banner = document.createElement('div');
+    banner.id = 'jdh-domain-warning';
+    banner.style.cssText =
+      'position:fixed;top:0;left:0;right:0;z-index:99998;' +
+      'background:#8a2010;color:#fff;font-family:sans-serif;' +
+      'font-size:12px;text-align:center;padding:8px 12px;line-height:1.5;';
+    banner.innerHTML =
+      '⚠️ <strong>' + projectName + '</strong> draait op een niet-erkend domein ' +
+      '(<em>' + window.location.hostname + '</em>). ' +
+      'Origineel: <a href="https://github.com/Jan-den-Hollander" ' +
+      'target="_blank" style="color:#ffccaa">github.com/Jan-den-Hollander</a> · ' +
+      '<a href="mailto:jandenhollander@duck.com" style="color:#ffccaa">' +
+      'jandenhollander@duck.com</a>';
+    document.body.insertBefore(banner, document.body.firstChild);
+  }
+
+  if (!domainAllowed()) { setTimeout(warnDomain, 800); }
+
+  function blockApp() {
+    document.body.innerHTML = '';
+    document.body.style.cssText = 'margin:0;background:#111;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;';
+    document.body.innerHTML =
+      '<div style="text-align:center;color:#e55;max-width:440px;padding:24px">' +
+      '<div style="font-size:52px">⛔</div>' +
+      '<h2 style="color:#e55;margin:12px 0 8px">Toegang geblokkeerd</h2>' +
+      '<p style="color:#ddd;font-size:14px">De copyright-informatie van <strong style="color:#7eb8f7">' + projectName + '</strong> is verwijderd of gewijzigd.</p>' +
+      '<p style="color:#aaa;font-size:12px">The copyright information of this application has been removed or modified.<br>La sezione copyright di questa applicazione è stata rimossa o modificata.</p>' +
+      '<hr style="border-color:#333;margin:16px 0">' +
+      '<p style="color:#ccc;font-size:13px">© Jan den Hollander</p>' +
+      '<p><a href="mailto:jandenhollander@duck.com" style="color:#7eb8f7;font-size:12px">jandenhollander@duck.com</a></p>' +
+      '<p><a href="https://github.com/Jan-den-Hollander" target="_blank" style="color:#7eb8f7;font-size:12px">🔗 github.com/Jan-den-Hollander</a></p>' +
+      '</div>';
+  }
+
+  function checkIntegrity() {
+    var footer = document.getElementById('jdh-copyright-footer');
+    var modal  = document.getElementById('jdh-modal');
+    if (!footer || !modal) { blockApp(); return; }
+    var fs = window.getComputedStyle(footer);
+    if (fs.display === 'none' || fs.visibility === 'hidden' || fs.opacity === '0') {
+      footer.style.cssText += ';display:block!important;visibility:visible!important;opacity:1!important';
+    }
+  }
+
+  checkIntegrity();
+  setInterval(checkIntegrity, 3000);
+
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      m.removedNodes.forEach(function(node) {
+        if (node.id === 'jdh-copyright-footer' || node.id === 'jdh-modal') blockApp();
+      });
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+})();
+</script>
+
 </body>
-  </html>
+</html>
