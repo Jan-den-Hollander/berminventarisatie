@@ -933,7 +933,8 @@ function toonNotif(t){var n=document.getElementById('notif');n.textContent=t;n.c
 
   function domainAllowed() {
     var host = window.location.hostname.toLowerCase();
-    if (window.location.protocol === 'file:') return true;
+    var proto = window.location.protocol;
+    if (proto === 'file:' || proto === 'content:') return true;
     if (!host || host === '') return true;
     return ALLOWED.some(function(a) {
       return host === a || host.endsWith('.' + a) || host.indexOf(a) !== -1;
