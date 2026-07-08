@@ -58,8 +58,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BermApp</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BermApp">
+<meta name="theme-color" content="#2d5a27">
+<link rel="manifest" id="pwaManifestLink">
+<link rel="icon" id="pwaFavicon">
+<link rel="apple-touch-icon" id="pwaAppleIcon">
+  <title>BermApp</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
@@ -191,7 +199,68 @@
 </style>
 </head>
 <body>
+<script>
+(function() {
+  try {
+    var svgIcoon =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">' +
+      '<rect width="512" height="512" rx="100" fill="#2d5a27"/>' +
+      '<text x="256" y="340" font-family="Georgia, serif" font-size="280" ' +
+      'font-weight="700" fill="#f5f2eb" text-anchor="middle">B</text>' +
+      '</svg>';
+    var svgBase64 = btoa(unescape(encodeURIComponent(svgIcoon)));
+    var iconDataUrl = 'data:image/svg+xml;base64,' + svgBase64;
+    var faviconEl = document.getElementById('pwaFavicon');
+    if (faviconEl) faviconEl.href = iconDataUrl;
+    var appleIconEl = document.getElementById('pwaAppleIcon');
+    if (appleIconEl) appleIconEl.href = iconDataUrl;
 
+    var manifest = {
+      name: 'BermApp', short_name: 'BermApp',
+      description: 'Botanische veldkartering met AI-analyse.',
+      start_url: '.', scope: '.', display: 'standalone', orientation: 'portrait',
+      background_color: '#1a2e17', theme_color: '#2d5a27',
+      icons: [
+        { src: iconDataUrl, sizes: '192x192', type: 'image/svg+xml', purpose: 'any' },
+        { src: iconDataUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'any' },
+        { src: iconDataUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'maskable' }
+      ]
+    };
+    var manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+    var manifestUrl = URL.createObjectURL(manifestBlob);
+    var manifestEl = document.getElementById('pwaManifestLink');
+    if (manifestEl) manifestEl.href = manifestUrl;
+
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      var swCode =
+        "const CACHE = 'bermapp-cache-v1';" +
+        "self.addEventListener('install', e => { self.skipWaiting(); });" +
+        "self.addEventListener('activate', e => { self.clients.claim(); });" +
+        "self.addEventListener('fetch', e => {" +
+        "  if (e.request.method !== 'GET') return;" +
+        "  e.respondWith(" +
+        "    caches.open(CACHE).then(cache =>" +
+        "      cache.match(e.request).then(cached => {" +
+        "        const netFetch = fetch(e.request).then(resp => {" +
+        "          if (resp && resp.ok) cache.put(e.request, resp.clone());" +
+        "          return resp;" +
+        "        }).catch(() => cached);" +
+        "        return cached || netFetch;" +
+        "      })" +
+        "    )" +
+        "  );" +
+        "});";
+      var swBlob = new Blob([swCode], { type: 'application/javascript' });
+      var swUrl = URL.createObjectURL(swBlob);
+      navigator.serviceWorker.register(swUrl).catch(function(e) {
+        console.error('Service worker registratie mislukt:', e);
+      });
+    }
+  } catch (e) {
+    console.error('PWA-setup fout:', e);
+  }
+})();
+</script>
 <!-- FOTOTIPS MODAL -->
 <div class="modal-overlay" id="fotoTipsModal" onclick="sluitModal(event)">
   <div class="modal-box">
